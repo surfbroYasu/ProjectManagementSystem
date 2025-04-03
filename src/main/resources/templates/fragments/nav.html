@@ -1,0 +1,62 @@
+<!-- fragments/nav.html -->
+<!--<div th:fragment="nav">-->
+<!--	<nav class="h-100 flex-column align-items-stretch pe-4 border-end">-->
+<!--		<nav class="nav nav-pills flex-column">-->
+<!--			<a class="nav-link" th:href="@{/projects}">プロジェクト</a>-->
+
+
+<!--			<a class="nav-link" th:href="@{/requirements}">要件定義</a>-->
+<!--						<nav class="nav nav-pills flex-column">-->
+<!--							<a class="nav-link ms-3 my-1" th:href="@{/db/tables}">機能要件</a>-->
+<!--							<a class="nav-link ms-3 my-1" th:href="@{/db/columns}">非機能要件</a>-->
+<!--						</nav>-->
+<!--			<a class="nav-link" th:href="@{/modules}">モジュール</a>-->
+
+<!--			<a class="nav-link" th:href="@{/db}">-->
+<!--				<span th:utext="#{icon.data}"></span>-->
+<!--				データベース-->
+<!--			</a>-->
+<!--		</nav>-->
+<!--	</nav>-->
+<!--</div>-->
+
+<!-- fragments/nav.html -->
+<div th:fragment="nav">
+	<ul class="nav flex-column border-end">
+		<li class="nav-item mb-2">
+			<a class="nav-link active" aria-current="page" href="/" th:href="@{/}">
+				<i class="bi bi-house-door"></i> ダッシュボード
+			</a>
+		</li>
+		<li class="nav-item mb-2">
+			<a class="nav-link" href="#" th:href="@{/projects}">
+				<i th:utext="#{icon.project}"></i>  プロジェクト
+			</a>
+		</li>
+		<li class="nav-item mb-2">
+			<a class="nav-link" href="#" th:href="@{/clients}">
+				<i th:utext="#{icon.client}"></i>  顧客管理
+			</a>
+		</li>
+		<li class="nav-item mb-2">
+			<a class="nav-link" href="#" th:href="@{/db}">
+				<i th:utext="#{icon.data}"></i> DB定義
+			</a>
+		</li>
+		<li class="nav-item mb-2">
+			<a class="nav-link" href="#" th:href="@{/modules}">
+				<i th:utext="#{icon.module}"></i>  モジュール
+			</a>
+		</li>
+		<li class="nav-item mb-2">
+			<a class="nav-link" href="#" th:href="@{/requirements}">
+				<i th:utext="#{icon.requirement}"></i>  要件定義
+			</a>
+		</li>
+		<li class="nav-item mt-4">
+			<a class="nav-link text-danger" href="#" th:href="@{/logout}">
+				<i th:utext="#{icon.logout}"></i>  ログアウト
+			</a>
+		</li>
+	</ul>
+</div>

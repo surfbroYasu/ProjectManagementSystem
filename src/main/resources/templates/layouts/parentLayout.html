@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+	<!--	tab title-->
+	<!-- tab title -->
+	<title th:if="${title}" th:text="#{${title}}"></title>
+	<title th:unless="${title}" th:text="#{default.title}"></title>
+
+
+	<!--meta info-->
+
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+
+	<script th:src="@{/webjars/jquery/jquery.js}"></script>
+
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+	<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+	<script src="/js/script.js" th:src="@{/js/script.js}"></script>
+
+	<th:block layout:fragment="meta"></th:block>
+
+	<script layout:fragment="meta-script"></script>
+</head>
+
+<body class="container">
+
+	<div class="row mt-5">
+		<div class="col-2">
+			<th:block th:insert="~{fragments/nav :: nav}">
+		</div>
+
+		<div class="col-10">
+			<div class="row">
+				<h4 th:text="#{${title}}"></h4>
+			</div>
+			<div class="row">
+				<th:block layout:fragment="mainContent">
+					<!-- ここに記述-->
+				</th:block>
+			</div>
+		</div>
+	</div>
+
+
+	<script layout:fragment="body-script" th:inline="javascript"></script>
+</body>
+
+</html>

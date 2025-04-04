@@ -9,6 +9,8 @@ import com.example.projectmanagement.modules.projects.domain.Project;
 @Mapper
 public interface ProjectMapper {
 	
-	public List<Project> getAllProjects(int organizationId);
+	public List<Project> getAllProjects();
+	
+	public void insertProject(Project project);
 
 }

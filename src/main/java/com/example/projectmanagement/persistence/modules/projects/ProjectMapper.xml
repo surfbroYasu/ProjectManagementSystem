@@ -5,15 +5,21 @@
 
 <mapper namespace="com.example.projectmanagement.persistence.modules.projects.ProjectMapper">
 
-    <select id="findAll" resultType="com.example.projectmanagement.modules.projects.domain.Project">
+<resultMap id="ProjectResultMap" type="com.example.projectmanagement.modules.projects.domain.Project">
+    <id property="id" column="id"/>
+    <result property="projectName" column="project_name"/>
+    <result property="applicationName" column="application_name"/>
+    <result property="clientId" column="client_id"/>
+    <result property="startDate" column="start_date"/>
+</resultMap>
+
+
+    <select id="getAllProjects" resultMap="ProjectResultMap">
         SELECT * FROM projects
-        <where>
-        	owner = #{organizationId}
-        </where>
     </select>
 
-<!--    <insert id="insertname">-->
-<!--        INSERT INTO table (name, email) VALUES (#{name}, #{email});-->
-<!--    </insert>-->
+    <insert id="insertProject">
+        INSERT INTO projects (project_name, application_name, client_id, start_date) VALUES (#{projectName}, #{applicationName},#{clientId}, #{startDate});
+    </insert>
 
 </mapper>

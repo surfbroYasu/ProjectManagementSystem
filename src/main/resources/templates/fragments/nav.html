@@ -30,33 +30,41 @@
 		</li>
 		<li class="nav-item mb-2">
 			<a class="nav-link" href="#" th:href="@{/projects}">
-				<i th:utext="#{icon.project}"></i>  プロジェクト
+				<i th:utext="#{icon.project}"></i> プロジェクト
 			</a>
 		</li>
-		<li class="nav-item mb-2">
-			<a class="nav-link" href="#" th:href="@{/clients}">
-				<i th:utext="#{icon.client}"></i>  顧客管理
-			</a>
-		</li>
-		<li class="nav-item mb-2">
-			<a class="nav-link" href="#" th:href="@{/db}">
-				<i th:utext="#{icon.data}"></i> DB定義
-			</a>
-		</li>
-		<li class="nav-item mb-2">
-			<a class="nav-link" href="#" th:href="@{/modules}">
-				<i th:utext="#{icon.module}"></i>  モジュール
-			</a>
-		</li>
-		<li class="nav-item mb-2">
-			<a class="nav-link" href="#" th:href="@{/requirements}">
-				<i th:utext="#{icon.requirement}"></i>  要件定義
-			</a>
-		</li>
+
+
+		<th:block th:unless="#{${title}} == #{title.project.top}">
+
+			<li class="nav-item mb-2">
+				<a class="nav-link" href="#" th:href="@{/clients}">
+					<i th:utext="#{icon.client}"></i> 顧客管理
+				</a>
+			</li>
+			<li class="nav-item mb-2">
+				<a class="nav-link" href="#"  th:href="@{/database/{id}(id=${projectId})}">
+					<i th:utext="#{icon.data}"></i> DB定義
+				</a>
+			</li>
+			<li class="nav-item mb-2">
+				<a class="nav-link" href="#" th:href="@{/modules/{id}(id=${projectId})}">
+					<i th:utext="#{icon.module}"></i> モジュール
+				</a>
+			</li>
+			<li class="nav-item mb-2">
+				<a class="nav-link" href="#" th:href="@{/requirements/{id}(id=${projectId})}">
+					<i th:utext="#{icon.requirement}"></i> 要件定義
+				</a>
+			</li>
+
+		</th:block>
+
 		<li class="nav-item mt-4">
 			<a class="nav-link text-danger" href="#" th:href="@{/logout}">
-				<i th:utext="#{icon.logout}"></i>  ログアウト
+				<i th:utext="#{icon.logout}"></i> ログアウト
 			</a>
 		</li>
+
 	</ul>
 </div>

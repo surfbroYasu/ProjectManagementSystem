@@ -1,0 +1,40 @@
+<th:block th:fragment="accordion">
+	<div class="accordion" id="projectAccordion">
+		<th:block th:each="project, stat : ${projects}">
+			<div class="accordion-item">
+				<h2 class="accordion-header" th:attr="id='heading' + ${stat.index}">
+					<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+						th:attr="data-bs-target='#collapse' + ${stat.index}" aria-expanded="false"
+						th:attrappend="aria-controls='collapse' + ${stat.index}">
+
+						<div class="d-flex flex-column">
+							<strong th:text="${project.projectName}">プロジェクト名</strong>
+							<small class="text-muted" th:text="${project.applicationName}">アプリケーション名</small>
+						</div>
+
+					</button>
+
+				</h2>
+				<div class="accordion-collapse collapse" th:attr="id='collapse' + ${stat.index}"
+					th:attrappend="aria-labelledby='heading' + ${stat.index}" data-bs-parent="#projectAccordion">
+					<div class="accordion-body">
+						<p><strong>開始日：</strong> <span th:text="${project.startDate}">2025-04-01</span></p>
+						<p><strong>クライアント：</strong> <span th:text="${project.clientId}">1</span></p>
+					</div>
+
+					<a th:href="@{/database/{id}(id=${project.id})}" class="btn btn-outline-secondary btn-sm">
+						DB情報
+					</a>
+
+					<a th:href="@{/modules/{id}(id=${project.id})}" class="btn btn-outline-secondary btn-sm">
+						モジュール
+					</a>
+
+					<a th:href="@{/requirements/{id}(id=${project.id})}" class="btn btn-outline-secondary btn-sm">
+						要件定義
+					</a>
+				</div>
+			</div>
+		</th:block>
+	</div>
+</th:block>

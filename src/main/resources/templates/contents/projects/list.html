@@ -5,6 +5,14 @@
 
 <th:block layout:fragment="mainContent">
 
+	<div class="my-5">
+		<th:block th:insert="~{contents/projects/fragments/register :: registerForm}"></th:block>
+	</div>
+
+	<th:block th:if="${projects}">
+		<th:block th:insert="~{contents/projects/fragments/accordion :: accordion}"></th:block>
+	</th:block>
+
 </th:block>
 
 

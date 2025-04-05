@@ -1,6 +1,6 @@
 <th:block th:fragment="accordion">
-	<div class="accordion" id="projectAccordion">
-		<th:block th:each="project, stat : ${projects}">
+	<div class="accordion my-5" id="dbAccordion">
+		<th:block th:each="db, stat : ${dbInfo}">
 			<div class="accordion-item">
 				<h2 class="accordion-header" th:attr="id='heading' + ${stat.index}">
 					<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -8,22 +8,18 @@
 						th:attrappend="aria-controls='collapse' + ${stat.index}">
 
 						<div class="d-flex flex-column">
-							<strong th:text="${project.projectName}">プロジェクト名</strong>
-							<small class="text-muted" th:text="${project.applicationName}">アプリケーション名</small>
+							<strong th:text="${db.dbName}">データベース名</strong>
+							<small class="text-muted" th:text="${db.dbms}">DBMS</small>
 						</div>
 
 					</button>
-
 				</h2>
 				<div class="accordion-collapse collapse" th:attr="id='collapse' + ${stat.index}"
-					th:attrappend="aria-labelledby='heading' + ${stat.index}" data-bs-parent="#projectAccordion">
+					th:attrappend="aria-labelledby='heading' + ${stat.index}" data-bs-parent="#dbAccordion">
 					<div class="accordion-body">
-						<p><strong>開始日：</strong> <span th:text="${project.startDate}">2025-04-01</span></p>
-						<p><strong>クライアント：</strong> <span th:text="${project.clientId}">1</span></p>
 
-
-						<a th:href="@{/database/{id}(id=${project.id})}" class="btn btn-outline-secondary btn-sm">
-							DB情報
+						<a th:href="@{/database/detail/{id}(id=${db.id})}" class="btn btn-outline-secondary btn-sm">
+							データベース詳細
 						</a>
 
 						<a th:href="@{/modules/{id}(id=${project.id})}" class="btn btn-outline-secondary btn-sm">
@@ -33,6 +29,23 @@
 						<a th:href="@{/requirements/{id}(id=${project.id})}" class="btn btn-outline-secondary btn-sm">
 							要件定義
 						</a>
+
+
+						<!--クイック-->
+						<hr />
+						<p><strong>DBMS：</strong> <span th:text="${db.dbms}">MySQL</span></p>
+
+						<th:block th:insert="~{contents/databases/fragments/register :: TableRegisterForm}"></th:block>
+
+
+						<div class="row g-3 mt-2">
+							<div class="col-md-6" th:each="table : ${tableInfoMap[db.id]}">
+								<th:block th:insert="~{contents/databases/fragments/cards :: tableCard}"></th:block>
+							</div>
+						</div>
+
+
+
 					</div>
 				</div>
 			</div>

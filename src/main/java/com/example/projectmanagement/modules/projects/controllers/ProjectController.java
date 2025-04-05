@@ -29,6 +29,7 @@ public class ProjectController {
 		return new ProjectRegisterForm();
 	}
 
+
 	@GetMapping("")
 	public String renderProjectIndex(Model model) {
 		model.addAttribute("title", "title.project.top");

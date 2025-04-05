@@ -32,18 +32,21 @@
 
 	<div class="row mt-5">
 		<div class="col-2">
-			<th:block th:insert="~{fragments/nav :: nav}"></th:block>
+			<div style="position: sticky; top: 1rem;">
+
+				<th:block th:insert="~{fragments/nav :: nav}"></th:block>
+			</div>
 		</div>
 
 		<div class="col-10">
 			<div class="row">
 				<h4 th:text="#{${title}}"></h4>
 			</div>
-			
+
 			<div class="row" th:if="${project}">
 				<th:block th:insert="~{fragments/breadCrumb :: breadCrumb}"></th:block>
 			</div>
-			
+
 			<div class="row">
 				<th:block layout:fragment="mainContent">
 					<!-- ここに記述-->

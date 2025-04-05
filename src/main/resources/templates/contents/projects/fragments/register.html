@@ -1,8 +1,21 @@
 <th:block th:fragment="registerForm">
-	<form th:action="@{/projects/add}" th:object="${projectRegisterForm}" method="post" class="d-flex gap-2 align-items-center">
-		<lable>新規登録</lable>
-		<input type="text" th:field="*{projectName}" class="form-control w-auto" placeholder="プロジェクト名">
-		<input type="text" th:field="*{applicationName}" class="form-control w-auto" placeholder="アプリケーション名">
-		<button type="submit" class="btn btn-primary">登録</button>
+	<form th:action="@{/projects/add}" th:object="${projectRegisterForm}" method="post" class="row g-2 align-items-center">
+
+		<div class="col-auto">
+			<label class="form-label">新規登録</label>
+		</div>
+
+		<div class="col-md-4">
+			<input type="text" required th:field="*{projectName}" class="form-control" placeholder="プロジェクト名">
+		</div>
+
+		<div class="col-md-4">
+			<input type="text" th:field="*{applicationName}" class="form-control" placeholder="アプリケーション名">
+		</div>
+
+		<div class="col-md-2">
+			<button type="submit" class="btn btn-primary w-100">登録</button>
+		</div>
+
 	</form>
 </th:block>

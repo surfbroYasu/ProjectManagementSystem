@@ -1,0 +1,13 @@
+<th:block th:fragment="tableCard">
+
+	<div class="card shadow-sm border-0 h-100">
+		<a th:href="@{'/database/table/' + ${table.id}}" class="text-decoration-none">
+<!--		<a href="" class="text-decoration-none">-->
+			<div class="card-body">
+				<h6 class="card-title mb-1" th:text="${table.tableName}">テーブル名</h6>
+				<p class="card-text text-muted small mb-0" th:text="${table.tableAlias}">論理名
+				</p>
+			</div>
+		</a>
+	</div>
+</th:block>

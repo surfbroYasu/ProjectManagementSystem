@@ -5,21 +5,18 @@
 
 <th:block layout:fragment="breadCrumb">
 
-	<li class="breadcrumb-item"><a th:href="@{/database/{id}(id=${projectId})}" th:text="${project.projectName}">BreadCrumb1</a></li>
-	<li class="breadcrumb-item active" aria-current="page">BreadCrumb2</li>
-
 </th:block>
 
 <th:block layout:fragment="mainContent">
 
 
-	<th:block th:if="${dbInfo}">
+	<th:block th:if="${dbInfo.size()>0}">
 		<th:block th:insert="~{contents/databases/fragments/accordion :: accordion}"></th:block>
 	</th:block>
 
 
 	<div class="my-5">
-		<th:block th:insert="~{contents/databases/fragments/register :: registerForm}"></th:block>
+		<th:block th:insert="~{contents/databases/fragments/register :: DBRegisterForm}"></th:block>
 	</div>
 
 

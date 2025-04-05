@@ -18,6 +18,13 @@
         SELECT * FROM projects
     </select>
 
+    <select id="getProjectById" resultMap="ProjectResultMap">
+        SELECT * FROM projects
+        <where>
+        	id=#{projectId}
+        </where>
+    </select>
+
     <insert id="insertProject">
         INSERT INTO projects (project_name, application_name, client_id, start_date) VALUES (#{projectName}, #{applicationName},#{clientId}, #{startDate});
     </insert>

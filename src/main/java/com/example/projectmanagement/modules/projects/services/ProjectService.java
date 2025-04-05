@@ -21,6 +21,10 @@ public class ProjectService {
 	public List<Project> getProjects(){
 		return mapper.getAllProjects();
 	}
+	
+	public Project getProjectById(int projectId){
+		return mapper.getProjectById(projectId);
+	}
 
 	
 }

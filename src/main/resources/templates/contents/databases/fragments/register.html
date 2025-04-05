@@ -1,0 +1,55 @@
+<!--DB作成フォーム-->
+
+<th:block th:fragment="DBRegisterForm">
+	<form th:action="@{/database/add}" th:object="${dbInfoRegisterForm}" method="post"
+		class="row g-2 align-items-center">
+
+		<div class="col-2">
+			<label class="form-label">新規登録</label>
+		</div>
+
+		<input type="hidden" name="projectId" th:value="${projectId}" />
+
+		<div class="col-md-4">
+			<input type="text" required th:field="*{dbName}" class="form-control" placeholder="データベース名">
+		</div>
+
+		<div class="col-md-4">
+			<select class="form-select" required th:field="*{dbms}" aria-label="Default select example">
+				<option value="MariaDB">MariaDB</option>
+				<option value="MySQL">MySQL</option>
+			</select>
+		</div>
+
+		<div class="col-md-2">
+			<button type="submit" class="btn btn-primary w-100">登録</button>
+		</div>
+	</form>
+</th:block>
+
+<!--テーブル作成フォーム-->
+
+<th:block th:fragment="TableRegisterForm">
+
+	<form th:action="@{/database/table/add}" th:object="${tableInfoRegisterForm}" method="post"
+		class="row g-2 align-items-center">
+
+		<div class="col-2">
+			<label class="form-label">テーブル追加</label>
+		</div>
+
+		<input type="hidden" name="dbInfoId" th:value="${db.id}" />
+
+		<div class="col-md-4">
+			<input type="text" required th:field="*{tableName}" class="form-control" placeholder="テーブル名">
+		</div>
+		<div class="col-md-4">
+			<input type="text" th:field="*{tableAlias}" class="form-control" placeholder="論理名">
+		</div>
+
+		<div class="col-md-2">
+			<button type="submit" class="btn btn-outline-primary w-100">追加</button>
+		</div>
+	</form>
+	
+</th:block>

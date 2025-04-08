@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.projectmanagement.modules.databases.domain.DBInfo;
+import com.example.projectmanagement.modules.databases.domain.TableColumn;
 import com.example.projectmanagement.modules.databases.domain.TableInfo;
 import com.example.projectmanagement.persistence.modules.databases.DBInfoMapper;
 
@@ -20,17 +21,17 @@ public class DatabaseService {
 	/*
 	 * ----DB INFO----
 	 */
+	
+	public void insertDatabase(DBInfo domain) {
+		mapper.insertNewDatabase(domain);
+	}
 
 	public List<DBInfo> getAll(int projectId) {
 		return mapper.getDBInfoByProject(projectId);
 	}
-
-	public void insertDatabase(DBInfo domain) {
-		mapper.insertNewDatabase(domain);
-	}
 	
-	public DBInfo getDBInfoByDBId(int id) {
-		return mapper.getDBInfoByDBId(id);
+	public DBInfo getDBInfoByDBId(int dbId) {
+		return mapper.getDBInfoByDBId(dbId);
 	}
 
 	/*
@@ -39,6 +40,14 @@ public class DatabaseService {
 
 	public void insertTable(TableInfo domain) {
 		mapper.insertNewTable(domain);
+	}
+	
+	public TableInfo getTableByTableId(int tableId) {
+		return mapper.getTableByTableId(tableId);
+	}
+	
+	public List<TableInfo> getTableInfoByDbIds(List<Integer> dbInfoIds) {
+		return mapper.getTableInfoByDbIds(dbInfoIds);
 	}
 		
 	public Map<Integer, List<TableInfo>> getRelatedTableInfo(List<DBInfo> databases) {
@@ -52,13 +61,31 @@ public class DatabaseService {
 	                     .collect(Collectors.groupingBy(TableInfo::getDbInfoId));
 	}
 
+	
+	/*
+	 * ----COLUMNS----
+	 */
+	public void insertColumn(TableColumn domain) {
+		mapper.insertNewColumn(domain);
+	}
+	
+	public List<TableColumn> getFKList(int dbId){
+		return mapper.getFKList(dbId);
+	}
+	
+	public List<TableColumn> getTableColumns(List<Integer> tableIds){
+		return mapper.getColumnsByTableIds(tableIds);
+	}
+	
+	public Map<Integer, List<TableColumn>> getRelatedColumns(List<TableInfo> tables){
+		List<Integer> tableIds = tables.stream()
+				.map(TableInfo::getId)
+				.collect(Collectors.toList());
+		
+		List<TableColumn> relatedColumns = mapper.getColumnsByTableIds(tableIds);
+		
+		return relatedColumns.stream().collect(Collectors.groupingBy(TableColumn::getTableInfoId));
+	}
 
-	
-	public List<TableInfo> getTableInfoByDbIds(List<Integer> dbInfoIds) {
-		return mapper.getTableInfoByDbIds(dbInfoIds);
-	}
-	
-	public TableInfo getTableByTableId(int tableId) {
-		return mapper.getTableByTableId(tableId);
-	}
+
 }

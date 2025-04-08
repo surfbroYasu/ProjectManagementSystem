@@ -4,24 +4,105 @@
 
 
 <th:block layout:fragment="breadCrumb">
-	
-	<li class="breadcrumb-item"><a th:href="@{/database/table/{id}(id=${db.id})}" th:text="${db.dbName}">BreadCrumb1</a></li>
-<!--	<li class="breadcrumb-item active" aria-current="page">BreadCrumb2</li>-->
+	<li class="breadcrumb-item"><a th:href="@{/database/{id}(id=${project.id})}"
+			th:text="#{title.db.top}">BreadCrumb1</a>
+	</li>
+	<li class="breadcrumb-item"><a th:href="@{/database/detail/{id}(id=${db.id})}"
+			th:text="#{title.db.details}">データベース詳細ページ</a></li>
+	<li class="breadcrumb-item active" aria-current="page" th:text="#{title.db.tables}">BreadCrumb2</li>
 
 </th:block>
 
 <th:block layout:fragment="mainContent">
-<p th:text="${db}">hello</p>
 
-<!--	<th:block th:if="${dbInfo.size()>0}">-->
-<!--		<th:block th:insert="~{contents/databases/fragments/accordion :: accordion}"></th:block>-->
-<!--	</th:block>-->
+	<!--	<th:block th:if="${dbInfo.size()>0}">-->
+	<!--		<th:block th:insert="~{contents/databases/fragments/accordion :: accordion}"></th:block>-->
+	<!--	</th:block>-->
 
 
-<!--	<div class="my-5">-->
-<!--		<th:block th:insert="~{contents/databases/fragments/register :: DBRegisterForm}"></th:block>-->
-<!--	</div>-->
 
+
+	<div class="card border-secondary mb-4 px-0">
+		<div class="card-header bg-secondary text-white fw-bold">
+			Table Info
+		</div>
+		<div class="card-body">
+
+			<div class="row mb-2">
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-4 fw-bold text-muted">DBMS</div>
+						<div class="col-md-8" th:text="${db.dbms}">MySQL</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-4 fw-bold text-muted">DB Name</div>
+						<div class="col-md-8" th:text="${db.dbName}">project_db</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row mb-2">
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-4 fw-bold text-muted">Table Name</div>
+						<div class="col-md-8" th:text="${table.tableName}">test_4</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-4 fw-bold text-muted">Table Alias</div>
+						<div class="col-md-8" th:text="${table.tableAlias}">テスト４</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
+
+	<table class="table table-striped table-bordered table-sm">
+		<thead class="table-primary">
+			<tr>
+				<th>カラム名</th>
+				<th>論理名</th>
+				<th>データ型</th>
+				<th>PK</th>
+				<th>UK</th>
+				<th>FK</th>
+				<th>NULL</th>
+				<th>AUTO INCR</th>
+				<th>初期値</th>
+				<th>制約</th>
+				<th>コメント</th>
+			</tr>
+		</thead>
+		<tbody th:if="${columnList.size()>0}">
+			<tr th:each="col : ${columnList}">
+				<td th:text="${col.columnName}">column</td>
+				<td th:text="${col.alias}">alias</td>
+				<td th:text="${col.dataType + (col.dataTypeParam != null ? '(' + col.dataTypeParam + ')' : '')}">
+					type</td>
+
+				<td th:text="${col.isPk ? '○' : ''}">pk</td>
+				<td th:text="${col.isUnique ? '○' : ''}">uk</td>
+				<td th:text="${col.isFK ? '○' : ''}">fk</td>
+				<td th:text="${col.isNullable ? '○' : '×'}">nullable</td>
+				<td th:text="${col.isAutoIncrement ? '○' : ''}">auto</td>
+				<td th:text="${col.defaultValue}">default</td>
+				<td th:text="${col.checkConstraint}">check</td>
+				<td th:text="${col.comment}">comment</td>
+			</tr>
+		</tbody>
+	</table>
+
+
+	<div class="my-5">
+		<h4>新規作成</h4>
+		<th:block th:insert="~{contents/databases/fragments/register :: ColumnRegisterForm}"></th:block>
+	</div>
 
 </th:block>
 

@@ -35,7 +35,7 @@
 		class="row g-2 align-items-center">
 
 		<div class="col-2">
-			<label class="form-label">テーブル追加</label>
+			<label class="form-label" for="tableName">テーブル追加</label>
 		</div>
 
 		<input type="hidden" name="dbInfoId" th:value="${db.id}" />
@@ -51,5 +51,96 @@
 			<button type="submit" class="btn btn-outline-primary w-100">追加</button>
 		</div>
 	</form>
-	
+
+</th:block>
+
+
+<!--カラム作成フォーム-->
+<th:block th:fragment="ColumnRegisterForm">
+	<form th:action="@{/database/column/add}" th:object="${tableColumnRegisterForm}" method="post" class="row g-2 mt-3">
+		<input type="hidden" name="tableInfoId" th:value="${table.id}" />
+
+		<div class="col-md-3">
+			<label class="form-label" th:for="'columnName' + ${table.id}">カラム名</label>
+			<input type="text" class="form-control" th:field="*{columnName}" th:id="'columnName' + ${table.id}"
+				required />
+		</div>
+
+		<div class="col-md-3">
+			<label class="form-label" th:for="'alias' + ${table.id}">論理名</label>
+			<input type="text" class="form-control" th:field="*{alias}" th:id="'alias' + ${table.id}" />
+		</div>
+
+		<div class="col-md-3">
+			<label class="form-label" th:for="'dataType' + ${table.id}">データ型</label>
+			<input type="text" class="form-control" th:field="*{dataType}" th:id="'dataType' + ${table.id}" />
+		</div>
+
+		<div class="col-md-3">
+			<label class="form-label" th:for="'dataTypeParam' + ${table.id}">型パラメータ</label>
+			<div class="input-group">
+				<span class="input-group-text">(</span>
+				<input type="text" class="form-control" th:field="*{dataTypeParam}"
+					th:id="'dataTypeParam' + ${table.id}" />
+				<span class="input-group-text">)</span>
+			</div>
+		</div>
+
+
+		<div class="col-md-12">
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="checkbox" th:field="*{isPk}" th:id="'isPk' + ${table.id}" />
+				<label class="form-check-label" th:for="'isPk' + ${table.id}">PrimaryKey</label>
+			</div>
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="checkbox" th:field="*{isUnique}"
+					th:id="'isUnique' + ${table.id}" />
+				<label class="form-check-label" th:for="'isUnique' + ${table.id}">UniqueKey</label>
+			</div>
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="checkbox" th:field="*{isFK}" th:id="'isFK' + ${table.id}" />
+				<label class="form-check-label" th:for="'isFK' + ${table.id}">ForeignKey</label>
+			</div>
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="checkbox" th:field="*{isNullable}"
+					th:id="'isNullable' + ${table.id}" />
+				<label class="form-check-label" th:for="'isNullable' + ${table.id}">NULL許容</label>
+			</div>
+			<div class="form-check form-check-inline">
+				<input class="form-check-input" type="checkbox" th:field="*{isAutoIncrement}"
+					th:id="'isAutoIncrement' + ${table.id}" />
+				<label class="form-check-label" th:for="'isAutoIncrement' + ${table.id}">AUTO INCREMENT</label>
+			</div>
+		</div>
+
+		<div class="col-md-3">
+			<label class="form-label" th:for="'defaultValue' + ${table.id}">初期値</label>
+			<input type="text" class="form-control" th:field="*{defaultValue}" th:id="'defaultValue' + ${table.id}" />
+		</div>
+
+		<div class="col-md-4">
+			<label class="form-label" th:for="'checkConstraint' + ${table.id}">制約</label>
+			<input type="text" class="form-control" th:field="*{checkConstraint}"
+				th:id="'checkConstraint' + ${table.id}" placeholder="e.g. price >= 0 or status IN ('A', 'B')" />
+		</div>
+
+		<div class="col-md-5">
+			<label class="form-label" th:for="'comment' + ${table.id}">コメント</label>
+			<input type="text" class="form-control" th:field="*{comment}" th:id="'comment' + ${table.id}" />
+		</div>
+
+		<div class="col-md-6">
+			<label class="form-label" th:for="'fkId' + ${table.id}">参照カラム（FK）</label>
+			<select class="form-select" th:field="*{fkId}" th:id="'fkId' + ${table.id}">
+				<option value="">--select foreign key--</option>
+				<option th:each="o : *{fkOptions}" th:value="${o.id}" th:text="${o.tableName +  '.   ' + o.columnName}">
+				</option>
+			</select>
+		</div>
+		<div class="col-md-2 d-flex align-items-end">
+			<button type="submit" class="btn btn-primary w-100">追加</button>
+		</div>
+
+	</form>
+
 </th:block>

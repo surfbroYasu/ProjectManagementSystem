@@ -18,22 +18,27 @@
 					th:attrappend="aria-labelledby='heading' + ${stat.index}" data-bs-parent="#dbAccordion_db">
 					<div class="accordion-body">
 
-						<a th:href="@{/database/detail/{id}(id=${db.id})}" class="btn btn-outline-secondary btn-sm">
+						<a th:href="@{/project/{projectId}/database/{dbId}/detail(projectId=${project.id}, dbId=${db.id})}" class="btn btn-outline-secondary btn-sm">
 							データベース詳細
 						</a>
 
-						<a th:href="@{/modules/{id}(id=${project.id})}" class="btn btn-outline-secondary btn-sm">
+						<a  th:href="@{/project/{projectId}/modules(projectId=${projectId})}" class="btn btn-outline-secondary btn-sm">
 							モジュール
 						</a>
 
-						<a th:href="@{/requirements/{id}(id=${project.id})}" class="btn btn-outline-secondary btn-sm">
+						<a th:href="@{/project/{projectId}/requirements(projectId=${projectId})}" class="btn btn-outline-secondary btn-sm">
 							要件定義
 						</a>
 
 						<a th:href="@{/requirements/{id}(id=${project.id})}" class="btn btn-outline-secondary btn-sm">
 							テーブル定義書
 						</a>
-
+						
+						<th:block th:insert="~{contents/databases/fragments/modal :: dbEditBtn}"></th:block>
+						<th:block th:insert="~{contents/databases/fragments/modal :: dbEditForm}"></th:block>
+						<th:block th:insert="~{contents/databases/fragments/modal :: dbDeleteBtn}"></th:block>
+						<th:block th:insert="~{contents/databases/fragments/modal :: dbDeleteForm}"></th:block>
+						
 						<!--クイック-->
 						<hr />
 						<p><strong>DBMS：</strong> <span th:text="${db.dbms}">MySQL</span></p>
@@ -55,7 +60,7 @@
 </th:block>
 
 <th:block th:fragment="tableInfoAccordion">
-	<div class="accordion" id="dbAccordion_table">
+	<div class="accordion shadow" id="dbAccordion_table">
 		<th:block th:each="table : ${tableList}">
 			<div class="accordion-item">
 				<h2 class="accordion-header" th:id="'heading' + ${table.id}">
@@ -69,13 +74,18 @@
 					th:aria-labelledby="'heading' + ${table.id}" data-bs-parent="#dbAccordion_table">
 					<div class="accordion-body">
 
-						<a th:href="@{/database/table/{id}(id=${table.id})}" class="btn btn-outline-secondary btn-sm">
+						<a th:href="@{/project/{projectId}/database/{dbId}/table/{tableId}(projectId=${project.id},dbId=${db.id}, tableId=${table.id})}" class="btn btn-outline-secondary btn-sm">
 							テーブル詳細
 						</a>
 
 						<a th:href="@{/requirements/{id}(id=${project.id})}" class="btn btn-outline-secondary btn-sm">
 							テーブル定義書
 						</a>
+
+						<th:block th:insert="~{contents/databases/fragments/modal :: tableEditBtn}"></th:block>
+						<th:block th:insert="~{contents/databases/fragments/modal :: tableEditForm}"></th:block>
+						<th:block th:insert="~{contents/databases/fragments/modal :: tableDeleteBtn}"></th:block>
+						<th:block th:insert="~{contents/databases/fragments/modal :: tableDeleteForm}"></th:block>
 
 						<hr />
 
@@ -106,17 +116,19 @@
 						<!--クイック-->
 						<hr />
 						<div class="bg-light p-3">
-							<button type="button" class="btn btn-primary mb-3" th:id="'toggleBtn' + ${table.id}"
-								th:onclick="'toggleForm(' + ${table.id} + ')'">
-								カラム追加
+
+							<button th:id="'toggleBtnAdd' + ${table.id}" class="btn btn-primary"
+								th:onclick="'toggleSection({id: ' + ${table.id} + ', sectionPrefix: \'formAdd\', buttonPrefix: \'toggleBtnAdd\', labelType: \'add\'})'">
+
+								<span th:text="#{label.column.add}">カラム追加</span>
 							</button>
 
-							<div th:id="'form' + ${table.id}" style="display: none;">
+							<div th:id="'formAdd' + ${table.id}" style="display: none;">
 								<th:block th:insert="~{contents/databases/fragments/register :: ColumnRegisterForm}">
 								</th:block>
 							</div>
-						</div>
 
+						</div>
 
 					</div>
 				</div>

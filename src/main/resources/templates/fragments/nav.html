@@ -15,22 +15,22 @@
 		<th:block th:unless="#{${title}} == #{title.project.top}">
 
 			<li class="nav-item mb-2">
-				<a class="nav-link" href="#" th:href="@{/clients}">
+				<a class="nav-link" href="#" th:href="@{/project/{projectId}/client(projectId=${project.id})}">
 					<i th:utext="#{icon.client}"></i> 顧客管理
 				</a>
 			</li>
 			<li class="nav-item mb-2">
-				<a class="nav-link" href="#"  th:href="@{/database/{id}(id=${project.id})}">
+				<a class="nav-link" href="#"  th:href="@{/project/{projectId}/database(projectId=${project.id})}">
 					<i th:utext="#{icon.data}"></i> DB定義
 				</a>
 			</li>
 			<li class="nav-item mb-2">
-				<a class="nav-link" href="#" th:href="@{/modules/{id}(id=${projectId})}">
+				<a class="nav-link" href="#" th:href="@{/project/{projectId}/modules(projectId=${projectId})}">
 					<i th:utext="#{icon.module}"></i> モジュール
 				</a>
 			</li>
 			<li class="nav-item mb-2">
-				<a class="nav-link" href="#" th:href="@{/requirements/{id}(id=${projectId})}">
+				<a class="nav-link" href="#" th:href="@{/project/{projectId}/requirements(projectId=${projectId})}">
 					<i th:utext="#{icon.requirement}"></i> 要件定義
 				</a>
 			</li>

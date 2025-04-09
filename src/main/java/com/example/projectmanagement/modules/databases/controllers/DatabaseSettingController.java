@@ -27,7 +27,7 @@ import com.example.projectmanagement.modules.projects.services.ProjectService;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
-@RequestMapping("/database")
+@RequestMapping("/project/{projectId}/database")
 public class DatabaseSettingController {
 
 	private static final String TEMPLATE_ROOT = "contents/databases/";
@@ -48,25 +48,24 @@ public class DatabaseSettingController {
 		return new TableInfoRegisterForm();
 	}
 
-
 	private void setProjectToModel(Model model, Integer projectId) {
-	    model.addAttribute("project", projectService.getProjectById(projectId));
+		model.addAttribute("project", projectService.getProjectById(projectId));
 	}
 
 	private void setProjectFromDatabase(Model model, Integer databaseId) {
-	    DBInfo db = service.getDBInfoByDBId(databaseId);
-	    model.addAttribute("project", projectService.getProjectById(db.getProjectId()));
-	    model.addAttribute("db", db);
+		DBInfo db = service.getDBInfoByDBId(databaseId);
+		model.addAttribute("project", projectService.getProjectById(db.getProjectId()));
+		model.addAttribute("db", db);
 	}
 
 	private void setProjectFromTable(Model model, Integer tableId) {
-	    TableInfo table = service.getTableByTableId(tableId);
-	    DBInfo db = service.getDBInfoByDBId(table.getDbInfoId());
-	    model.addAttribute("project", projectService.getProjectById(db.getProjectId()));
-	    model.addAttribute("db", db);
-	    model.addAttribute("table", table);
+		TableInfo table = service.getTableByTableId(tableId);
+		DBInfo db = service.getDBInfoByDBId(table.getDbInfoId());
+		model.addAttribute("project", projectService.getProjectById(db.getProjectId()));
+		model.addAttribute("db", db);
+		model.addAttribute("table", table);
 	}
-	
+
 	/**
 	 * prep Foreign Key select options 
 	 * @param model
@@ -78,7 +77,7 @@ public class DatabaseSettingController {
 		model.addAttribute("tableColumnRegisterForm", form);
 	}
 
-	@GetMapping("/{projectId}")
+	@GetMapping("")
 	public String showDbInfo(@PathVariable Integer projectId, Model model) {
 		model.addAttribute("title", "title.db.top");
 		setProjectToModel(model, projectId);
@@ -92,46 +91,66 @@ public class DatabaseSettingController {
 		return TEMPLATE_ROOT + "list";
 	}
 
-	@PostMapping("/add")
-	public String addDatabase(HttpServletRequest request,
-			@Validated @ModelAttribute("dbInfoRegisterForm") DBInfoRegisterForm form,
-			BindingResult bindingResult,
-			Model model) {
 
-		String referer = request.getHeader("Referer");
+	@PostMapping("/{action}")
+	public String handleDatabaseOperation(HttpServletRequest request,
+	                                      @PathVariable String action,
+	                                      @PathVariable Integer projectId,
+	                                      @Validated @ModelAttribute("dbInfoRegisterForm") DBInfoRegisterForm form,
+	                                      BindingResult bindingResult,
+	                                      Model model) {
 
-		if (bindingResult.hasErrors()) {
-			return "redirect:" + referer;
-		}
+	    String referer = request.getHeader("Referer");
 
-		DBInfo domain = new DBInfo();
-		BeanUtils.copyProperties(form, domain);
+	    if (bindingResult.hasErrors()) {
+	        return "redirect:" + referer;
+	    }
 
-		service.insertDatabase(domain);
+	    DBInfo domain = new DBInfo();
+	    BeanUtils.copyProperties(form, domain);
+	    domain.setProjectId(projectId); // projectIdがDBInfoに必要な場合
 
-		return "redirect:" + referer;
+	    switch (action) {
+	        case "add":
+	            service.insertDatabase(domain);
+	            break;
+	        case "edit":
+	            service.updateDatabase(domain);
+	            break;
+	        case "delete":
+	            service.deleteDatabase(domain.getId());
+	            break;
+	        default:
+	            throw new IllegalArgumentException("Unsupported action: " + action);
+	    }
+
+	    return "redirect:" + referer;
 	}
 
-	@GetMapping("/detail/{databaseId}")
-	public String renderDBDetail(@PathVariable Integer databaseId, Model model) {
+	
+	
+	@GetMapping("/{databaseId}/detail")
+	public String renderDBDetail(@PathVariable Integer projectId, @PathVariable Integer databaseId, Model model) {
 
 		List<TableInfo> relatedTables = service.getTableInfoByDbIds(List.of(databaseId));
 
 		model.addAttribute("title", "title.db.details");
-		
+
 		setProjectFromDatabase(model, databaseId);
 
 		model.addAttribute("tableList", relatedTables);
 		model.addAttribute("columnMap", service.getRelatedColumns(relatedTables));
-		
+
 		setColumnFormToModel(model, databaseId);
-		
 
 		return TEMPLATE_ROOT + "detailDB";
 	}
 
-	@PostMapping("/table/add")
-	public String addTable(HttpServletRequest request,
+	@PostMapping("/{databaseId}/table/{action}")
+	public String addTable(HttpServletRequest request, 
+			@PathVariable String action,
+			@PathVariable Integer projectId,
+			@PathVariable Integer databaseId,
 			@Validated @ModelAttribute("tableInfoRegisterForm") TableInfoRegisterForm form,
 			BindingResult bindingResult,
 			Model model) {
@@ -145,18 +164,34 @@ public class DatabaseSettingController {
 		TableInfo domain = new TableInfo();
 		BeanUtils.copyProperties(form, domain);
 
-		service.insertTable(domain);
+		
+	    switch (action) {
+        case "add":
+        	service.insertTable(domain);
+            break;
+        case "edit":
+            service.updateTable(domain);
+            break;
+        case "delete":
+            service.deleteTable(domain.getId());
+            break;
+        default:
+            throw new IllegalArgumentException("Unsupported action: " + action);
+    }
+
 
 		return "redirect:" + referer;
 	}
 
-	@GetMapping("/table/{tableId}")
-	public String renderTableDetail(@PathVariable Integer tableId, Model model) {
+	@GetMapping("/{databaseId}/table/{tableId}")
+	public String renderTableDetail(Model model,
+			@PathVariable Integer projectId, 
+			@PathVariable Integer databaseId, 
+			@PathVariable Integer tableId) {
 		model.addAttribute("title", "title.db.tables");
 
 		TableInfo targetTable = service.getTableByTableId(tableId);
 		List<TableColumn> columnList = service.getTableColumns(List.of(targetTable.getId()));
-		
 
 		setColumnFormToModel(model, targetTable.getDbInfoId());
 		setProjectFromTable(model, tableId);
@@ -165,8 +200,11 @@ public class DatabaseSettingController {
 		return TEMPLATE_ROOT + "detailTable";
 	}
 
-	@PostMapping("/column/add")
+	@PostMapping("/{databaseId}/table/{tableId}/column/add")
 	public String addColumn(HttpServletRequest request,
+			@PathVariable Integer projectId,
+			@PathVariable Integer databaseId, 
+			@PathVariable Integer tableId,
 			@Validated @ModelAttribute("tableColumnRegisterForm") TableColumnRegisterForm form, BindingResult result,
 			Model model) {
 		String referer = request.getHeader("Referer");

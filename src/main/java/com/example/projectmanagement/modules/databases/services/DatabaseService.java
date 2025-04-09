@@ -25,6 +25,14 @@ public class DatabaseService {
 	public void insertDatabase(DBInfo domain) {
 		mapper.insertNewDatabase(domain);
 	}
+	
+	public void updateDatabase(DBInfo domain) {
+		mapper.updateDatabase(domain);
+	}
+	
+	public void deleteDatabase(int dbId) {
+		mapper.deleteDatabase(dbId);
+	}
 
 	public List<DBInfo> getAll(int projectId) {
 		return mapper.getDBInfoByProject(projectId);
@@ -41,6 +49,15 @@ public class DatabaseService {
 	public void insertTable(TableInfo domain) {
 		mapper.insertNewTable(domain);
 	}
+	
+	public void updateTable(TableInfo domain) {
+		mapper.updateTable(domain);
+	}
+	
+	public void deleteTable(int tableId) {
+		mapper.deleteTable(tableId);
+	}
+
 	
 	public TableInfo getTableByTableId(int tableId) {
 		return mapper.getTableByTableId(tableId);

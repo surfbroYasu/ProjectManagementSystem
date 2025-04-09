@@ -1,0 +1,19 @@
+<th:block th:fragment="parent">
+		<li class="breadcrumb-item"><a th:href="@{/project/{projectId}/database(projectId=${project.id})}"
+			th:text="#{title.db.top}">データベース設定トップ</a>
+	</li>
+</th:block>
+
+<th:block th:fragment="child">
+		<li class="breadcrumb-item"><a th:href="@{/project/{projectId}/database/{dbId}/detail(projectId=${project.id}, dbId=${db.id})}"
+			th:text="#{title.db.details}">データベース詳細ページ</a></li>
+</th:block>
+
+<th:block th:fragment="grandChild">
+	
+</th:block>
+
+<th:block th:fragment="greatGrandChild">
+	
+</th:block>
+

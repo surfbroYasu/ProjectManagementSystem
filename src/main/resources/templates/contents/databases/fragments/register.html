@@ -1,8 +1,8 @@
 <!--DB作成フォーム-->
 
 <th:block th:fragment="DBRegisterForm">
-	<form th:action="@{/database/add}" th:object="${dbInfoRegisterForm}" method="post"
-		class="row g-2 align-items-center">
+	<form th:action="@{/project/{projectId}/database/add(projectId=${project.id})}" th:object="${dbInfoRegisterForm}"
+		method="post" class="row g-2 align-items-center">
 
 		<div class="col-2">
 			<label class="form-label">新規登録</label>
@@ -31,8 +31,8 @@
 
 <th:block th:fragment="TableRegisterForm">
 
-	<form th:action="@{/database/table/add}" th:object="${tableInfoRegisterForm}" method="post"
-		class="row g-2 align-items-center">
+	<form th:action="@{/project/{projectId}/database/{dbId}/table/add(projectId=${project.id}, dbId=${db.id})}"
+		th:object="${tableInfoRegisterForm}" method="post" class="row g-2 align-items-center">
 
 		<div class="col-2">
 			<label class="form-label" for="tableName">テーブル追加</label>
@@ -57,7 +57,9 @@
 
 <!--カラム作成フォーム-->
 <th:block th:fragment="ColumnRegisterForm">
-	<form th:action="@{/database/column/add}" th:object="${tableColumnRegisterForm}" method="post" class="row g-2 mt-3">
+	<form
+		th:action="@{/project/{projectId}/database/{dbId}/table/{tableId}/column/add(projectId=${project.id}, dbId=${db.id}, tableId=${table.id})}"
+		th:object="${tableColumnRegisterForm}" method="post" class="row g-2 mt-3">
 		<input type="hidden" name="tableInfoId" th:value="${table.id}" />
 
 		<div class="col-md-3">

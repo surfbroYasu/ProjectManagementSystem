@@ -69,6 +69,20 @@
 	  #{dbms}     
 	  )
 	</insert>
+	
+	<update id="updateDatabase" >
+	  UPDATE db_info
+	  SET 
+	    db_name = #{dbName},
+	    dbms = #{dbms}
+	  WHERE id = #{id}
+	</update>
+
+	<delete id="deleteDatabase" parameterType="int">
+	  DELETE FROM db_info
+	  WHERE id = #{id}
+	</delete>
+
   
   
 	<select id="getTableInfoByDbIds" resultMap="TableInfoResultMap" parameterType="list">
@@ -106,6 +120,22 @@
 	   #{historyId}
 	   )
 	 </insert>
+	 
+	<update id="updateTable" >
+	  UPDATE table_info
+	  SET 
+	    table_name = #{tableName},
+	    table_alias = #{tableAlias},
+	    history_id = #{historyId}
+	  WHERE id = #{id}
+	</update>
+
+	<delete id="deleteTable" parameterType="int">
+	  DELETE FROM table_info
+	  WHERE id = #{tableId}
+	</delete>
+	
+	 
 	 
 	<select id="getColumnsByTableIds" resultMap="TableColumnResultMap" parameterType="list">
 	    SELECT *

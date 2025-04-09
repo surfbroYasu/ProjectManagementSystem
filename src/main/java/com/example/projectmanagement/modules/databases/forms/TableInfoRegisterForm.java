@@ -1,5 +1,6 @@
 package com.example.projectmanagement.modules.databases.forms;
 
+import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -7,6 +8,8 @@ import lombok.Data;
 public class TableInfoRegisterForm {
 	
 	private Integer id;
+	
+	@NotNull
 	private Integer dbInfoId;
 	
 	@NotBlank

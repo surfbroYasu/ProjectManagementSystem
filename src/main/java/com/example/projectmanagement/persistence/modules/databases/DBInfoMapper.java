@@ -15,6 +15,8 @@ public interface DBInfoMapper {
 	 * database
 	 */
 	public void insertNewDatabase(DBInfo domain);
+	public void updateDatabase(DBInfo domain);
+	public void deleteDatabase(int dbId);
 	
 	public DBInfo getDBInfoByDBId(int dbId);
 	public List<DBInfo> getDBInfoByProject(int projectId);
@@ -25,7 +27,9 @@ public interface DBInfoMapper {
 	 * tables
 	 */
 	public void insertNewTable(TableInfo domain);
-
+	public void updateTable(TableInfo domain);
+	public void deleteTable(int tableId);
+	
 	public TableInfo getTableByTableId(int tableId);
 	public List<TableInfo> getTableInfoByDbIds(List<Integer> dbInfoIds);
 

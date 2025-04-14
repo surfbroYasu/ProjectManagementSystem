@@ -22,5 +22,7 @@ public class TableColumn {
 	private Integer fkId;
 	private String checkConstraint;
 	private String comment;
+	private String onDelete;
+	private String onUpdate;
 	
 }

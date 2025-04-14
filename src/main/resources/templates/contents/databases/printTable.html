@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/printLayout.html}">
+
+<th:block layout:fragment="meta">
+	<script th:src="@{/js/toggleForm.js}"></script>
+</th:block>
+
+
+<th:block layout:fragment="mainContent">
+<!--	<div class="container my-4">-->
+<!--		<div class="mx-auto">-->
+
+			<th:block th:each="table : ${tableList}">
+				<th:block th:if="${columnMap[table.id] != null}"
+					th:with="columnList=${columnMap[table.id]}, table=${table}, print=true">
+					<div class="table-wrapper mb-5">
+
+						<!-- テーブル情報など -->
+						<th:block th:insert="~{contents/databases/fragments/table :: tableDefHeading}" />
+						<th:block th:insert="~{contents/databases/fragments/table :: columnTable}" />
+					</div>
+
+				</th:block>
+			</th:block>
+
+			<th:block th:unless="${columnMap}">
+				<!-- テーブル情報など -->
+				<th:block th:insert="~{contents/databases/fragments/table :: tableDefHeading}" />
+				<th:block th:insert="~{contents/databases/fragments/table :: columnTable}" />
+			</th:block>
+
+<!--		</div>-->
+<!--	</div>-->
+</th:block>
+
+
+
+</html>

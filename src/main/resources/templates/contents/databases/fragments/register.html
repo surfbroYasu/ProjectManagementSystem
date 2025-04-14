@@ -131,18 +131,44 @@
 			<input type="text" class="form-control" th:field="*{comment}" th:id="'comment' + ${table.id}" />
 		</div>
 
-		<div class="col-md-6">
-			<label class="form-label" th:for="'fkId' + ${table.id}">参照カラム（FK）</label>
-			<select class="form-select" th:field="*{fkId}" th:id="'fkId' + ${table.id}">
-				<option value="">--select foreign key--</option>
-				<option th:each="o : *{fkOptions}" th:value="${o.id}" th:text="${o.tableName +  '.   ' + o.columnName}">
-				</option>
-			</select>
+		<div th:id="'fkTarget' + ${table.id}" style="display: none;" class="col-md-12">
+			<div class="col-md-12">
+				<div class="col-md-6">
+					<label class="form-label" th:for="'fkId' + ${table.id}">参照カラム（FK）</label>
+					<select class="form-select" th:field="*{fkId}" th:id="'fkId' + ${table.id}">
+						<option value="">--select foreign key--</option>
+						<option th:each="o : *{fkOptions}" th:value="${o.id}"
+							th:text="${o.tableName +  '.   ' + o.columnName}">
+						</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="col-md-6">
+				<label class="form-label" th:for="'onDelete' + ${table.id}">ON DELETE</label>
+				<select class="form-select" th:field="*{onDelete}" th:id="'onDelete' + ${table.id}">
+					<option value="">--select a constraint--</option>
+					<option th:each="o : *{fkConstraintOptions}" th:value="${o}" th:text="${o}">
+					</option>
+				</select>
+			</div>
+
+			<div class="col-md-6">
+				<label class="form-label" th:for="'onUpdate' + ${table.id}">ON UPDATE</label>
+				<select class="form-select" th:field="*{onUpdate}" th:id="'onUpdate' + ${table.id}">
+					<option value="">--select a constraint--</option>
+					<option th:each="o : *{fkConstraintOptions}" th:value="${o}" th:text="${o}">
+					</option>
+				</select>
+			</div>
 		</div>
+
 		<div class="col-md-2 d-flex align-items-end">
 			<button type="submit" class="btn btn-primary w-100">追加</button>
 		</div>
 
 	</form>
+
+
 
 </th:block>

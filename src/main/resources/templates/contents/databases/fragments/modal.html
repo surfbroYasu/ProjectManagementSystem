@@ -22,7 +22,7 @@
 				<div class="modal-header">
 					<h5 class="modal-title">
 						<span th:utext="#{icon.warning}"></span>
-						<span th:text="#{conf.db.edit}">DB編集</span>
+						<span th:text="#{form.db.edit}">DB編集</span>
 					</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
@@ -35,12 +35,12 @@
 						<input type="hidden" name="id" th:value="${db.id}" />
 						<input type="hidden" name="projectId" th:value="${project.id}" />
 						<div class="mb-3">
-							<label class="form-label" for="editDbName" th:text="#{field.db_name}">DB名</label>
+							<label th:text="#{field.db_name}" class="form-label" for="editDbName">DB名</label>
 							<input type="text" class="form-control" id="editDbName" name="dbName"
 								th:value="${db.dbName}" required />
 						</div>
 						<div class="mb-3">
-							<label class="form-label" for="editDbms" th:text="#{field.dbms}">DBMS</label>
+							<label th:text="#{field.dbms}" class="form-label" for="editDbms">DBMS</label>
 							<select class="form-select" required name="dbms" th:value="${db.dbms}">
 								<option value="MariaDB">MariaDB</option>
 								<option value="MySQL">MySQL</option>
@@ -78,7 +78,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title"><span th:utext="#{icon.danger}"></span><span
-							th:text="#{conf.db.delete}"></span></h5>
+							th:text="#{form.db.delete}"></span></h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
@@ -136,7 +136,7 @@
 				<div class="modal-header">
 					<h5 class="modal-title">
 						<span th:utext="#{icon.warning}"></span>
-						<span th:text="#{conf.table.edit}">テーブル編集</span>
+						<span th:text="#{form.table.edit}">テーブル編集</span>
 					</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
@@ -147,12 +147,12 @@
 						method="post">
 						<input type="hidden" th:name="id" th:value="${table.id}" />
 						<div class="mb-3">
-							<label class="form-label" for="editTableName" th:text="#{field.table_name}">テーブル名</label>
+							<label th:text="#{field.table_name}" class="form-label" for="editTableName">テーブル名</label>
 							<input type="text" class="form-control" id="editTableName" name="tableName"
 								th:value="${table.tableName}" required />
 						</div>
 						<div class="mb-3">
-							<label class="form-label" for="editTableAlias" th:text="#{field.table_alias}">表示名</label>
+							<label th:text="#{field.table_alias}" class="form-label" for="editTableAlias">表示名</label>
 							<input type="text" class="form-control" id="editTableAlias" name="tableAlias"
 								th:value="${table.tableAlias}" />
 						</div>
@@ -188,7 +188,7 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title"><span th:utext="#{icon.danger}"></span><span
-							th:text="#{conf.table.delete}"></span></h5>
+							th:text="#{form.table.delete}"></span></h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
@@ -217,6 +217,181 @@
 						Save changes
 					</button>
 
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>
+
+
+<!--
+	columnModal :: HOW TO 
+	
+	BUTTON: <tr th:each="col : ${columnList}" th:onclick="'openModal(' + ${col.id} + ', \'colModal\')'">
+	MODAL: <th:block th:insert="~{contents/databases/fragments/modal :: columModal}"></th:block>
+	
+-->
+<th:block th:fragment="columModal">
+	<div class="modal" th:id="'colModal' + ${col.id}" tabindex="-1">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">
+						<span th:utext="#{icon.warning}"></span>
+						<span th:text="#{form.column.edit}">テーブル編集</span>
+					</h5>
+				</div>
+				<div class="modal-body">
+
+					<small th:text="#{message.conf.action}"></small>
+
+					<form
+						th:action="@{/project/{projectId}/database/{dbId}/table/{tableId}/column/edit(projectId=${project.id}, dbId=${db.id}, tableId=${table.id})}"
+						method="post" th:id="'editTableColumnRegisterForm' + ${col.id}"
+						th:object="${tableColumnRegisterForm}">
+						<input type="hidden" name="id" th:value="${col.id}" />
+						<input type="hidden" name="tableInfoId" th:value="${table.id}" />
+
+						<div class="mb-3 row g-2">
+							<div class="col-md-6">
+								<label th:text="#{field.col.column_name}" class="form-label"
+									th:for="'columnName' + ${col.id}">カラム名</label>
+								<input type="text" class="form-control" name="columnName"
+									th:id="'columnName' + ${col.id}" th:value="${col.columnName}" required />
+							</div>
+							<div class="col-md-6">
+								<label th:text="#{field.col.alias}" class="form-label"
+									th:for="'alias' + ${col.id}">論理名</label>
+								<input type="text" class="form-control" name="alias" th:id="'alias' + ${col.id}"
+									th:value="${col.alias}" />
+							</div>
+							<div class="col-md-6">
+								<label th:text="#{field.col.data_type}" class="form-label"
+									th:for="'dataType' + ${col.id}">データ型</label>
+								<input type="text" class="form-control" name="dataType" th:id="'dataType' + ${col.id}"
+									th:value="${col.dataType}" />
+							</div>
+							<div class="col-md-6">
+								<label th:text="#{field.col.data_type_param}" class="form-label"
+									th:for="'dataTypeParam' + ${col.id}">型パラメータ</label>
+								<div class="input-group">
+									<span class="input-group-text">(</span>
+									<input type="text" class="form-control" name="dataTypeParam"
+										th:id="'dataTypeParam' + ${col.id}" th:value="${col.dataTypeParam}" />
+									<span class="input-group-text">)</span>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" name="isPk"
+										th:id="'isPk' + ${col.id}" th:checked="${col.isPk}" />
+									<label th:text="#{field.col.is_pk}" class="form-check-label"
+										th:for="'isPk' + ${col.id}">PrimaryKey</label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" name="isUnique"
+										th:id="'isUnique' + ${col.id}" th:checked="${col.isUnique}" />
+									<label th:text="#{field.col.is_unique}" class="form-check-label"
+										th:for="'isUnique' + ${col.id}">UniqueKey</label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" name="isFK"
+										th:id="'isFK' + ${table.id} + ${col.id}" th:checked="${col.isFK}" />
+									<label th:text="#{field.col.is_fk}" class="form-check-label"
+										th:for="'isFK'  + ${table.id} + ${col.id}"
+										onchange="toggleFKForm(this)">ForeignKey</label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" name="isNullable"
+										th:id="'isNullable' + ${col.id}" th:checked="${col.isNullable}" />
+									<label th:text="#{field.col.is_nullable}" class="form-check-label"
+										th:for="'isNullable' + ${col.id}">NULL許容</label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="checkbox" name="isAutoIncrement"
+										th:id="'isAutoIncrement' + ${col.id}" th:checked="${col.isAutoIncrement}" />
+									<label th:text="#{field.col.is_auto_increment}" class="form-check-label"
+										th:for="'isAutoIncrement' + ${col.id}">AUTO
+										INCREMENT</label>
+								</div>
+							</div>
+							<div class="col-md-12">
+								<label th:text="#{field.col.default_val}" class="form-label"
+									th:for="'defaultValue' + ${col.id}">初期値</label>
+								<input type="text" class="form-control" name="defaultValue"
+									th:id="'defaultValue' + ${col.id}" th:value="${col.defaultValue}" />
+							</div>
+							<div class="col-md-12">
+								<label th:text="#{field.col.check_constraint}" class="form-label"
+									th:for="'checkConstraint' + ${table.id}">制約</label>
+								<input type="text" class="form-control" name="checkConstraint"
+									th:id="'checkConstraint' + ${table.id}" th:value="${col.checkConstraint}"
+									placeholder="e.g. price >= 0 or status IN ('A', 'B')" />
+							</div>
+							<div class="col-md-12">
+								<label th:text="#{field.col.comment}" class="form-label"
+									th:for="'comment' + ${col.id}">コメント</label>
+								<input type="text" class="form-control" name="comment" th:id="'comment' + ${col.id}"
+									th:value="${col.comment}" />
+							</div>
+
+							<div th:id="'fkTarget' + ${table.id} + ${col.id}" style="display: none;" class="col-md-12">
+								<div class="col-md-12">
+									<div class="col-md-6">
+										<label class="form-label" th:for="'fkId' + ${table.id}">参照カラム（FK）</label>
+										<select class="form-select" name="fkId" th:id="'fkId' + ${table.id}">
+											<option value="">--select foreign key--</option>
+											<option th:each="o : *{fkOptions}" th:value="${o.id}"
+												th:text="${o.tableName +  '.   ' + o.columnName}"	        
+												th:selected="${o.id == col.fkId}">
+											</option>
+										</select>
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<label class="form-label" th:for="'onDelete' + ${table.id}">ON DELETE</label>
+									<select class="form-select" name="onDelete"  th:id="'onDelete' + ${table.id}">
+										<option value="">--select a constraint--</option>
+										<option th:each="o : *{fkConstraintOptions}" th:value="${o}" th:text="${o}" th:selected="${o == col.onDelete}">
+										</option>
+									</select>
+								</div>
+
+								<div class="col-md-6">
+									<label class="form-label" th:for="'onUpdate' + ${table.id}">ON UPDATE</label>
+									<select class="form-select" name="onUpdate"  th:id="'onUpdate' + ${table.id}">
+										<option value="">--select a constraint--</option>
+										<option th:each="o : *{fkConstraintOptions}" th:value="${o}" th:text="${o}" th:selected="${o == col.onUpdate}">
+										</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</form>
+
+					<form
+						th:action="@{/project/{projectId}/database/{dbId}/table/{tableId}/column/delete(projectId=${project.id}, dbId=${db.id}, tableId=${table.id})}"
+						method="post" th:id="'deleteTableColumnRegisterForm' + ${col.id}"
+						th:object="${tableColumnRegisterForm}">
+						<input type="hidden" name="id" th:value="${col.id}" />
+						<input type="hidden" name="columnName" th:value="${col.columnName}" />
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+						th:text="#{label.close}">Close</button>
+					<button type="submit" class="btn btn-warning" th:form="'editTableColumnRegisterForm' + ${col.id}"
+						th:text="#{label.save}">EDIT</button>
+
+				</div>
+				<div class="modal-footer">
+					<p>
+						<span th:utext="#{icon.trash}"></span>
+						<b th:text="${col.columnName} + '（' + ${col.alias} + '）'"></b>
+					</p>
+					<button type="submit" class="btn btn-danger" th:text="#{label.delete}"
+						th:form="'deleteTableColumnRegisterForm' + ${col.id}">DELETE</button>
 				</div>
 			</div>
 		</div>

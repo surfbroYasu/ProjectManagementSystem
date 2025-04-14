@@ -91,44 +91,41 @@ public class DatabaseSettingController {
 		return TEMPLATE_ROOT + "list";
 	}
 
-
 	@PostMapping("/{action}")
 	public String handleDatabaseOperation(HttpServletRequest request,
-	                                      @PathVariable String action,
-	                                      @PathVariable Integer projectId,
-	                                      @Validated @ModelAttribute("dbInfoRegisterForm") DBInfoRegisterForm form,
-	                                      BindingResult bindingResult,
-	                                      Model model) {
+			@PathVariable String action,
+			@PathVariable Integer projectId,
+			@Validated @ModelAttribute("dbInfoRegisterForm") DBInfoRegisterForm form,
+			BindingResult bindingResult,
+			Model model) {
 
-	    String referer = request.getHeader("Referer");
+		String referer = request.getHeader("Referer");
 
-	    if (bindingResult.hasErrors()) {
-	        return "redirect:" + referer;
-	    }
+		if (bindingResult.hasErrors()) {
+			return "redirect:" + referer;
+		}
 
-	    DBInfo domain = new DBInfo();
-	    BeanUtils.copyProperties(form, domain);
-	    domain.setProjectId(projectId); // projectIdがDBInfoに必要な場合
+		DBInfo domain = new DBInfo();
+		BeanUtils.copyProperties(form, domain);
+		domain.setProjectId(projectId); // projectIdがDBInfoに必要な場合
 
-	    switch (action) {
-	        case "add":
-	            service.insertDatabase(domain);
-	            break;
-	        case "edit":
-	            service.updateDatabase(domain);
-	            break;
-	        case "delete":
-	            service.deleteDatabase(domain.getId());
-	            break;
-	        default:
-	            throw new IllegalArgumentException("Unsupported action: " + action);
-	    }
+		switch (action) {
+		case "add":
+			service.insertDatabase(domain);
+			break;
+		case "edit":
+			service.updateDatabase(domain);
+			break;
+		case "delete":
+			service.deleteDatabase(domain.getId());
+			break;
+		default:
+			throw new IllegalArgumentException("Unsupported action: " + action);
+		}
 
-	    return "redirect:" + referer;
+		return "redirect:" + referer;
 	}
 
-	
-	
 	@GetMapping("/{databaseId}/detail")
 	public String renderDBDetail(@PathVariable Integer projectId, @PathVariable Integer databaseId, Model model) {
 
@@ -147,7 +144,7 @@ public class DatabaseSettingController {
 	}
 
 	@PostMapping("/{databaseId}/table/{action}")
-	public String addTable(HttpServletRequest request, 
+	public String addTable(HttpServletRequest request,
 			@PathVariable String action,
 			@PathVariable Integer projectId,
 			@PathVariable Integer databaseId,
@@ -164,29 +161,27 @@ public class DatabaseSettingController {
 		TableInfo domain = new TableInfo();
 		BeanUtils.copyProperties(form, domain);
 
-		
-	    switch (action) {
-        case "add":
-        	service.insertTable(domain);
-            break;
-        case "edit":
-            service.updateTable(domain);
-            break;
-        case "delete":
-            service.deleteTable(domain.getId());
-            break;
-        default:
-            throw new IllegalArgumentException("Unsupported action: " + action);
-    }
-
+		switch (action) {
+		case "add":
+			service.insertTable(domain);
+			break;
+		case "edit":
+			service.updateTable(domain);
+			break;
+		case "delete":
+			service.deleteTable(domain.getId());
+			break;
+		default:
+			throw new IllegalArgumentException("Unsupported action: " + action);
+		}
 
 		return "redirect:" + referer;
 	}
 
 	@GetMapping("/{databaseId}/table/{tableId}")
 	public String renderTableDetail(Model model,
-			@PathVariable Integer projectId, 
-			@PathVariable Integer databaseId, 
+			@PathVariable Integer projectId,
+			@PathVariable Integer databaseId,
 			@PathVariable Integer tableId) {
 		model.addAttribute("title", "title.db.tables");
 
@@ -200,10 +195,11 @@ public class DatabaseSettingController {
 		return TEMPLATE_ROOT + "detailTable";
 	}
 
-	@PostMapping("/{databaseId}/table/{tableId}/column/add")
+	@PostMapping("/{databaseId}/table/{tableId}/column/{action}")
 	public String addColumn(HttpServletRequest request,
+			@PathVariable String action,
 			@PathVariable Integer projectId,
-			@PathVariable Integer databaseId, 
+			@PathVariable Integer databaseId,
 			@PathVariable Integer tableId,
 			@Validated @ModelAttribute("tableColumnRegisterForm") TableColumnRegisterForm form, BindingResult result,
 			Model model) {
@@ -216,8 +212,53 @@ public class DatabaseSettingController {
 		TableColumn domain = new TableColumn();
 		BeanUtils.copyProperties(form, domain);
 
-		service.insertColumn(domain);
-
+		switch (action) {
+		case "add":
+			System.out.println(domain);
+			service.insertColumn(domain);
+			break;
+		case "edit":
+			service.updateColumn(domain);
+			break;
+		case "delete":
+			service.deleteColumn(domain.getId());
+			break;
+		default:
+			throw new IllegalArgumentException("Unsupported action: " + action);
+		}
 		return "redirect:" + referer;
 	}
+
+	
+	@GetMapping("/{databaseId}/print")
+	public String printDBTables(@PathVariable Integer projectId, @PathVariable Integer databaseId, Model model) {
+
+		List<TableInfo> relatedTables = service.getTableInfoByDbIds(List.of(databaseId));
+
+		setProjectFromDatabase(model, databaseId);
+
+		model.addAttribute("tableList", relatedTables);
+		model.addAttribute("columnMap", service.getRelatedColumns(relatedTables));
+
+
+		return TEMPLATE_ROOT + "printTable";
+	}
+	
+	@GetMapping("/{databaseId}/table/{tableId}/print")
+	public String printTable(HttpServletRequest request,
+			@PathVariable Integer projectId,
+			@PathVariable Integer databaseId,
+			@PathVariable Integer tableId,
+			Model model) {
+
+		TableInfo targetTable = service.getTableByTableId(tableId);
+		List<TableColumn> columnList = service.getTableColumns(List.of(targetTable.getId()));
+
+		setProjectFromTable(model, tableId);
+		model.addAttribute("columnList", columnList);
+		model.addAttribute("print", "print");
+		
+		return TEMPLATE_ROOT + "printTable";
+	}
+
 }

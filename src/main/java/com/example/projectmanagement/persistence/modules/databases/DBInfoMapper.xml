@@ -37,6 +37,8 @@
 	    <result property="fkId" column="fk_id" />
 	    <result property="checkConstraint" column="check_constraint" />
 	    <result property="comment" column="comment" />
+	    <result property="onDelete" column="on_delete" />
+	    <result property="onUpdate" column="on_update" />
 	</resultMap>
 	
 
@@ -134,9 +136,8 @@
 	  DELETE FROM table_info
 	  WHERE id = #{tableId}
 	</delete>
-	
-	 
-	 
+
+
 	<select id="getColumnsByTableIds" resultMap="TableColumnResultMap" parameterType="list">
 	    SELECT *
 	    FROM table_columns
@@ -149,7 +150,6 @@
 	        </if>
 	    </where>
 	</select>
-
 
 	<select id="getFKList" resultMap="TableColumnResultMap">
 	  SELECT
@@ -168,8 +168,6 @@
 	    AND t.db_info_id = #{dbId}
 	  </where>
 	</select>
-
-
 	
 	<insert id="insertNewColumn" parameterType="com.example.projectmanagement.modules.databases.domain.TableColumn">
 	  INSERT INTO table_columns (
@@ -186,26 +184,86 @@
 	    default_val,
 	    fk_id,
 	    check_constraint,
-	    comment
+	    comment,
+	    on_delete,
+	    on_update
 	  ) VALUES (
 	    #{tableInfoId},
 	    #{columnName},
 	    #{alias},
 	    #{dataType},
 	    #{dataTypeParam},
-	    #{isPk},
-	    #{isUnique},
-	    #{isFK},
-	    #{isNullable},
-	    #{isAutoIncrement},
+	    <choose>
+	      <when test="isPk != null">#{isPk}</when>
+	      <otherwise>false</otherwise>
+	    </choose>,
+	    <choose>
+	      <when test="isUnique != null">#{isUnique}</when>
+	      <otherwise>false</otherwise>
+	    </choose>,
+	    <choose>
+	      <when test="isFK != null">#{isFK}</when>
+	      <otherwise>false</otherwise>
+	    </choose>,
+	    <choose>
+	      <when test="isNullable != null">#{isNullable}</when>
+	      <otherwise>false</otherwise>
+	    </choose>,
+	    <choose>
+	      <when test="isAutoIncrement != null">#{isAutoIncrement}</when>
+	      <otherwise>false</otherwise>
+	    </choose>,
 	    #{defaultValue},
 	    #{fkId},
 	    #{checkConstraint},
-	    #{comment}
+	    #{comment},
+	    #{onDelete},
+	    #{onUpdate}	    
 	  )
 	</insert>
+
+		
+	<update id="updateColumn" >
+	  UPDATE table_columns
+	  SET
+	    column_name = #{columnName},
+	    alias = #{alias},
+	    data_type = #{dataType},
+	    data_type_param = #{dataTypeParam},
+	    is_pk = <choose>
+	              <when test="isPk != null">#{isPk}</when>
+	              <otherwise>false</otherwise>
+	            </choose>,
+	    is_unique = <choose>
+	                  <when test="isUnique != null">#{isUnique}</when>
+	                  <otherwise>false</otherwise>
+	                </choose>,
+	    is_fk = <choose>
+	              <when test="isFK != null">#{isFK}</when>
+	              <otherwise>false</otherwise>
+	            </choose>,
+	    is_nullable = <choose>
+	                    <when test="isNullable != null">#{isNullable}</when>
+	                    <otherwise>false</otherwise>
+	                  </choose>,
+	    is_auto_increment = <choose>
+	                          <when test="isAutoIncrement != null">#{isAutoIncrement}</when>
+	                          <otherwise>false</otherwise>
+	                        </choose>,
+	    default_val = #{defaultValue},
+	    fk_id = #{fkId},
+	    check_constraint = #{checkConstraint},
+	    comment = #{comment},
+	    on_delete = #{onDelete},
+	    on_update = #{onUpdate}
+	  WHERE id = #{id}
+	</update>
+
 	
-	
+	<delete id="deleteColumn" parameterType="int">
+	  DELETE FROM table_columns
+	  WHERE id = #{columnId}
+	</delete>
 
 
 </mapper>

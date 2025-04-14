@@ -1,0 +1,93 @@
+<th:block th:fragment="columnTable">
+	<table class="table table-hover table-striped table-bordered shadow table-sm">
+		<thead class="table-primary">
+			<tr>
+				<th>カラム名</th>
+				<th>論理名</th>
+				<th>データ型</th>
+				<th>PK</th>
+				<th>UK</th>
+				<th>FK</th>
+				<th>NULL</th>
+				<th>AUTO INCR</th>
+				<th>初期値</th>
+				<th>制約</th>
+				<th>コメント</th>
+			</tr>
+		</thead>
+		<tbody th:if="${columnList.size()>0}">
+			<tr th:each="col : ${columnList}" th:onclick="'openModal(' + ${col.id} + ', \'colModal\')'">
+				<td style="width: 14%" th:text="${col.columnName}">column</td>
+				<td style="width: 12%" th:text="${col.alias}">alias</td>
+				<td style="width: 10%"
+					th:text="${col.dataType + (col.dataTypeParam != null ? '(' + col.dataTypeParam + ')' : '')}">
+					type</td>
+
+				<td style="width: 4%" class="text-center" th:text="${col.isPk ? '○' : ''}">pk</td>
+				<td style="width: 4%" class="text-center" th:text="${col.isUnique ? '○' : ''}">uk</td>
+				<td style="width: 4%" class="text-center" th:text="${col.isFK ? '○' : ''}">fk</td>
+				<td style="width: 4%" class="text-center" th:text="${col.isNullable ? '○' : ''}">nullable</td>
+				<td style="width: 4%" class="text-center" th:text="${col.isAutoIncrement ? '○' : ''}">auto</td>
+
+				<td style="width: 8%" th:text="${col.defaultValue}">default</td>
+				<td style="width: 18%" class="">
+					<div th:unless="${#strings.isEmpty(col.checkConstraint)}">
+						<span th:text="${col.checkConstraint}"></span>
+						<hr />
+					</div>
+
+					<div th:unless="${#strings.isEmpty(col.onDelete)}">
+						<span class="fw-lighter">on DELETE</span>
+						<span th:text="${col.onDelete}"></span>
+
+					</div>
+
+					<div th:unless="${#strings.isEmpty(col.onUpdate)}">
+						<span class="fw-lighter">on UPDATE</span>
+						<span th:text="${col.onUpdate}"></span>
+					</div>
+				</td>
+
+				<td style="width: 18%">
+					<span th:text="${col.comment}"></span>
+					<div th:if="${col.fkId != null}">
+						<span class="fw-lighter">参照: </span>
+						<span th:each="fk : ${tableColumnRegisterForm.fkOptions}" th:if="${fk.id == col.fkId}"
+							th:text="${fk.tableName + '.' + fk.columnName}"></span>
+					</div>
+				</td>
+
+
+				<th:block th:unless="${print}" th:insert="~{contents/databases/fragments/modal :: columModal}">
+				</th:block>
+
+			</tr>
+		</tbody>
+	</table>
+	<div class="page-break"></div>
+</th:block>
+
+<th:block th:fragment="tableDefHeading">
+
+	<table class="table table-bordered mb-3">
+		<tbody>
+			<tr>
+				<td style="width: 25%">自社</td>
+				<td style="width: 25%">
+					<div><strong>納品先</strong> </div>
+					<div><strong>プロジェクト名：</strong> <span th:text="${project.projectName}">プロジェクト名</span></div>
+				</td>
+				<td style="width: 25%">
+					<div> <span th:text="${table.tableName}">テーブル名</span></div>
+					<div><span th:text="${table.tableAlias}">テーブル呼称</span></div>
+				</td>
+				<td style="width: 25%">
+					<div>担当者</div>
+					<div>作成日</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+
+</th:block>

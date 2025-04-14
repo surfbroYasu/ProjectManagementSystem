@@ -37,6 +37,8 @@ public interface DBInfoMapper {
 	 * columns
 	 */
 	public void insertNewColumn(TableColumn domain);
+	public void updateColumn(TableColumn domain);
+	public void deleteColumn(int columnId);
 	public List<TableColumn> getFKList(int dbId);
 	public List<TableColumn> getColumnsByTableIds(List<Integer> tableIds);
 	

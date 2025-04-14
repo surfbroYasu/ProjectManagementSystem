@@ -2,6 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/parentLayout.html}">
 
+<th:block layout:fragment="meta">
+	<script th:src="@{/js/toggleForm.js}"></script>
+	<script th:src="@{/js/dbSetting/columnForm.js}"></script>
+</th:block>
 
 
 <th:block layout:fragment="breadCrumb">
@@ -16,44 +20,15 @@
 
 	<th:block th:insert="~{contents/databases/fragments/infoCard :: tableInfo}"></th:block>
 
-	<table class="table table-striped table-bordered shadow table-sm">
-		<thead class="table-primary">
-			<tr>
-				<th>カラム名</th>
-				<th>論理名</th>
-				<th>データ型</th>
-				<th>PK</th>
-				<th>UK</th>
-				<th>FK</th>
-				<th>NULL</th>
-				<th>AUTO INCR</th>
-				<th>初期値</th>
-				<th>制約</th>
-				<th>コメント</th>
-			</tr>
-		</thead>
-		<tbody th:if="${columnList.size()>0}">
-			<tr th:each="col : ${columnList}">
-				<td th:text="${col.columnName}">column</td>
-				<td th:text="${col.alias}">alias</td>
-				<td th:text="${col.dataType + (col.dataTypeParam != null ? '(' + col.dataTypeParam + ')' : '')}">
-					type</td>
-
-				<td th:text="${col.isPk ? '○' : ''}">pk</td>
-				<td th:text="${col.isUnique ? '○' : ''}">uk</td>
-				<td th:text="${col.isFK ? '○' : ''}">fk</td>
-				<td th:text="${col.isNullable ? '○' : '×'}">nullable</td>
-				<td th:text="${col.isAutoIncrement ? '○' : ''}">auto</td>
-				<td th:text="${col.defaultValue}">default</td>
-				<td th:text="${col.checkConstraint}">check</td>
-				<td th:text="${col.comment}">comment</td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="mb-3">
+		<a class="btn btn-primary" th:text="#{label.pdf.export}"
+			th:href="@{/project/{projectId}/database/{dbId}/table/{tableId}/print(projectId=${project.id}, dbId=${db.id}, tableId=${table.id})}">PDF出力</a>
+	</div>
+	<th:block th:insert="~{contents/databases/fragments/table :: columnTable}"></th:block>
 
 
 	<div class="my-5 py-3 px-5 bg-body-tertiary">
-		<h5 th:text="#{label.column.add}"></h5>
+		<h5 th:text="#{form.column.add}"></h5>
 		<th:block th:insert="~{contents/databases/fragments/register :: ColumnRegisterForm}"></th:block>
 	</div>
 

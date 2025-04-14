@@ -2,16 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/parentLayout.html}">
 
+<th:block layout:fragment="meta">
+	<script th:src="@{/js/accordion.js}"></script>
+	<script th:src="@{/js/toggleForm.js}"></script>
+</th:block>
+
 
 <th:block layout:fragment="breadCrumb">
-
 </th:block>
 
 <th:block layout:fragment="mainContent">
 
 
-	<th:block th:if="${dbInfo.size()>0}">
-		<th:block th:insert="~{contents/databases/fragments/accordion :: accordion}"></th:block>
+	<th:block th:if="${dbList.size()>0}">
+		<th:block th:insert="~{contents/databases/fragments/accordion :: dbInfoAccordion}"></th:block>
 	</th:block>
 
 

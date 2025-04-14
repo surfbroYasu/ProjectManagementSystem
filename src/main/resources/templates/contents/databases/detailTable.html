@@ -2,27 +2,37 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/parentLayout.html}">
 
+<th:block layout:fragment="meta">
+	<script th:src="@{/js/toggleForm.js}"></script>
+	<script th:src="@{/js/dbSetting/columnForm.js}"></script>
+</th:block>
+
 
 <th:block layout:fragment="breadCrumb">
-	
-	<li class="breadcrumb-item"><a th:href="@{/database/table/{id}(id=${db.id})}" th:text="${db.dbName}">BreadCrumb1</a></li>
-<!--	<li class="breadcrumb-item active" aria-current="page">BreadCrumb2</li>-->
+
+	<th:block th:insert="~{contents/databases/fragments/breadcrumb :: parent}"></th:block>
+	<th:block th:insert="~{contents/databases/fragments/breadcrumb :: child}"></th:block>
+	<li class="breadcrumb-item active" aria-current="page" th:text="#{title.db.tables}">テーブル詳細</li>
 
 </th:block>
 
 <th:block layout:fragment="mainContent">
-<p th:text="${db}">hello</p>
 
-<!--	<th:block th:if="${dbInfo.size()>0}">-->
-<!--		<th:block th:insert="~{contents/databases/fragments/accordion :: accordion}"></th:block>-->
-<!--	</th:block>-->
+	<th:block th:insert="~{contents/databases/fragments/infoCard :: tableInfo}"></th:block>
 
-
-<!--	<div class="my-5">-->
-<!--		<th:block th:insert="~{contents/databases/fragments/register :: DBRegisterForm}"></th:block>-->
-<!--	</div>-->
+	<div class="mb-3">
+		<a class="btn btn-primary" th:text="#{label.pdf.export}"
+			th:href="@{/project/{projectId}/database/{dbId}/table/{tableId}/print(projectId=${project.id}, dbId=${db.id}, tableId=${table.id})}">PDF出力</a>
+	</div>
+	<th:block th:insert="~{contents/databases/fragments/table :: columnTable}"></th:block>
 
 
+	<div class="my-5 py-3 px-5 bg-body-tertiary">
+		<h5 th:text="#{form.column.add}"></h5>
+		<th:block th:insert="~{contents/databases/fragments/register :: ColumnRegisterForm}"></th:block>
+	</div>
+
+	<div id="message-container" th:data-add="#{label.column.add}" th:data-close="#{label.close}"></div>
 </th:block>
 
 

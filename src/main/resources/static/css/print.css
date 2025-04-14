@@ -1,0 +1,56 @@
+@media print {
+	  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .container,
+  .table-responsive,
+  .table {
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th, td {
+    border: 1px solid #000 !important;
+    padding: 4px 8px !important;
+  }
+
+  thead {
+    background-color: #eee !important;
+    font-weight: bold;
+  }
+
+  /* ページ区切りを明示したい場合 */
+  .page-break {
+    page-break-after: always;
+  }
+
+  a[href]:after {
+    content: none !important;
+  }
+
+  .table-primary {
+    background-color: #cce5ff !important;
+    color: #000 !important;
+  }
+
+  th, td {
+    border: 1px solid #000 !important;
+  }
+  
+  .table{
+	  font-size: 9px;
+  }
+  
+}

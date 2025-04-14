@@ -15,6 +15,7 @@
 	<!--meta info-->
 
 	<link rel="stylesheet" th:href="@{/css/style.css}" />
+	<link rel="stylesheet" th:href="@{/css/print.css}" />
 
 	<script th:src="@{/webjars/jquery/jquery.js}"></script>
 
@@ -31,28 +32,19 @@
 <body class="container">
 
 	<div class="row mt-5">
-		<div class="col-2">
-			<div style="position: sticky; top: 1rem;">
-
-				<th:block th:insert="~{fragments/nav :: nav}"></th:block>
-			</div>
+		<div class="mb-3 no-print">
+			<button class="btn btn-primary" onclick="window.print()" th:text="#{label.pdf.export}">PDF出力</button>
 		</div>
 
-		<div class="col-10">
-			<div class="row">
-				<h4 th:text="#{${title}}"></h4>
-			</div>
-
-			<div class="row" th:if="${project}">
-				<th:block th:insert="~{fragments/breadCrumb :: breadCrumb}"></th:block>
-			</div>
-
-			<div class="row">
-				<th:block layout:fragment="mainContent">
-					<!-- ここに記述-->
-				</th:block>
-			</div>
+		<div class="mb-3 no-print">
+			<button class="btn btn-secondary" onclick="history.back()" th:text="#{label.return}">戻る</button>
 		</div>
+	</div>
+
+
+	<th:block layout:fragment="mainContent">
+		<!-- ここに記述-->
+	</th:block>
 	</div>
 
 

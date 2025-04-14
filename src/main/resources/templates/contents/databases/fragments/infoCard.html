@@ -1,0 +1,71 @@
+<th:block  th:fragment="tableInfo">
+	
+	<div class="card border-secondary mb-4 px-0">
+		<div class="card-header bg-secondary text-white fw-bold">
+			Table Info
+		</div>
+		<div class="card-body">
+
+			<div class="row mb-2">
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-4 fw-bold text-muted">DBMS</div>
+						<div class="col-md-8" th:text="${db.dbms}">MySQL</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-4 fw-bold text-muted">DB Name</div>
+						<div class="col-md-8" th:text="${db.dbName}">project_db</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row mb-2">
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-4 fw-bold text-muted">Table Name</div>
+						<div class="col-md-8" th:text="${table.tableName}">test_4</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-4 fw-bold text-muted">Table Alias</div>
+						<div class="col-md-8" th:text="${table.tableAlias}">テスト４</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	
+</th:block>
+
+
+<th:block  th:fragment="dbInfo">
+	
+	<div class="card border-secondary mb-4 px-0">
+		<div class="card-header bg-secondary text-white fw-bold">
+			Table Info
+		</div>
+		<div class="card-body">
+
+			<div class="row mb-2">
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-4 fw-bold text-muted">DBMS</div>
+						<div class="col-md-8" th:text="${db.dbms}">MySQL</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-4 fw-bold text-muted">DB Name</div>
+						<div class="col-md-8" th:text="${db.dbName}">project_db</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	
+</th:block>

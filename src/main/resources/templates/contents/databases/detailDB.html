@@ -2,24 +2,45 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/parentLayout.html}">
 
+<th:block layout:fragment="meta">
+	<script th:src="@{/js/accordion.js}"></script>
+	<script th:src="@{/js/toggleForm.js}"></script>
+	<script th:src="@{/js/dbSetting/columnForm.js}"></script>
+</th:block>
 
 <th:block layout:fragment="breadCrumb">
+	<th:block th:insert="~{contents/databases/fragments/breadcrumb :: parent}"></th:block>
+
+	<li class="breadcrumb-item active" aria-current="page" th:text="#{title.db.details}">データベース詳細ページ</li>
 </th:block>
 
 <th:block layout:fragment="mainContent">
-<p>hello</p>
 
-<!--	<th:block th:if="${dbInfo.size()>0}">-->
-<!--		<th:block th:insert="~{contents/databases/fragments/accordion :: accordion}"></th:block>-->
-<!--	</th:block>-->
+	<div class="row justify-content-center">
+		<div class="col-lg-12">
 
+			<!-- インフォカード -->
+			<th:block th:insert="~{contents/databases/fragments/infoCard :: dbInfo}"></th:block>
+			
+			<!-- フォーム -->
+			<div class="bg-primary-subtle shadow  border-top border-bottom border-3 border-primary px-4 py-5 mb-4">
+				<th:block th:insert="~{contents/databases/fragments/register :: TableRegisterForm}"></th:block>
+			</div>
 
-<!--	<div class="my-5">-->
-<!--		<th:block th:insert="~{contents/databases/fragments/register :: DBRegisterForm}"></th:block>-->
-<!--	</div>-->
+			<!-- アコーディオン -->
+			<th:block th:if="${tableList.size()>0}">
+				<th:block th:insert="~{contents/databases/fragments/accordion :: tableInfoAccordion}"></th:block>
+			</th:block>
 
+		</div>
+		
+	</div>
+	<div id="message-container" th:data-add="#{label.column.add}" th:data-close="#{label.close}"></div>
 
 </th:block>
 
+<script layout:fragment="bodyScript">
+
+</script>
 
 </html>

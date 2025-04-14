@@ -1,15 +1,21 @@
-package com.example.projectmanagement.modules.databases.domain;
+package com.example.projectmanagement.modules.databases.forms;
 
+import java.util.List;
+
+import com.example.projectmanagement.modules.databases.domain.TableColumn;
+
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class TableColumn {
-
-	private String tableName;
-
+public class TableColumnRegisterForm {
+	
 	private Integer id;
 	private Integer tableInfoId;
+	
+	@NotBlank
 	private String columnName;
+	
 	private String alias;
 	private String dataType;
 	private String dataTypeParam;
@@ -24,5 +30,11 @@ public class TableColumn {
 	private String comment;
 	private String onDelete;
 	private String onUpdate;
+	
+	public List<TableColumn> fkOptions;
+	
+	public List<String> getFkConstraintOptions(){
+		return List.of("CASCADE", "SET NULL", "RESTRICTED", "NO ACTION");
+	}
 	
 }

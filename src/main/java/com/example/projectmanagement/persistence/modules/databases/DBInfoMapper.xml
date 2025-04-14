@@ -19,6 +19,28 @@
 	  <result property="tableAlias" column="table_alias" />
 	  <result property="historyId" column="history_id" />
 	</resultMap>
+	
+	<resultMap id="TableColumnResultMap" type="com.example.projectmanagement.modules.databases.domain.TableColumn">
+	    <id property="id" column="id" />
+	    <result property="tableInfoId" column="table_info_id" />
+	    <result property="columnName" column="column_name" />
+	    <result property="tableName" column="table_name" />
+	    <result property="alias" column="alias" />
+	    <result property="dataType" column="data_type" />
+	    <result property="dataTypeParam" column="data_type_param" />
+	    <result property="isPk" column="is_pk" />
+	    <result property="isUnique" column="is_unique" />
+	    <result property="isFK" column="is_fk" />
+	    <result property="isNullable" column="is_nullable" />
+	    <result property="isAutoIncrement" column="is_auto_increment" />
+	    <result property="defaultValue" column="default_val" />
+	    <result property="fkId" column="fk_id" />
+	    <result property="checkConstraint" column="check_constraint" />
+	    <result property="comment" column="comment" />
+	    <result property="onDelete" column="on_delete" />
+	    <result property="onUpdate" column="on_update" />
+	</resultMap>
+	
 
 	 <select id="getDBInfoByProject" resultMap="DBInfoResultMap">
 	  SELECT *
@@ -49,15 +71,33 @@
 	  #{dbms}     
 	  )
 	</insert>
+	
+	<update id="updateDatabase" >
+	  UPDATE db_info
+	  SET 
+	    db_name = #{dbName},
+	    dbms = #{dbms}
+	  WHERE id = #{id}
+	</update>
+
+	<delete id="deleteDatabase" parameterType="int">
+	  DELETE FROM db_info
+	  WHERE id = #{id}
+	</delete>
+
   
   
 	<select id="getTableInfoByDbIds" resultMap="TableInfoResultMap" parameterType="list">
 	  SELECT *
 	  FROM table_info
-	  WHERE db_info_id IN
-	  <foreach item="id" collection="list" open="(" separator="," close=")">
-	    #{id}
-	  </foreach>
+	<where>
+	  <if test="list != null and list.size() > 0">
+	    db_info_id IN
+	    <foreach item="id" collection="list" open="(" separator="," close=")">
+	      #{id}
+	    </foreach>
+	  </if>
+	</where>
 	</select>
   
 	<select id="getTableByTableId" resultMap="TableInfoResultMap" >
@@ -82,6 +122,149 @@
 	   #{historyId}
 	   )
 	 </insert>
+	 
+	<update id="updateTable" >
+	  UPDATE table_info
+	  SET 
+	    table_name = #{tableName},
+	    table_alias = #{tableAlias},
+	    history_id = #{historyId}
+	  WHERE id = #{id}
+	</update>
+
+	<delete id="deleteTable" parameterType="int">
+	  DELETE FROM table_info
+	  WHERE id = #{tableId}
+	</delete>
+
+
+	<select id="getColumnsByTableIds" resultMap="TableColumnResultMap" parameterType="list">
+	    SELECT *
+	    FROM table_columns
+	    <where>
+	        <if test="list != null and list.size() > 0">
+	            table_info_id IN
+	            <foreach item="id" collection="list" open="(" separator="," close=")">
+	                #{id}
+	            </foreach>
+	        </if>
+	    </where>
+	</select>
+
+	<select id="getFKList" resultMap="TableColumnResultMap">
+	  SELECT
+	    c.id,
+	    c.table_info_id,
+	    c.column_name,
+	    t.table_name,
+	    c.alias,
+	    c.data_type,
+	    c.data_type_param
+	  FROM db_info db
+	  INNER JOIN table_info t ON t.db_info_id = db.id
+	  INNER JOIN table_columns c ON c.table_info_id = t.id
+	  <where>
+	    (c.is_pk = TRUE OR c.is_unique = TRUE)
+	    AND t.db_info_id = #{dbId}
+	  </where>
+	</select>
+	
+	<insert id="insertNewColumn" parameterType="com.example.projectmanagement.modules.databases.domain.TableColumn">
+	  INSERT INTO table_columns (
+	    table_info_id,
+	    column_name,
+	    alias,
+	    data_type,
+	    data_type_param,
+	    is_pk,
+	    is_unique,
+	    is_fk,
+	    is_nullable,
+	    is_auto_increment,
+	    default_val,
+	    fk_id,
+	    check_constraint,
+	    comment,
+	    on_delete,
+	    on_update
+	  ) VALUES (
+	    #{tableInfoId},
+	    #{columnName},
+	    #{alias},
+	    #{dataType},
+	    #{dataTypeParam},
+	    <choose>
+	      <when test="isPk != null">#{isPk}</when>
+	      <otherwise>false</otherwise>
+	    </choose>,
+	    <choose>
+	      <when test="isUnique != null">#{isUnique}</when>
+	      <otherwise>false</otherwise>
+	    </choose>,
+	    <choose>
+	      <when test="isFK != null">#{isFK}</when>
+	      <otherwise>false</otherwise>
+	    </choose>,
+	    <choose>
+	      <when test="isNullable != null">#{isNullable}</when>
+	      <otherwise>false</otherwise>
+	    </choose>,
+	    <choose>
+	      <when test="isAutoIncrement != null">#{isAutoIncrement}</when>
+	      <otherwise>false</otherwise>
+	    </choose>,
+	    #{defaultValue},
+	    #{fkId},
+	    #{checkConstraint},
+	    #{comment},
+	    #{onDelete},
+	    #{onUpdate}	    
+	  )
+	</insert>
+
+		
+	<update id="updateColumn" >
+	  UPDATE table_columns
+	  SET
+	    column_name = #{columnName},
+	    alias = #{alias},
+	    data_type = #{dataType},
+	    data_type_param = #{dataTypeParam},
+	    is_pk = <choose>
+	              <when test="isPk != null">#{isPk}</when>
+	              <otherwise>false</otherwise>
+	            </choose>,
+	    is_unique = <choose>
+	                  <when test="isUnique != null">#{isUnique}</when>
+	                  <otherwise>false</otherwise>
+	                </choose>,
+	    is_fk = <choose>
+	              <when test="isFK != null">#{isFK}</when>
+	              <otherwise>false</otherwise>
+	            </choose>,
+	    is_nullable = <choose>
+	                    <when test="isNullable != null">#{isNullable}</when>
+	                    <otherwise>false</otherwise>
+	                  </choose>,
+	    is_auto_increment = <choose>
+	                          <when test="isAutoIncrement != null">#{isAutoIncrement}</when>
+	                          <otherwise>false</otherwise>
+	                        </choose>,
+	    default_val = #{defaultValue},
+	    fk_id = #{fkId},
+	    check_constraint = #{checkConstraint},
+	    comment = #{comment},
+	    on_delete = #{onDelete},
+	    on_update = #{onUpdate}
+	  WHERE id = #{id}
+	</update>
+
+	
+	<delete id="deleteColumn" parameterType="int">
+	  DELETE FROM table_columns
+	  WHERE id = #{columnId}
+	</delete>
+
 
 </mapper>
 

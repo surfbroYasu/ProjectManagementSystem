@@ -22,6 +22,7 @@ import com.example.projectmanagement.modules.databases.forms.DBInfoRegisterForm;
 import com.example.projectmanagement.modules.databases.forms.TableColumnRegisterForm;
 import com.example.projectmanagement.modules.databases.forms.TableInfoRegisterForm;
 import com.example.projectmanagement.modules.databases.services.DatabaseService;
+import com.example.projectmanagement.modules.databases.sqlgenerator.DataTypeResolverFactory;
 import com.example.projectmanagement.modules.projects.services.ProjectService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -38,6 +39,9 @@ public class DatabaseSettingController {
 	@Autowired
 	private DatabaseService service;
 
+	@Autowired
+    private DataTypeResolverFactory resolverFactory;
+
 	@ModelAttribute("dbInfoRegisterForm")
 	public DBInfoRegisterForm setDBRegistForm() {
 		return new DBInfoRegisterForm();
@@ -52,18 +56,20 @@ public class DatabaseSettingController {
 		model.addAttribute("project", projectService.getProjectById(projectId));
 	}
 
-	private void setProjectFromDatabase(Model model, Integer databaseId) {
+	private DBInfo setProjectFromDatabase(Model model, Integer databaseId) {
 		DBInfo db = service.getDBInfoByDBId(databaseId);
 		model.addAttribute("project", projectService.getProjectById(db.getProjectId()));
 		model.addAttribute("db", db);
+		return db;
 	}
 
-	private void setProjectFromTable(Model model, Integer tableId) {
+	private DBInfo setProjectFromTable(Model model, Integer tableId) {
 		TableInfo table = service.getTableByTableId(tableId);
 		DBInfo db = service.getDBInfoByDBId(table.getDbInfoId());
 		model.addAttribute("project", projectService.getProjectById(db.getProjectId()));
 		model.addAttribute("db", db);
 		model.addAttribute("table", table);
+		return db;
 	}
 
 	/**
@@ -71,10 +77,12 @@ public class DatabaseSettingController {
 	 * @param model
 	 * @param databaseId
 	 */
-	private void setColumnFormToModel(Model model, Integer databaseId) {
+	private void setColumnFormToModel(Model model, Integer databaseId, String dbms) {
 		TableColumnRegisterForm form = new TableColumnRegisterForm();
 		form.setFkOptions(service.getFKList(databaseId));
 		model.addAttribute("tableColumnRegisterForm", form);
+		List<String> dataTypeOptions = resolverFactory.getResolver(dbms).getDataTypeOptions();
+		model.addAttribute("dataTypeOptions", dataTypeOptions);
 	}
 
 	@GetMapping("")
@@ -133,12 +141,12 @@ public class DatabaseSettingController {
 
 		model.addAttribute("title", "title.db.details");
 
-		setProjectFromDatabase(model, databaseId);
+		DBInfo db = setProjectFromDatabase(model, databaseId);
 
 		model.addAttribute("tableList", relatedTables);
 		model.addAttribute("columnMap", service.getRelatedColumns(relatedTables));
 
-		setColumnFormToModel(model, databaseId);
+		setColumnFormToModel(model, databaseId, db.getDbms());
 
 		return TEMPLATE_ROOT + "detailDB";
 	}
@@ -188,8 +196,8 @@ public class DatabaseSettingController {
 		TableInfo targetTable = service.getTableByTableId(tableId);
 		List<TableColumn> columnList = service.getTableColumns(List.of(targetTable.getId()));
 
-		setColumnFormToModel(model, targetTable.getDbInfoId());
-		setProjectFromTable(model, tableId);
+		DBInfo db = setProjectFromTable(model, tableId);
+		setColumnFormToModel(model, targetTable.getDbInfoId(), db.getDbms());
 		model.addAttribute("columnList", columnList);
 
 		return TEMPLATE_ROOT + "detailTable";

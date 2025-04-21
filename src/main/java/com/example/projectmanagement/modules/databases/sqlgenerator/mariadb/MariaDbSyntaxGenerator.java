@@ -155,14 +155,19 @@ public class MariaDbSyntaxGenerator extends AbstractSqlSyntaxGenerator {
 		sb.append(";");
 		return sb.toString();
 	}
-
 	/**
-	 * UPDATE文テンプレートを生成する（? プレースホルダ付き）。
+	 * 実データを埋め込んだ UPDATE 文を生成する。
 	 *
+	 * ---注意:---
+	 *   値には文字列や数値、Boolean、null が含まれることが想定される
+	 *   値は自動的に適切なSQL形式に整形される（formatValue により）
+	 *   WHERE句が指定されない場合、全行更新されるため注意
+	 *   
+	 *   
 	 * @param tableName テーブル名
-	 * @param columnNames 更新対象のカラム名リスト
-	 * @param whereClause WHERE句（例："id = ?"）
-	 * @return SQL UPDATE文
+	 * @param updates カラム名と更新値のマップ
+	 * @param whereClause WHERE句（例: "id = 1"）
+	 * @return 完成された UPDATE SQL文
 	 */
 	@Override
 	public String updateStatement(String tableName, Map<String, Object> updates, String whereClause) {
@@ -181,6 +186,14 @@ public class MariaDbSyntaxGenerator extends AbstractSqlSyntaxGenerator {
 		return sb.toString();
 	}
 
+	/**
+	 * UPDATE文テンプレートを生成する（? プレースホルダ付き）。
+	 *
+	 * @param tableName テーブル名
+	 * @param columnNames 更新対象のカラム名リスト
+	 * @param whereClause WHERE句（例："id = ?"）
+	 * @return SQL UPDATE文
+	 */
 	@Override
 	public String updateTemplate(String tableName, List<String> columnNames, String whereClause) {
 		StringBuilder sb = new StringBuilder();
@@ -197,13 +210,6 @@ public class MariaDbSyntaxGenerator extends AbstractSqlSyntaxGenerator {
 		return sb.toString();
 	}
 
-	/**
-	 * DELETE文を生成する。
-	 *
-	 * @param tableName テーブル名
-	 * @param whereClause WHERE句（例："id = ?"）。空の場合は全削除になるので注意。
-	 * @return SQL DELETE文
-	 */
 	@Override
 	public String deleteStatement(String tableName, String whereClause) {
 		StringBuilder sb = new StringBuilder();
@@ -215,6 +221,13 @@ public class MariaDbSyntaxGenerator extends AbstractSqlSyntaxGenerator {
 		return sb.toString();
 	}
 
+	/**
+	 * DELETE文を生成する。
+	 *
+	 * @param tableName テーブル名
+	 * @param whereClause WHERE句（例："id = ?"）。空の場合は全削除になるので注意。
+	 * @return SQL DELETE文
+	 */
 	@Override
 	public String deleteTemplate(String tableName, String whereClause) {
 		StringBuilder sb = new StringBuilder();

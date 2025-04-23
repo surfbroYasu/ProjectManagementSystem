@@ -23,6 +23,8 @@ import com.example.projectmanagement.modules.databases.forms.TableColumnRegister
 import com.example.projectmanagement.modules.databases.forms.TableInfoRegisterForm;
 import com.example.projectmanagement.modules.databases.services.DatabaseService;
 import com.example.projectmanagement.modules.databases.sqlgenerator.DataTypeResolverFactory;
+import com.example.projectmanagement.modules.databases.sqlgenerator.SqlGeneratorFactory;
+import com.example.projectmanagement.modules.databases.sqlgenerator.SqlSyntaxGenerator;
 import com.example.projectmanagement.modules.projects.services.ProjectService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,7 +42,10 @@ public class DatabaseSettingController {
 	private DatabaseService service;
 
 	@Autowired
-    private DataTypeResolverFactory resolverFactory;
+	private DataTypeResolverFactory resolverFactory;
+	
+	@Autowired
+	private SqlGeneratorFactory sqlFactory;
 
 	@ModelAttribute("dbInfoRegisterForm")
 	public DBInfoRegisterForm setDBRegistForm() {
@@ -200,6 +205,12 @@ public class DatabaseSettingController {
 		setColumnFormToModel(model, targetTable.getDbInfoId(), db.getDbms());
 		model.addAttribute("columnList", columnList);
 
+		//		TODO : SQL generator
+		SqlSyntaxGenerator sqlGen = sqlFactory.getGenerator(db.getDbms());
+		model.addAttribute("createTableSQL", sqlGen.createTable(targetTable, columnList));
+		model.addAttribute("dropTableSQL", sqlGen.dropTable(targetTable.getTableName()));
+		
+		
 		return TEMPLATE_ROOT + "detailTable";
 	}
 
@@ -237,7 +248,6 @@ public class DatabaseSettingController {
 		return "redirect:" + referer;
 	}
 
-	
 	@GetMapping("/{databaseId}/print")
 	public String printDBTables(@PathVariable Integer projectId, @PathVariable Integer databaseId, Model model) {
 
@@ -248,10 +258,9 @@ public class DatabaseSettingController {
 		model.addAttribute("tableList", relatedTables);
 		model.addAttribute("columnMap", service.getRelatedColumns(relatedTables));
 
-
 		return TEMPLATE_ROOT + "printTable";
 	}
-	
+
 	@GetMapping("/{databaseId}/table/{tableId}/print")
 	public String printTable(HttpServletRequest request,
 			@PathVariable Integer projectId,
@@ -265,7 +274,7 @@ public class DatabaseSettingController {
 		setProjectFromTable(model, tableId);
 		model.addAttribute("columnList", columnList);
 		model.addAttribute("print", "print");
-		
+
 		return TEMPLATE_ROOT + "printTable";
 	}
 

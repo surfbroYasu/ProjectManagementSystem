@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.projectmanagement.modules.databases.sqlgenerator.DataTypeResolver;
 
-@Component("mariadb")
+@Component("mariadbType")
 public class MariaDbDataTypeResolver implements DataTypeResolver {
 
 	@Override

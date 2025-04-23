@@ -13,6 +13,6 @@ public class DataTypeResolverFactory {
 	}
 
 	public DataTypeResolver getResolver(String dbms) {
-		return resolvers.getOrDefault(dbms.toLowerCase(), resolvers.get("mariadb"));
+		return resolvers.getOrDefault(dbms.toLowerCase(), resolvers.get("mariadbType"));
 	}
 }

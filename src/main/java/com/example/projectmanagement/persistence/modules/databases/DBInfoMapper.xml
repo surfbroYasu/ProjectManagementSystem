@@ -39,6 +39,10 @@
 	    <result property="comment" column="comment" />
 	    <result property="onDelete" column="on_delete" />
 	    <result property="onUpdate" column="on_update" />
+	    
+	    <result property="refTableName" column="ref_table_name" />
+		<result property="refColumnName" column="ref_column_name" />
+
 	</resultMap>
 	
 
@@ -139,11 +143,16 @@
 
 
 	<select id="getColumnsByTableIds" resultMap="TableColumnResultMap" parameterType="list">
-	    SELECT *
-	    FROM table_columns
+	    SELECT
+	      c.*,
+	      t.table_name AS ref_table_name,
+	      ref.column_name AS ref_column_name
+	    FROM table_columns c
+	    LEFT JOIN table_columns ref ON c.fk_id = ref.id
+	    LEFT JOIN table_info t ON ref.table_info_id = t.id
 	    <where>
 	        <if test="list != null and list.size() > 0">
-	            table_info_id IN
+	            c.table_info_id IN
 	            <foreach item="id" collection="list" open="(" separator="," close=")">
 	                #{id}
 	            </foreach>

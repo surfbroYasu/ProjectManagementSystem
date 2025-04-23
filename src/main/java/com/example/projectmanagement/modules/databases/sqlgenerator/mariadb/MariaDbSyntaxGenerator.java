@@ -1,5 +1,6 @@
 package com.example.projectmanagement.modules.databases.sqlgenerator.mariadb;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +10,7 @@ import com.example.projectmanagement.modules.databases.domain.TableColumn;
 import com.example.projectmanagement.modules.databases.domain.TableInfo;
 import com.example.projectmanagement.modules.databases.sqlgenerator.AbstractSqlSyntaxGenerator;
 
-@Component("mariadb")
+@Component("mariadbSyntax")
 public class MariaDbSyntaxGenerator extends AbstractSqlSyntaxGenerator {
 
 	/**
@@ -23,6 +24,9 @@ public class MariaDbSyntaxGenerator extends AbstractSqlSyntaxGenerator {
 	public String createTable(TableInfo table, List<TableColumn> columns) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("CREATE TABLE ").append(table.getTableName()).append(" (\n");
+
+		List<String> fkConstraints = new ArrayList<>();
+
 		for (int i = 0; i < columns.size(); i++) {
 			TableColumn col = columns.get(i);
 			sb.append("  ").append(col.getColumnName())
@@ -32,21 +36,53 @@ public class MariaDbSyntaxGenerator extends AbstractSqlSyntaxGenerator {
 				sb.append("(").append(col.getDataTypeParam()).append(")");
 			}
 
-			if (Boolean.TRUE.equals(col.getIsPk()))
+			if (Boolean.TRUE.equals(col.getIsPk())) {
 				sb.append(" PRIMARY KEY");
-			else {
-				if (Boolean.FALSE.equals(col.getIsNullable()))
-					sb.append(" NOT NULL");
-				if (Boolean.TRUE.equals(col.getIsUnique()))
-					sb.append(" UNIQUE");
-				if (Boolean.TRUE.equals(col.getIsAutoIncrement()))
-					sb.append(" AUTO_INCREMENT");
 			}
 
-			if (i < columns.size() - 1)
-				sb.append(",");
+			if (Boolean.FALSE.equals(col.getIsNullable()))
+				sb.append(" NOT NULL");
+			if (Boolean.TRUE.equals(col.getIsUnique()))
+				sb.append(" UNIQUE");
+			if (Boolean.TRUE.equals(col.getIsAutoIncrement()))
+				sb.append(" AUTO_INCREMENT");
+
+			if (columns.size() -1 != i) {
+				sb.append(",");				
+			}
+
+			// 外部キー制約を構築（別途）
+			if (Boolean.TRUE.equals(col.getIsFK()) && col.getFkId() != null
+					&& col.getRefTableName() != null && col.getRefColumnName() != null) {
+
+				StringBuilder fk = new StringBuilder();
+				fk.append("  CONSTRAINT fk_").append(col.getColumnName())
+						.append(" FOREIGN KEY (").append(col.getColumnName()).append(")")
+						.append(" REFERENCES ").append(col.getRefTableName())
+						.append("(").append(col.getRefColumnName()).append(")");
+
+				if (col.getOnDelete() != null && !col.getOnDelete().isBlank()) {
+					fk.append(" ON DELETE ").append(col.getOnDelete());
+				}
+				if (col.getOnUpdate() != null && !col.getOnUpdate().isBlank()) {
+					fk.append(" ON UPDATE ").append(col.getOnUpdate());
+				}
+
+				fkConstraints.add(fk.toString());
+			}
+
 			sb.append("\n");
 		}
+
+		// 外部キー制約を追加
+		for (int i = 0; i < fkConstraints.size(); i++) {
+			sb.append(fkConstraints.get(i));
+			if (i < fkConstraints.size() - 1) {
+				sb.append(",");
+			}
+			sb.append("\n");
+		}
+
 		sb.append(") ENGINE=InnoDB;");
 		return sb.toString();
 	}
@@ -155,6 +191,7 @@ public class MariaDbSyntaxGenerator extends AbstractSqlSyntaxGenerator {
 		sb.append(";");
 		return sb.toString();
 	}
+
 	/**
 	 * 実データを埋め込んだ UPDATE 文を生成する。
 	 *

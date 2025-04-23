@@ -14,6 +14,6 @@ public class SqlGeneratorFactory {
     }
 
     public SqlSyntaxGenerator getGenerator(String dbms) {
-        return generators.getOrDefault(dbms.toLowerCase(), generators.get("mariadb"));
+        return generators.getOrDefault(dbms.toLowerCase(), generators.get("mariadbSyntax"));
     }
 }

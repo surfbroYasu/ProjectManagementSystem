@@ -24,5 +24,7 @@ public class TableColumn {
 	private String comment;
 	private String onDelete;
 	private String onUpdate;
-	
+
+	private String refTableName;  
+	private String refColumnName;
 }

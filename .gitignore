@@ -44,3 +44,15 @@ Desktop.ini
 *.log
 logs/
 
+# Node.js
+/frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Vite build output
+/src/main/resources/static/js/bundle/
+
+# Logs
+/frontend/npm-debug.log*
+/frontend/yarn-debug.log*
+/frontend/yarn-error.log*

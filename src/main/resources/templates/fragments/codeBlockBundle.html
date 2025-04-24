@@ -1,0 +1,20 @@
+<th:block th:fragment="meta">
+	<!-- highlight.js -->
+	<script th:src="@{/webjars/highlightjs/10.1.2/highlight.min.js}"></script>
+	<link rel="stylesheet" th:href="@{/webjars/highlightjs/10.1.2/styles/default.min.css}" />
+	<script th:src="@{/webjars/highlightjs/10.1.2/languages/sql.min.js}"></script>
+
+	<!-- clipboard.js -->
+	<script th:src="@{/webjars/clipboard.js/2.0.11/clipboard.min.js}"></script>
+
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			hljs.highlightAll();
+			new ClipboardJS('.clipboard').on('success', function () {
+				alert("コピーしました！");
+			});
+		});
+	</script>
+
+</th:block>

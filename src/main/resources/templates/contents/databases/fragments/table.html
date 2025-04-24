@@ -52,8 +52,7 @@
 					<span th:text="${col.comment}"></span>
 					<div th:if="${col.fkId != null}">
 						<span class="fw-lighter">参照: </span>
-						<span th:each="fk : ${tableColumnRegisterForm.fkOptions}" th:if="${fk.id == col.fkId}"
-							th:text="${fk.tableName + '.' + fk.columnName}"></span>
+						<span th:text="${col.refTableName + '.' + col.refColumnName}"></span>
 					</div>
 				</td>
 

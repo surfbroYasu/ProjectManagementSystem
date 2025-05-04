@@ -75,7 +75,7 @@
 
 		<div class="col-md-3">
 			<label class="form-label" th:for="'dataType' + ${table.id}">データ型</label>
-			<select class="form-select" required th:field="*{dataType}" aria-label="Default select example">
+			<select class="form-select" required th:field="*{dataType}" th:id="'dataType' + ${table.id}" aria-label="Default select example">
 				<option  th:each="dt : ${dataTypeOptions}" th:value="${dt}" th:text="${dt}">DATATYPE</option>
 			</select>
 		</div>

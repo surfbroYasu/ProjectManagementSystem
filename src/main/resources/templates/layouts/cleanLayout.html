@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+	<!--	tab title-->
+	<!-- tab title -->
+	<title th:if="${title}" th:text="#{${title}}"></title>
+	<th:block th:unless="${title}" layout:fragment="tabTitle">
+	</th:block>
+
+
+	<!--meta info-->
+
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+
+	<script th:src="@{/webjars/jquery/jquery.js}"></script>
+
+	<link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+	<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+	<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+	
+	<th:block layout:fragment="meta"></th:block>
+
+	<script layout:fragment="meta-script"></script>
+</head>
+
+
+<body class="container">
+
+
+	<th:block layout:fragment="mainContent">
+		<!-- ここに記述-->
+	</th:block>
+	</div>
+
+
+	<script layout:fragment="bodyScript" th:inline="javascript"></script>
+</body>
+
+</html>

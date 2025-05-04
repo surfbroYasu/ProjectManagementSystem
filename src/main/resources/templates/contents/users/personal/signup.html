@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{contents/users/authentication.html}">
+
+<th:block layout:fragment="form">
+	<p class="text-center h3 fw-bold mb-5 mx-1 mx-md-4 mt-4" th:text="#{title.signup}"></p>
+
+	<form class="mx-1 mx-md-4" th:action="@{/user/signup/personal/register}" th:object="${signupForm}" method="post">
+
+
+		<!-- email -->
+		<div class="d-flex flex-row align-items-center mb-2">
+			<div data-mdb-input-init class="form-outline flex-fill mb-0">
+				<input type="email" th:field="*{email}" class="form-control" required />
+				<label class="form-label" for="email" th:text="#{field.auth.email}">Your Email</label>
+				<div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+			</div>
+		</div>
+
+		<!-- password -->
+		<div class="d-flex flex-row align-items-center mb-2 position-relative">
+			<div data-mdb-input-init class="form-outline flex-fill mb-0 w-100">
+				<div class="input-group">
+					<input type="password" th:field="*{password}" class="form-control" id="password"
+						aria-describedby="button-addon1" required />
+					<button class="btn btn-outline-secondary" type="button" id="button-addon1"
+						onclick="togglePassword('password', this)"><i class="bx bx-show"></i></button>
+				</div>
+				<label class="form-label" for="password" th:text="#{field.auth.pass}">Password</label>
+				<div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+			</div>
+		</div>
+
+		<!-- passwordConf -->
+		<div class="d-flex flex-row align-items-center mb-2 position-relative">
+			<div data-mdb-input-init class="form-outline flex-fill mb-0 w-100">
+				<div class="input-group">
+					<input type="password" th:field="*{passwordConf}" class="form-control" id="passwordConf"
+						aria-describedby="button-addon2" required />
+					<button class="btn btn-outline-secondary" type="button" id="button-addon2"
+						onclick="togglePassword('passwordConf', this)"><i class="bx bx-show"></i></button>
+				</div>
+				<label class="form-label" for="passwordConf" th:text="#{field.auth.conf_pass}">Repeat your
+					password</label>
+				<div class="text-danger" th:if="${#fields.hasErrors('passwordConf')}" th:errors="*{passwordConf}"></div>
+			</div>
+		</div>
+
+		<!-- agreedToTerms -->
+		<div class="form-check d-flex justify-content-center mb-5">
+			<input class="form-check-input me-2" type="checkbox" id="agreedToTerms" value="true"
+				th:field="*{agreedToTerms}" required />
+			<label class="form-check-label" for="agreedToTerms">
+				<span th:utext="#{field.auth.agree_terms('/user/terms')}">
+					I agree all statements in <a th:href="@{/user/terms}" target="_blank">Terms of service</a></span>
+			</label>
+		</div>
+		<div class="text-danger text-center mb-2" th:if="${#fields.hasErrors('agreedToTerms')}"
+			th:errors="*{agreedToTerms}"></div>
+
+
+
+		<div class="d-flex justify-content-center mx-4 mb-2 mb-lg-4">
+			<button type="submit" class="btn btn-primary btn-lg" th:text="#{title.signup}">Register</button>
+		</div>
+
+	</form>
+
+</th:block>
+
+<th:block layout:fragment="link">
+	<div class="text-center mt-3" th:utext="#{field.auth.to_login}"></div>
+</th:block>
+
+</html>

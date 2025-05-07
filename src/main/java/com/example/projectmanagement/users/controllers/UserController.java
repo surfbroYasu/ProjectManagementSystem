@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.projectmanagement.users.domain.User;
 import com.example.projectmanagement.users.domain.UserRoleEnum;
 import com.example.projectmanagement.users.forms.SimpleUserRegistForm;
+import com.example.projectmanagement.users.forms.UserInfoForm;
 import com.example.projectmanagement.users.security.CustomUserDetails;
 import com.example.projectmanagement.users.services.UserService;
 
@@ -28,6 +29,7 @@ import com.example.projectmanagement.users.services.UserService;
 public class UserController {
 
 	private static final String PERSONAL_SIGNUP = "contents/users/personal/signup";
+	private static final String USER_INFO_SETUP = "contents/users/setup";
 
 	@Autowired
 	private UserService userService;
@@ -35,6 +37,11 @@ public class UserController {
 	@ModelAttribute("signupForm")
 	public SimpleUserRegistForm setSingupForm() {
 		return new SimpleUserRegistForm();
+	}
+	
+	@ModelAttribute("userInfoForm")
+	public UserInfoForm setUserInfoForm() {
+		return new UserInfoForm();
 	}
 
 	@GetMapping("/signup/personal")
@@ -69,7 +76,21 @@ public class UserController {
 	@GetMapping("/setup")
 	public String renderUserSetupPage(@AuthenticationPrincipal CustomUserDetails loginUser, Model model) {
 		model.addAttribute("userInfo", loginUser);
-		return "contents/users/setup";
+		return USER_INFO_SETUP;
+	}
+	
+	@PostMapping("/setup/info")
+	public String updateUserInfo(@Validated @ModelAttribute("userInfoForm") UserInfoForm form, BindingResult result) {
+		
+		if (result.hasErrors()) {
+			return USER_INFO_SETUP;
+		}
+		
+		User user = new User();
+		BeanUtils.copyProperties(form, user);
+		
+		userService.updateUserInfo(user);
+		return "redirect:/";
 	}
 
 	@GetMapping("/terms")

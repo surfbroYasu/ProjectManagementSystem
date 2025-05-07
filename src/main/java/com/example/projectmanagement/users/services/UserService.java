@@ -26,5 +26,9 @@ public class UserService {
         return userMapper.findByEmail(email) != null;
     }
     
+    public void updateUserInfo(User user) {
+    	userMapper.updateUserInfo(user);
+    }
+    
 
 }

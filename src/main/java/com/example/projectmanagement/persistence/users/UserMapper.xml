@@ -25,5 +25,15 @@
 	    INSERT INTO users (password_hash, role, first_name, middle_name, last_name, email, is_active) 
 	    VALUES (#{passwordHash}, #{role}, #{firstName}, #{middleName}, #{lastName}, #{email}, #{isActive})
     </insert>
+    
+    <update id="updateUserInfo">
+    	UPDATE users SET 
+    	first_name= #{firstName}, 
+    	middle_name= #{middleName}, 
+    	last_name= #{lastName}
+    	<where>
+    		email = #{email}
+    	</where>
+    </update>
 
 </mapper>

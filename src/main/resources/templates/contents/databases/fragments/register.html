@@ -76,7 +76,7 @@
 		<div class="col-md-3">
 			<label class="form-label" th:for="'dataType' + ${table.id}">データ型</label>
 			<select class="form-select" required th:field="*{dataType}" th:id="'dataType' + ${table.id}" aria-label="Default select example">
-				<option  th:each="dt : ${dataTypeOptions}" th:value="${dt}" th:text="${dt}">DATATYPE</option>
+				<option  th:each="dt : ${dataTypeResolver.getDataTypeOptions()}" th:value="${dt}" th:text="${dt}">DATATYPE</option>
 			</select>
 		</div>
 
@@ -150,7 +150,7 @@
 				<label class="form-label" th:for="'onDelete' + ${table.id}">ON DELETE</label>
 				<select class="form-select" th:field="*{onDelete}" th:id="'onDelete' + ${table.id}">
 					<option value="">--select a constraint--</option>
-					<option th:each="o : *{fkConstraintOptions}" th:value="${o}" th:text="${o}">
+					<option th:each="o : ${dataTypeResolver.getFkConstraintOptions()}" th:value="${o}" th:text="${o}">
 					</option>
 				</select>
 			</div>
@@ -159,7 +159,7 @@
 				<label class="form-label" th:for="'onUpdate' + ${table.id}">ON UPDATE</label>
 				<select class="form-select" th:field="*{onUpdate}" th:id="'onUpdate' + ${table.id}">
 					<option value="">--select a constraint--</option>
-					<option th:each="o : *{fkConstraintOptions}" th:value="${o}" th:text="${o}">
+					<option th:each="o : ${dataTypeResolver.getFkConstraintOptions()}" th:value="${o}" th:text="${o}">
 					</option>
 				</select>
 			</div>

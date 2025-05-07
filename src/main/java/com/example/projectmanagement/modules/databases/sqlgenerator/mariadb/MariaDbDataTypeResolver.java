@@ -16,6 +16,18 @@ public class MariaDbDataTypeResolver implements DataTypeResolver {
                 "DATE", "DATETIME", "BOOLEAN", "JSON"
             );
 	}
+	
+	
+	@Override
+	public List<String> getFkConstraintOptions() {
+		return List.of(
+			"CASCADE",
+			"SET NULL",
+			"RESTRICT",
+			"NO ACTION"
+		);
+	}
+
 
 	
 }

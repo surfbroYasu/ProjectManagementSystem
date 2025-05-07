@@ -4,4 +4,5 @@ import java.util.List;
 
 public interface DataTypeResolver {
 	List<String> getDataTypeOptions();
+	List<String> getFkConstraintOptions();
 }

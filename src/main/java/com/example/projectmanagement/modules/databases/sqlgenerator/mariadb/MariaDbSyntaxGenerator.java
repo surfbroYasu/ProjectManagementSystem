@@ -70,12 +70,17 @@ public class MariaDbSyntaxGenerator extends AbstractSqlSyntaxGenerator {
 
 				fkConstraints.add(fk.toString());
 			}
-
-			sb.append("\n");
+			if (columns.size() -1 != i) {
+				sb.append("\n");
+			}
 		}
 
 		// 外部キー制約を追加
 		for (int i = 0; i < fkConstraints.size(); i++) {
+			if(i == 0) {
+				sb.append(",\n");
+			}
+			
 			sb.append(fkConstraints.get(i));
 			if (i < fkConstraints.size() - 1) {
 				sb.append(",");

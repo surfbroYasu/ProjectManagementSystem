@@ -32,9 +32,5 @@ public class TableColumnRegisterForm {
 	private String onUpdate;
 	
 	public List<TableColumn> fkOptions;
-	
-	public List<String> getFkConstraintOptions(){
-		return List.of("CASCADE", "SET NULL", "RESTRICTED", "NO ACTION");
-	}
-	
+
 }

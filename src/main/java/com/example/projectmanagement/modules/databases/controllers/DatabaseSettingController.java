@@ -22,6 +22,7 @@ import com.example.projectmanagement.modules.databases.forms.DBInfoRegisterForm;
 import com.example.projectmanagement.modules.databases.forms.TableColumnRegisterForm;
 import com.example.projectmanagement.modules.databases.forms.TableInfoRegisterForm;
 import com.example.projectmanagement.modules.databases.services.DatabaseService;
+import com.example.projectmanagement.modules.databases.sqlgenerator.DataTypeResolver;
 import com.example.projectmanagement.modules.databases.sqlgenerator.DataTypeResolverFactory;
 import com.example.projectmanagement.modules.databases.sqlgenerator.SqlGeneratorFactory;
 import com.example.projectmanagement.modules.databases.sqlgenerator.SqlSyntaxGenerator;
@@ -86,8 +87,8 @@ public class DatabaseSettingController {
 		TableColumnRegisterForm form = new TableColumnRegisterForm();
 		form.setFkOptions(service.getFKList(databaseId));
 		model.addAttribute("tableColumnRegisterForm", form);
-		List<String> dataTypeOptions = resolverFactory.getResolver(dbms).getDataTypeOptions();
-		model.addAttribute("dataTypeOptions", dataTypeOptions);
+		DataTypeResolver dataTypeResolver = resolverFactory.getResolver(dbms);
+		model.addAttribute("dataTypeResolver", dataTypeResolver);
 	}
 
 	@GetMapping("")
@@ -120,7 +121,7 @@ public class DatabaseSettingController {
 
 		DBInfo domain = new DBInfo();
 		BeanUtils.copyProperties(form, domain);
-		domain.setProjectId(projectId); // projectIdがDBInfoに必要な場合
+		domain.setProjectId(projectId); 
 
 		switch (action) {
 		case "add":

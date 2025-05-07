@@ -268,8 +268,11 @@
 							<div class="col-md-6">
 								<label th:text="#{field.col.data_type}" class="form-label"
 									th:for="'dataType' + ${col.id}">データ型</label>
-								<input type="text" class="form-control" name="dataType" th:id="'dataType' + ${col.id}"
-									th:value="${col.dataType}" />
+								<select class="form-select" required name="dataType" th:id="'dataType' + ${col.id}"
+									aria-label="Default select example">
+									<option th:each="dt : ${dataTypeResolver.getDataTypeOptions()}" th:value="${dt}"
+										th:text="${dt}">DATATYPE</option>
+								</select>
 							</div>
 							<div class="col-md-6">
 								<label th:text="#{field.col.data_type_param}" class="form-label"
@@ -342,7 +345,7 @@
 										<select class="form-select" name="fkId" th:id="'fkId' + ${table.id}">
 											<option value="">--select foreign key--</option>
 											<option th:each="o : *{fkOptions}" th:value="${o.id}"
-												th:text="${o.tableName +  '.   ' + o.columnName}"	        
+												th:text="${o.tableName +  '.   ' + o.columnName}"
 												th:selected="${o.id == col.fkId}">
 											</option>
 										</select>
@@ -351,18 +354,20 @@
 
 								<div class="col-md-6">
 									<label class="form-label" th:for="'onDelete' + ${table.id}">ON DELETE</label>
-									<select class="form-select" name="onDelete"  th:id="'onDelete' + ${table.id}">
+									<select class="form-select" name="onDelete" th:id="'onDelete' + ${table.id}">
 										<option value="">--select a constraint--</option>
-										<option th:each="o : *{fkConstraintOptions}" th:value="${o}" th:text="${o}" th:selected="${o == col.onDelete}">
+										<option th:each="o : ${dataTypeResolver.getFkConstraintOptions()}"
+											th:value="${o}" th:text="${o}">
 										</option>
 									</select>
 								</div>
 
 								<div class="col-md-6">
 									<label class="form-label" th:for="'onUpdate' + ${table.id}">ON UPDATE</label>
-									<select class="form-select" name="onUpdate"  th:id="'onUpdate' + ${table.id}">
+									<select class="form-select" name="onUpdate" th:id="'onUpdate' + ${table.id}">
 										<option value="">--select a constraint--</option>
-										<option th:each="o : *{fkConstraintOptions}" th:value="${o}" th:text="${o}" th:selected="${o == col.onUpdate}">
+										<option th:each="o : ${dataTypeResolver.getFkConstraintOptions()}"
+											th:value="${o}" th:text="${o}">
 										</option>
 									</select>
 								</div>

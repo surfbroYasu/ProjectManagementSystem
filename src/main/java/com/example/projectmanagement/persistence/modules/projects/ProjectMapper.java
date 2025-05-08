@@ -11,8 +11,9 @@ public interface ProjectMapper {
 	
 	public Project getProjectById(int projectId);
 
-	public List<Project> getAllProjects();
+	public List<Project> getAllProjectsByUser(int userId);
 	
 	public void insertProject(Project project);
-
+	
+	public boolean existsUserProject(int userId, int projectId);
 }

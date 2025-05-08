@@ -18,13 +18,18 @@ public class ProjectService {
 		mapper.insertProject(project);
 	}
 	
-	public List<Project> getProjects(){
-		return mapper.getAllProjects();
+	public List<Project> getProjects(int userId){
+		return mapper.getAllProjectsByUser(userId);
 	}
 	
 	public Project getProjectById(int projectId){
 		return mapper.getProjectById(projectId);
 	}
+	
+	public boolean isProjectAccessibleByUser(int projectId, int userId) {
+	    return mapper.existsUserProject(userId, projectId);
+	}
+
 
 	
 }

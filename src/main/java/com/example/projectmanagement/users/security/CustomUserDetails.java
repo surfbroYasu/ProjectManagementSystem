@@ -48,6 +48,10 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() { return true; }
     
+    public int getUserId() {
+    	return user.getId();
+    }
+    
     public Map<String, String> getFullNameInMap() {
     	
     	  Map<String, String> nameMap = new HashMap<>();

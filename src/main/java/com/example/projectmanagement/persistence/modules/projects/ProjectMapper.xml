@@ -13,9 +13,28 @@
     <result property="startDate" column="start_date"/>
 </resultMap>
 
-
+<!--	not being used currently-->
     <select id="getAllProjects" resultMap="ProjectResultMap">
         SELECT * FROM projects
+    </select>
+    
+    <!-- Mapper.xml -->
+	<select id="existsUserProject" resultType="boolean">
+	    SELECT EXISTS (
+	        SELECT 1 FROM project_developers
+	        WHERE user_id = #{userId}
+	        AND project_id = #{projectId}
+	    )
+	</select>
+    
+
+    <select id="getAllProjectsByUser" resultMap="ProjectResultMap">
+        SELECT * FROM projects p
+        INNER JOIN project_developers pd ON
+        	pd.project_id = p.id
+        <where>
+        	pd.user_id = #{userId}
+        </where>
     </select>
 
     <select id="getProjectById" resultMap="ProjectResultMap">

@@ -44,8 +44,17 @@
         </where>
     </select>
 
-    <insert id="insertProject">
-        INSERT INTO projects (project_name, application_name, client_id, start_date) VALUES (#{projectName}, #{applicationName},#{clientId}, #{startDate});
-    </insert>
+	<insert id="insertProject"
+	        parameterType="com.example.projectmanagement.modules.projects.domain.Project"
+	        useGeneratedKeys="true" keyProperty="id">
+	    INSERT INTO projects (project_name, application_name, client_id, start_date)
+	    VALUES (#{projectName}, #{applicationName}, #{clientId}, #{startDate});
+	</insert>
+
+	<insert id="insertProjectDev" >
+	    INSERT INTO project_developers (user_id, member_name, project_id, dev_role)
+	    VALUES (#{userId}, #{memberName}, #{projectId}, #{devRole});
+	</insert>
+
 
 </mapper>

@@ -1,5 +1,7 @@
 package com.example.projectmanagement.modules.projects.controllers;
 
+import java.util.Locale;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.projectmanagement.modules.projects.domain.Project;
+import com.example.projectmanagement.modules.projects.domain.ProjectDevRoleEnum;
+import com.example.projectmanagement.modules.projects.domain.ProjectDeveloper;
 import com.example.projectmanagement.modules.projects.forms.ProjectRegisterForm;
 import com.example.projectmanagement.modules.projects.services.ProjectService;
 import com.example.projectmanagement.users.security.CustomUserDetails;
@@ -31,7 +35,6 @@ public class ProjectController {
 		return new ProjectRegisterForm();
 	}
 
-
 	@GetMapping("")
 	public String renderProjectIndex(@AuthenticationPrincipal CustomUserDetails loginUser, Model model) {
 		model.addAttribute("title", "title.project.top");
@@ -40,7 +43,8 @@ public class ProjectController {
 	}
 
 	@PostMapping("/add")
-	public String addProject(@AuthenticationPrincipal CustomUserDetails loginUser, @Validated @ModelAttribute("projectRegisterForm") ProjectRegisterForm form,
+	public String addProject(Locale locale, @AuthenticationPrincipal CustomUserDetails loginUser,
+			@Validated @ModelAttribute("projectRegisterForm") ProjectRegisterForm form,
 			BindingResult bindingResult,
 			Model model) {
 
@@ -53,7 +57,17 @@ public class ProjectController {
 		Project domain = new Project();
 		BeanUtils.copyProperties(form, domain);
 
-		service.insertProject(domain);
+		ProjectDeveloper devInfo = new ProjectDeveloper(
+				null, //id
+				loginUser.getUserId(), //userId
+				null, //teamId
+				null, //projectId …サービス側で（プロジェクトをDBに登録後に）セット
+				loginUser.getFormattedFullName(locale), //memberName
+				ProjectDevRoleEnum.DEV.name() //devRole
+		);
+
+		service.createProjectWithDeveloper(domain, devInfo);
+
 		return "redirect:/projects";
 	}
 

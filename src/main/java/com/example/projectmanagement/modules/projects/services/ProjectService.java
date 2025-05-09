@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.projectmanagement.modules.projects.domain.Project;
+import com.example.projectmanagement.modules.projects.domain.ProjectDeveloper;
 import com.example.projectmanagement.persistence.modules.projects.ProjectMapper;
 
 @Service
@@ -29,7 +30,16 @@ public class ProjectService {
 	public boolean isProjectAccessibleByUser(int projectId, int userId) {
 	    return mapper.existsUserProject(userId, projectId);
 	}
+	
+	public void insertProjectDev(ProjectDeveloper devInfo) {
+		mapper.insertProjectDev(devInfo);
+	}
 
-
+	
+    public void createProjectWithDeveloper(Project project, ProjectDeveloper dev) {
+        mapper.insertProject(project); 
+        dev.setProjectId(project.getId());
+        mapper.insertProjectDev(dev);
+    }
 	
 }

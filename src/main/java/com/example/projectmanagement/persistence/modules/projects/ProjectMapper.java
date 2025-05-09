@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.example.projectmanagement.modules.projects.domain.Project;
+import com.example.projectmanagement.modules.projects.domain.ProjectDeveloper;
 
 @Mapper
 public interface ProjectMapper {
@@ -13,7 +14,9 @@ public interface ProjectMapper {
 
 	public List<Project> getAllProjectsByUser(int userId);
 	
+	public boolean existsUserProject(int userId, int projectId);
+	
 	public void insertProject(Project project);
 	
-	public boolean existsUserProject(int userId, int projectId);
+	public void insertProjectDev(ProjectDeveloper devInfo);
 }

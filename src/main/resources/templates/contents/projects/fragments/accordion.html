@@ -21,6 +21,14 @@
 						<p><strong>開始日：</strong> <span th:text="${project.startDate}">2025-04-01</span></p>
 						<p><strong>クライアント：</strong> <span th:text="${project.clientId}">1</span></p>
 
+						<!-- <form th:action="@{projects/delete}">
+							<input type="hidden" th:value="${project.id}" name="projectId">
+							<input type="submit" th:value="#{label.delete}" class="btn btn-danger">
+						</form> -->
+						<th:block th:insert="~{contents/projects/fragments/modal :: projectEditBtn}"></th:block>
+						<th:block th:insert="~{contents/projects/fragments/modal :: projectEditForm}"></th:block>
+						<th:block th:insert="~{contents/projects/fragments/modal :: projectDeleteBtn}"></th:block>
+						<th:block th:insert="~{contents/projects/fragments/modal :: projectDeleteForm}"></th:block>
 
 						<a th:href="@{/project/{projectId}/database(projectId=${project.id})}" class="btn btn-outline-secondary btn-sm">
 							DB情報

@@ -54,8 +54,8 @@ public class ProjectController {
 			return "contents/projects/list";
 		}
 
-		Project domain = new Project();
-		BeanUtils.copyProperties(form, domain);
+		Project project = new Project();
+		BeanUtils.copyProperties(form, project);
 
 		ProjectDeveloper devInfo = new ProjectDeveloper(
 				null, //id
@@ -66,8 +66,31 @@ public class ProjectController {
 				ProjectDevRoleEnum.DEV.name() //devRole
 		);
 
-		service.createProjectWithDeveloper(domain, devInfo);
+		service.createProjectWithDeveloper(project, devInfo);
 
+		return "redirect:/projects";
+	}
+
+	@PostMapping("/edit")
+	public String updateProject(@AuthenticationPrincipal CustomUserDetails loginUser,
+			@Validated @ModelAttribute("projectRegisterForm") ProjectRegisterForm form,
+			BindingResult bindingResult, Model model) {
+		
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("projects", service.getProjects(loginUser.getUserId()));
+			model.addAttribute("title", "title.project.top");
+			return "contents/projects/list";
+		}
+		Project project = new Project();
+		BeanUtils.copyProperties(form, project);
+		System.out.println(project);
+		service.updateProject(project);
+		return "redirect:/projects";
+	}
+
+	@PostMapping("/delete")
+	public String deleteProject(@ModelAttribute("projectRegisterForm") ProjectRegisterForm form) {
+		service.deleteProject(form.getId());
 		return "redirect:/projects";
 	}
 

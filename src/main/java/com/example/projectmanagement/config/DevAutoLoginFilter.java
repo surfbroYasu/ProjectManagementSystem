@@ -32,15 +32,13 @@ public class DevAutoLoginFilter extends OncePerRequestFilter {
 		if (auth == null || !auth.isAuthenticated()) {
 
 			CustomUserDetails dummyUser = new CustomUserDetails(
-				    new User(2, "dummy", "ROLE_SYSTEM_DEVELOPER", "Dev", null, "User", "dev@example.com", true)
-				    // 必要なら authorities も渡す
+				    new User(1, "dummy", "ROLE_SYSTEM_DEVELOPER", "Dev", null, "User", "dev@example.com", true)
 				);
 
 				UsernamePasswordAuthenticationToken authentication =
 				    new UsernamePasswordAuthenticationToken(dummyUser, null, dummyUser.getAuthorities());
 
 
-			// セキュリティコンテキストにセット
 			SecurityContext context = SecurityContextHolder.createEmptyContext();
 			context.setAuthentication(authentication);
 			SecurityContextHolder.setContext(context);

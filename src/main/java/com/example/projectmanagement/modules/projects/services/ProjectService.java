@@ -41,5 +41,14 @@ public class ProjectService {
         dev.setProjectId(project.getId());
         mapper.insertProjectDev(dev);
     }
+    
+    public void updateProject(Project project) {
+    	System.out.println("here");
+    	mapper.updateProject(project);
+    }
+    
+    public void deleteProject(int projectId) {
+    	mapper.deleteProject(projectId);
+    }
 	
 }

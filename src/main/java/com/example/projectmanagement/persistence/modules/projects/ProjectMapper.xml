@@ -18,7 +18,6 @@
         SELECT * FROM projects
     </select>
     
-    <!-- Mapper.xml -->
 	<select id="existsUserProject" resultType="boolean">
 	    SELECT EXISTS (
 	        SELECT 1 FROM project_developers
@@ -55,6 +54,21 @@
 	    INSERT INTO project_developers (user_id, member_name, project_id, dev_role)
 	    VALUES (#{userId}, #{memberName}, #{projectId}, #{devRole});
 	</insert>
+	
+	<update id="updateProject">
+	    UPDATE projects
+	    SET
+	        project_name = #{projectName},
+	        application_name = #{applicationName}
+	   <where>
+	    	 id = #{id}
+	   </where>
+	</update>
+	
+	<delete id="deleteProject">
+	    DELETE FROM projects
+	    WHERE id = #{projectId}
+	</delete>
 
 
 </mapper>

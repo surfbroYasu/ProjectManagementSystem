@@ -81,7 +81,7 @@
 						th:action="@{/projects/edit}"
 						th:object="${projectRegisterForm}" th:id="editprojecRegisterForm + ${project.id}"
 						method="post">
-						<input type="number" name="id" th:value="${project.id}" required/>
+						<input type="hidden" name="id" th:value="${project.id}" required/>
 						<div class="mb-3">
 							<label th:text="#{field.project_name}" class="form-label" for="editprojectName">テーブル名</label>
 							<input type="text" class="form-control" id="editprojectName" name="projectName"

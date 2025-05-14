@@ -1,11 +1,11 @@
-package com.example.projectmanagement.modules.users.services;
+package com.example.projectmanagement.users.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.projectmanagement.modules.users.domain.User;
 import com.example.projectmanagement.persistence.users.UserMapper;
+import com.example.projectmanagement.users.domain.User;
 
 @Service
 public class UserService {
@@ -19,12 +19,16 @@ public class UserService {
     public void registerUser(User user) {
         String encoded = passwordEncoder.encode(user.getPasswordHash());
         user.setPasswordHash(encoded);
-        user.setRole("USER");
         userMapper.insertUser(user);
     }
 
-    public boolean existsByUsername(String username) {
-        return userMapper.findByUsername(username) != null;
+    public boolean existsByEmail(String email) {
+        return userMapper.findByEmail(email) != null;
     }
+    
+    public void updateUserInfo(User user) {
+    	userMapper.updateUserInfo(user);
+    }
+    
 
 }

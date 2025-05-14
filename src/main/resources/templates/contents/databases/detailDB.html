@@ -3,9 +3,9 @@
 	layout:decorate="~{layouts/parentLayout.html}">
 
 <th:block layout:fragment="meta">
-	<script th:src="@{/js/accordion.js}"></script>
-	<script th:src="@{/js/toggleForm.js}"></script>
-	<script th:src="@{/js/dbSetting/columnForm.js}"></script>
+	<script th:src="@{/js/ui/accordion.js}"></script>
+	<script th:src="@{/js/ui/toggleForm.js}"></script>
+	<script th:src="@{/js/designated/dbSetting/columnForm.js}"></script>
 </th:block>
 
 <th:block layout:fragment="breadCrumb">
@@ -15,7 +15,6 @@
 </th:block>
 
 <th:block layout:fragment="mainContent">
-
 	<div class="row justify-content-center">
 		<div class="col-lg-12">
 
@@ -30,6 +29,7 @@
 			<!-- アコーディオン -->
 			<th:block th:if="${tableList.size()>0}">
 				<th:block th:insert="~{contents/databases/fragments/accordion :: tableInfoAccordion}"></th:block>
+				<!-- TODO: テーブル名編集機能 -->
 			</th:block>
 
 		</div>

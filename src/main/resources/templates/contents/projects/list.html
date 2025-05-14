@@ -2,6 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/parentLayout.html}">
 
+<th:block layout:fragment="meta">
+	<script th:src="@{/js/ui/toggleForm.js}"></script>
+	<script th:src="@{/js/designated/dbSetting/columnForm.js}"></script>
+</th:block>
 
 <th:block layout:fragment="mainContent">
 

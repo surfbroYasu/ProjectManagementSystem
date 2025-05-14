@@ -1,10 +1,12 @@
 package com.example.projectmanagement.modules.databases.controllers;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.projectmanagement.modules.databases.domain.DBInfo;
 import com.example.projectmanagement.modules.databases.domain.TableColumn;
@@ -21,7 +24,9 @@ import com.example.projectmanagement.modules.databases.domain.TableInfo;
 import com.example.projectmanagement.modules.databases.forms.DBInfoRegisterForm;
 import com.example.projectmanagement.modules.databases.forms.TableColumnRegisterForm;
 import com.example.projectmanagement.modules.databases.forms.TableInfoRegisterForm;
+import com.example.projectmanagement.modules.databases.services.ColumnValidationService;
 import com.example.projectmanagement.modules.databases.services.DatabaseService;
+import com.example.projectmanagement.modules.databases.sqlgenerator.DataTypeResolver;
 import com.example.projectmanagement.modules.databases.sqlgenerator.DataTypeResolverFactory;
 import com.example.projectmanagement.modules.databases.sqlgenerator.SqlGeneratorFactory;
 import com.example.projectmanagement.modules.databases.sqlgenerator.SqlSyntaxGenerator;
@@ -43,7 +48,14 @@ public class DatabaseSettingController {
 
 	@Autowired
 	private DataTypeResolverFactory resolverFactory;
+
+	@Autowired
+	private ColumnValidationService validationService;
 	
+	@Autowired
+	private MessageSource messageSource;
+
+
 	@Autowired
 	private SqlGeneratorFactory sqlFactory;
 
@@ -84,11 +96,12 @@ public class DatabaseSettingController {
 	 */
 	private void setColumnFormToModel(Model model, Integer databaseId, String dbms) {
 		TableColumnRegisterForm form = new TableColumnRegisterForm();
-		form.setFkOptions(service.getFKList(databaseId));
+		form.setForignOptions(service.getFKList(databaseId));
 		model.addAttribute("tableColumnRegisterForm", form);
-		List<String> dataTypeOptions = resolverFactory.getResolver(dbms).getDataTypeOptions();
-		model.addAttribute("dataTypeOptions", dataTypeOptions);
+		DataTypeResolver dataTypeResolver = resolverFactory.getResolver(dbms);
+		model.addAttribute("dataTypeResolver", dataTypeResolver);
 	}
+
 
 	@GetMapping("")
 	public String showDbInfo(@PathVariable Integer projectId, Model model) {
@@ -120,7 +133,7 @@ public class DatabaseSettingController {
 
 		DBInfo domain = new DBInfo();
 		BeanUtils.copyProperties(form, domain);
-		domain.setProjectId(projectId); // projectIdがDBInfoに必要な場合
+		domain.setProjectId(projectId);
 
 		switch (action) {
 		case "add":
@@ -200,53 +213,77 @@ public class DatabaseSettingController {
 
 		TableInfo targetTable = service.getTableByTableId(tableId);
 		List<TableColumn> columnList = service.getTableColumns(List.of(targetTable.getId()));
+		model.addAttribute("columnList", columnList);
 
 		DBInfo db = setProjectFromTable(model, tableId);
 		setColumnFormToModel(model, targetTable.getDbInfoId(), db.getDbms());
-		model.addAttribute("columnList", columnList);
-
+	
 		//		TODO : SQL generator
 		SqlSyntaxGenerator sqlGen = sqlFactory.getGenerator(db.getDbms());
 		model.addAttribute("createTableSQL", sqlGen.createTable(targetTable, columnList));
 		model.addAttribute("dropTableSQL", sqlGen.dropTable(targetTable.getTableName()));
-		
-		
+
 		return TEMPLATE_ROOT + "detailTable";
 	}
 
-	@PostMapping("/{databaseId}/table/{tableId}/column/{action}")
-	public String addColumn(HttpServletRequest request,
-			@PathVariable String action,
-			@PathVariable Integer projectId,
-			@PathVariable Integer databaseId,
-			@PathVariable Integer tableId,
-			@Validated @ModelAttribute("tableColumnRegisterForm") TableColumnRegisterForm form, BindingResult result,
-			Model model) {
-		String referer = request.getHeader("Referer");
+	@PostMapping("/{databaseId}/table/{tableId}/column")
+	public String handleColumnAction(HttpServletRequest request,
+	        @PathVariable Integer projectId,
+	        @PathVariable Integer databaseId,
+	        @PathVariable Integer tableId,
+	        @RequestParam("action") String action,
+	        @Validated @ModelAttribute("tableColumnRegisterForm") TableColumnRegisterForm form,
+	        BindingResult bindingResult,
+	        Model model,
+	        Locale locale) {
 
-		if (result.hasErrors()) {
-			return "redirect:" + referer;
-		}
+	    String redirectUrl = "redirect:" + request.getHeader("Referer");
+	    
+	    if ("delete".equals(action)) {
+	        service.deleteColumn(form.getId());
+	        return redirectUrl;
+	    }
 
-		TableColumn domain = new TableColumn();
-		BeanUtils.copyProperties(form, domain);
+	    validationService.setFalseToNull(form);
+	    String dbms = service.getDBInfoByDBId(databaseId).getDbms();
+	    validationService.validateForm(bindingResult, dbms, form);
 
-		switch (action) {
-		case "add":
-			System.out.println(domain);
-			service.insertColumn(domain);
-			break;
-		case "edit":
-			service.updateColumn(domain);
-			break;
-		case "delete":
-			service.deleteColumn(domain.getId());
-			break;
-		default:
-			throw new IllegalArgumentException("Unsupported action: " + action);
-		}
-		return "redirect:" + referer;
+	    if (bindingResult.hasErrors()) {
+	    	System.out.println(bindingResult);
+	    	
+	        model.addAttribute("errorColumnId", form.getId());
+	        
+			model.addAttribute("title", "title.db.tables");
+
+			TableInfo targetTable = service.getTableByTableId(tableId);
+			List<TableColumn> columnList = service.getTableColumns(List.of(targetTable.getId()));
+			model.addAttribute("columnList", columnList);
+
+			DBInfo db = setProjectFromTable(model, tableId);
+			DataTypeResolver dataTypeResolver = resolverFactory.getResolver(dbms);
+			model.addAttribute("dataTypeResolver", dataTypeResolver);
+		
+			SqlSyntaxGenerator sqlGen = sqlFactory.getGenerator(db.getDbms());
+			model.addAttribute("createTableSQL", sqlGen.createTable(targetTable, columnList));
+			model.addAttribute("dropTableSQL", sqlGen.dropTable(targetTable.getTableName()));
+
+			return TEMPLATE_ROOT + "detailTable";
+	    }
+
+
+	    TableColumn domain = new TableColumn();
+	    BeanUtils.copyProperties(form, domain);
+
+	    switch (action) {
+	        case "add" -> service.insertColumn(domain);
+	        case "edit" -> service.updateColumn(domain);
+	        default -> throw new IllegalArgumentException("Unsupported action: " + action);
+	    }
+
+	    return "redirect:/project/" + projectId + "/database/" + databaseId + "/table/" + tableId;
 	}
+
+
 
 	@GetMapping("/{databaseId}/print")
 	public String printDBTables(@PathVariable Integer projectId, @PathVariable Integer databaseId, Model model) {

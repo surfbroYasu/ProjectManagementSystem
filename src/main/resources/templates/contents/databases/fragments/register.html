@@ -56,90 +56,99 @@
 
 
 <!--カラム作成フォーム-->
-<th:block th:fragment="ColumnRegisterForm">
-	<form
-		th:action="@{/project/{projectId}/database/{dbId}/table/{tableId}/column/add(projectId=${project.id}, dbId=${db.id}, tableId=${table.id})}"
-		th:object="${tableColumnRegisterForm}" method="post" class="row g-2 mt-3">
+<th:block th:fragment="ColumnForm">
+	<form id="columnForm" th:object="${tableColumnRegisterForm}"
+		th:action="@{/project/{projectId}/database/{dbId}/table/{tableId}/column(projectId=${project.id}, dbId=${db.id}, tableId=${table.id})}"
+		method="post" class="row g-2">
+
+		<!-- フォーム全体のエラーリスト表示（項目に関係なく） -->
+		<div class="alert alert-danger" th:if="${#fields.hasErrors()}">
+			<ul class="mb-0">
+				<li th:each="err : ${#fields.errors()}" th:text="${err}"></li>
+			</ul>
+		</div>
+
+		<input type="hidden" th:field="*{id}" />
+
 		<input type="hidden" name="tableInfoId" th:value="${table.id}" />
 
 		<div class="col-md-3">
-			<label class="form-label" th:for="'columnName' + ${table.id}">カラム名</label>
-			<input type="text" class="form-control" th:field="*{columnName}" th:id="'columnName' + ${table.id}"
-				required />
+			<label class="form-label" th:for="'columnName'">カラム名</label>
+			<input type="text" class="form-control" th:field="*{columnName}" th:id="'columnName'" required />
 		</div>
 
 		<div class="col-md-3">
-			<label class="form-label" th:for="'alias' + ${table.id}">論理名</label>
-			<input type="text" class="form-control" th:field="*{alias}" th:id="'alias' + ${table.id}" />
+			<label class="form-label" th:for="'alias'">論理名</label>
+			<input type="text" class="form-control" th:field="*{alias}" th:id="'alias'" />
 		</div>
 
 		<div class="col-md-3">
-			<label class="form-label" th:for="'dataType' + ${table.id}">データ型</label>
-			<select class="form-select" required th:field="*{dataType}" aria-label="Default select example">
-				<option  th:each="dt : ${dataTypeOptions}" th:value="${dt}" th:text="${dt}">DATATYPE</option>
+			<label class="form-label" th:for="'dataType'">データ型</label>
+			<select class="form-select" required th:field="*{dataType}" th:id="'dataType'"
+				aria-label="Default select example">
+				<option th:each="dt : ${dataTypeResolver.getDataTypeOptions()}" th:value="${dt}" th:text="${dt}">
+					DATATYPE</option>
 			</select>
 		</div>
 
 		<div class="col-md-3">
-			<label class="form-label" th:for="'dataTypeParam' + ${table.id}">型パラメータ</label>
+			<label class="form-label" th:for="'dataTypeParam'">型パラメータ</label>
 			<div class="input-group">
 				<span class="input-group-text">(</span>
-				<input type="text" class="form-control" th:field="*{dataTypeParam}"
-					th:id="'dataTypeParam' + ${table.id}" />
+				<input type="text" class="form-control" th:field="*{dataTypeParam}" th:id="'dataTypeParam'" />
 				<span class="input-group-text">)</span>
 			</div>
 		</div>
 
 
 		<div class="col-md-12">
+
 			<div class="form-check form-check-inline">
-				<input class="form-check-input" type="checkbox" th:field="*{isPk}" th:id="'isPk' + ${table.id}" />
-				<label class="form-check-label" th:for="'isPk' + ${table.id}">PrimaryKey</label>
+				<input class="form-check-input" type="checkbox" th:field="*{isPrimary}" th:id="'isPrimary'" />
+				<label class="form-check-label" th:for="'isPrimary'">PrimaryKey</label>
 			</div>
 			<div class="form-check form-check-inline">
-				<input class="form-check-input" type="checkbox" th:field="*{isUnique}"
-					th:id="'isUnique' + ${table.id}" />
-				<label class="form-check-label" th:for="'isUnique' + ${table.id}">UniqueKey</label>
+				<input class="form-check-input" type="checkbox" th:field="*{isUnique}" th:id="'isUnique'" />
+				<label class="form-check-label" th:for="'isUnique'">UniqueKey</label>
 			</div>
 			<div class="form-check form-check-inline">
-				<input class="form-check-input" type="checkbox" th:field="*{isFK}" th:id="'isFK' + ${table.id}" />
-				<label class="form-check-label" th:for="'isFK' + ${table.id}">ForeignKey</label>
+				<input class="form-check-input" type="checkbox" th:field="*{isForign}" th:id="'isForign'" />
+				<label class="form-check-label" th:for="'isForign'">ForeignKey</label>
 			</div>
 			<div class="form-check form-check-inline">
-				<input class="form-check-input" type="checkbox" th:field="*{isNullable}"
-					th:id="'isNullable' + ${table.id}" />
-				<label class="form-check-label" th:for="'isNullable' + ${table.id}">NULL許容</label>
+				<input class="form-check-input" type="checkbox" th:field="*{isNullable}" th:id="'isNullable'" />
+				<label class="form-check-label" th:for="'isNullable'">NULL許容</label>
 			</div>
 			<div class="form-check form-check-inline">
 				<input class="form-check-input" type="checkbox" th:field="*{isAutoIncrement}"
-					th:id="'isAutoIncrement' + ${table.id}" />
-				<label class="form-check-label" th:for="'isAutoIncrement' + ${table.id}">AUTO INCREMENT</label>
+					th:id="'isAutoIncrement'" />
+				<label class="form-check-label" th:for="'isAutoIncrement'">AUTO INCREMENT</label>
 			</div>
 		</div>
 
 		<div class="col-md-3">
-			<label class="form-label" th:for="'defaultValue' + ${table.id}">初期値</label>
-			<input type="text" class="form-control" th:field="*{defaultValue}" th:id="'defaultValue' + ${table.id}" />
+			<label class="form-label" th:for="'defaultValue'">初期値</label>
+			<input type="text" class="form-control" th:field="*{defaultValue}" th:id="'defaultValue'" />
 		</div>
 
 		<div class="col-md-4">
-			<label class="form-label" th:for="'checkConstraint' + ${table.id}">制約</label>
-			<input type="text" class="form-control" th:field="*{checkConstraint}"
-				th:id="'checkConstraint' + ${table.id}" placeholder="e.g. price >= 0 or status IN ('A', 'B')" />
+			<label class="form-label" th:for="'checkConstraint'">制約</label>
+			<input type="text" class="form-control" th:field="*{checkConstraint}" th:id="'checkConstraint'"
+				placeholder="e.g. price >= 0 or status IN ('A', 'B')" />
 		</div>
 
 		<div class="col-md-5">
-			<label class="form-label" th:for="'comment' + ${table.id}">コメント</label>
-			<input type="text" class="form-control" th:field="*{comment}" th:id="'comment' + ${table.id}" />
+			<label class="form-label" th:for="'comment'">コメント</label>
+			<input type="text" class="form-control" th:field="*{comment}" th:id="'comment'" />
 		</div>
 
-		<div th:id="'fkTarget' + ${table.id}" style="display: none;" class="col-md-12">
+		<div th:id="'fkTarget'" style="display: none;" class="col-md-12">
 			<div class="col-md-12">
 				<div class="col-md-6">
-					<label class="form-label" th:for="'fkId' + ${table.id}">参照カラム（FK）</label>
-					<select class="form-select" th:field="*{fkId}" th:id="'fkId' + ${table.id}">
+					<label class="form-label" th:for="'forignId'">参照カラム（FK）</label>
+					<select class="form-select" th:field="*{forignId}" th:id="'forignId'">
 						<option value="">--select foreign key--</option>
-						<option th:each="o : *{fkOptions}" th:value="${o.id}"
+						<option th:each="o : *{forignOptions}" th:value="${o.id}"
 							th:text="${o.tableName +  '.   ' + o.columnName}">
 						</option>
 					</select>
@@ -147,30 +156,37 @@
 			</div>
 
 			<div class="col-md-6">
-				<label class="form-label" th:for="'onDelete' + ${table.id}">ON DELETE</label>
-				<select class="form-select" th:field="*{onDelete}" th:id="'onDelete' + ${table.id}">
+				<label class="form-label" th:for="'onDelete'">ON DELETE</label>
+				<select class="form-select" th:field="*{onDelete}" th:id="'onDelete'">
 					<option value="">--select a constraint--</option>
-					<option th:each="o : *{fkConstraintOptions}" th:value="${o}" th:text="${o}">
+					<option th:each="o : ${dataTypeResolver.getFkConstraintOptions()}" th:value="${o}" th:text="${o}">
 					</option>
 				</select>
 			</div>
 
 			<div class="col-md-6">
-				<label class="form-label" th:for="'onUpdate' + ${table.id}">ON UPDATE</label>
-				<select class="form-select" th:field="*{onUpdate}" th:id="'onUpdate' + ${table.id}">
+				<label class="form-label" th:for="'onUpdate'">ON UPDATE</label>
+				<select class="form-select" th:field="*{onUpdate}" th:id="'onUpdate'">
 					<option value="">--select a constraint--</option>
-					<option th:each="o : *{fkConstraintOptions}" th:value="${o}" th:text="${o}">
+					<option th:each="o : ${dataTypeResolver.getFkConstraintOptions()}" th:value="${o}" th:text="${o}">
 					</option>
 				</select>
 			</div>
 		</div>
-
-		<div class="col-md-2 d-flex align-items-end">
-			<button type="submit" class="btn btn-primary w-100">追加</button>
-		</div>
-
 	</form>
+</th:block>
 
+<th:block th:fragment="ColumnUpdateBtn">
+	<button type="submit" class="btn btn-warning" form="columnForm" th:text="#{label.save}" name="action"
+		value="edit">EDIT</button>
+</th:block>
 
+<th:block th:fragment="ColumnDeleteBtn">
+	<button type="submit" class="btn btn-danger" th:text="#{label.delete}" form="columnForm" name="action"
+		value="delete">DELETE</button>
+</th:block>
 
+<th:block th:fragment="ColumnNewBtn">
+	<button type="submit" class="btn btn-primary" form="columnForm" th:text="#{label.save}" name="action"
+		value="add">追加</button>
 </th:block>

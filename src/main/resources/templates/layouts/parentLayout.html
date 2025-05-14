@@ -5,8 +5,6 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
-	<!--	tab title-->
 	<!-- tab title -->
 	<title th:if="${title}" th:text="#{${title}}"></title>
 	<title th:unless="${title}" th:text="#{default.title}"></title>
@@ -21,7 +19,11 @@
 	<link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
 	<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 
-	<script src="/js/script.js" th:src="@{/js/script.js}"></script>
+	<!-- これだけでOK：codeblock.js に highlight.js / clipboard.js をすべて含めてある -->
+	<script th:src="@{/assets/codeblock/codeblock.js}"></script>
+	<link rel="stylesheet" th:href="@{/assets/codeblock/codeblock.css}" />
+
+	<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
 	<th:block layout:fragment="meta"></th:block>
 

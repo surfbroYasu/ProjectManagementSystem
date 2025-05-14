@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{contents/users/authentication.html}">
+
+<th:block layout:fragment="form">
+    
+	<p class="text-center h3 fw-bold mb-5 mx-1 mx-md-4 mt-4" >403 ERROR...</p>
+
+	<form class="mx-1 mx-md-4" th:action="@{/projects}" method="get">
+
+
+
+
+		<div class="d-flex justify-content-center mx-4 mb-2 mb-lg-4">
+			<button type="submit" class="btn btn-primary btn-lg" th:text="#{label.return}">Return</button>
+		</div>
+
+	</form>
+
+</th:block>
+
+
+</html>

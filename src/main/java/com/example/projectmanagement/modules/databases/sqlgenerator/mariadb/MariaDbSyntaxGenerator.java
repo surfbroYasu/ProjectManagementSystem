@@ -36,7 +36,7 @@ public class MariaDbSyntaxGenerator extends AbstractSqlSyntaxGenerator {
 				sb.append("(").append(col.getDataTypeParam()).append(")");
 			}
 
-			if (Boolean.TRUE.equals(col.getIsPk())) {
+			if (Boolean.TRUE.equals(col.getIsPrimary())) {
 				sb.append(" PRIMARY KEY");
 			}
 
@@ -52,7 +52,7 @@ public class MariaDbSyntaxGenerator extends AbstractSqlSyntaxGenerator {
 			}
 
 			// 外部キー制約を構築（別途）
-			if (Boolean.TRUE.equals(col.getIsFK()) && col.getFkId() != null
+			if (Boolean.TRUE.equals(col.getIsForign()) && col.getForignId() != null
 					&& col.getRefTableName() != null && col.getRefColumnName() != null) {
 
 				StringBuilder fk = new StringBuilder();
@@ -70,12 +70,17 @@ public class MariaDbSyntaxGenerator extends AbstractSqlSyntaxGenerator {
 
 				fkConstraints.add(fk.toString());
 			}
-
-			sb.append("\n");
+			if (columns.size() -1 != i) {
+				sb.append("\n");
+			}
 		}
 
 		// 外部キー制約を追加
 		for (int i = 0; i < fkConstraints.size(); i++) {
+			if(i == 0) {
+				sb.append(",\n");
+			}
+			
 			sb.append(fkConstraints.get(i));
 			if (i < fkConstraints.size() - 1) {
 				sb.append(",");
@@ -159,37 +164,27 @@ public class MariaDbSyntaxGenerator extends AbstractSqlSyntaxGenerator {
 	 */
 	@Override
 	public String insertStatement(String tableName, List<String> columnNames, List<Map<String, Object>> records) {
-		if (records == null || records.isEmpty())
-			return "";
+	    if (records == null || records.isEmpty()) return "";
 
-		StringBuilder sb = new StringBuilder();
-		sb.append("INSERT INTO ").append(tableName).append(" (")
-				.append(String.join(", ", columnNames)).append(")\nVALUES\n");
+	    StringBuilder sb = new StringBuilder();
+	    sb.append("INSERT INTO ").append(tableName).append(" (")
+	      .append(String.join(", ", columnNames)).append(")\nVALUES\n");
 
-		for (int i = 0; i < records.size(); i++) {
-			Map<String, Object> record = records.get(i);
+	    for (int i = 0; i < records.size(); i++) {
+	        Map<String, Object> record = records.get(i);
+	        sb.append("  (");
+	        for (int j = 0; j < columnNames.size(); j++) {
+	            Object value = record.get(columnNames.get(j));
+	            sb.append(formatValue(value));
+	            if (j < columnNames.size() - 1) sb.append(", ");
+	        }
+	        sb.append(")");
+	        if (i < records.size() - 1) sb.append(",");
+	        sb.append("\n");
+	    }
 
-			sb.append("  (");
-			for (int j = 0; j < columnNames.size(); j++) {
-				Object value = record.get(columnNames.get(j));
-				if (value == null) {
-					sb.append("NULL");
-				} else if (value instanceof Number || value instanceof Boolean) {
-					sb.append(value);
-				} else {
-					sb.append("'").append(value.toString().replace("'", "''")).append("'");
-				}
-				if (j < columnNames.size() - 1)
-					sb.append(", ");
-			}
-			sb.append(")");
-			if (i < records.size() - 1)
-				sb.append(",");
-			sb.append("\n");
-		}
-
-		sb.append(";");
-		return sb.toString();
+	    sb.append(";");
+	    return sb.toString();
 	}
 
 	/**

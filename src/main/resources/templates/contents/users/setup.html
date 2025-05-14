@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{contents/users/authentication.html}">
+
+<th:block layout:fragment="form">
+	<p class="text-center h3 fw-bold mb-5 mx-1 mx-md-4 mt-4" th:text="#{title.user_info.setup}"></p>
+
+	<form class="mx-1 mx-md-4" th:action="@{/user/setup/info}" th:object="${userInfoForm}" method="post">
+
+		<input type="hidden" name="email" th:value="${userInfo.getUsername}">
+
+		<div class="d-flex flex-row align-items-center mb-2 position-relative">
+			<div data-mdb-input-init class="form-outline flex-fill mb-0 w-100">
+				<input type="text" id="lastName" class="form-control" th:field="*{lastName}"/>
+				<label class="form-label" for="lastName" th:text="#{field.auth.last_name}">Last Name</label>
+			</div>
+		</div>
+		<div class="d-flex flex-row align-items-center mb-2 position-relative">
+			<div data-mdb-input-init class="form-outline flex-fill mb-0 w-100">
+				<input type="text" id="firstName" class="form-control" th:field="*{firstName}"/>
+				<label class="form-label" for="firstName" th:text="#{field.auth.first_name}">First Name</label>
+			</div>
+		</div>
+		<div class="d-flex flex-row align-items-center mb-2 position-relative">
+			<div data-mdb-input-init class="form-outline flex-fill mb-0 w-100">
+				<input type="text" id="middleName" class="form-control" th:field="*{middleName}"/>
+				<label class="form-label" for="middleName" th:text="#{field.auth.middle_name}">Middle Name</label>
+			</div>
+		</div>
+
+		<div class="d-flex justify-content-center mx-4 mb-2 mb-lg-4">
+			<button type="submit" class="btn btn-primary btn-lg" th:text="#{label.save}">Register</button>
+		</div>
+
+	</form>
+
+</th:block>
+
+<p th:text="${userInfo.getFullNameInMap}"></p>
+<p th:text="${userInfo.getAuthorities}"></p>
+</body>
+
+</html>

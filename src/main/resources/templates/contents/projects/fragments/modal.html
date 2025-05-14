@@ -1,0 +1,106 @@
+<!--
+	projectDelete :: HOW TO 
+	
+	BUTTON: <th:block th:insert="~{contents/projects/fragments/modal :: projectDeleteBtn}"></th:block>
+	MODAL: <th:block th:insert="~{contents/projects/fragments/modal :: projectDeleteForm}"></th:block>
+	
+-->
+<th:block th:fragment="projectDeleteBtn">
+    <button type="button" class="btn btn-danger"
+        th:onclick="'openModal(' + ${project.id} + ', \'deleteModal\')'">削除</button>
+
+</th:block>
+
+<th:block th:fragment="projectDeleteForm">
+    <div class="modal" th:id="'deleteModal' + ${project.id}" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <span th:utext="#{icon.danger}"></span>
+                        <span th:text="#{form.project.delete}"></span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        <span th:utext="#{icon.trash}"></span>
+                        <b th:text="${project.projectName} + '（' + ${project.applicationName} + '）'"></b>
+                    </p>
+                    <small th:text="#{message.conf.action}"></small>
+
+                    <form th:action="@{/projects/delete}" th:object="${projectRegisterForm}"
+                        th:id="deleteprojectRegisterForm + ${project.id}" method="post">
+                        <input type="text" name="id" th:value="${project.id}" />
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        th:text="#{label.close}">Close</button>
+
+                    <button type="submit" class="btn btn-danger" th:text="#{label.delete}"
+                        th:form="deleteprojectRegisterForm + ${project.id}">
+                        Save changes
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+
+<!--
+	projectEdit :: HOW TO 
+	
+	BUTTON: <th:block th:insert="~{contents/projects/fragments/modal :: projectEditBtn}"></th:block>
+	MODAL: <th:block th:insert="~{contents/projects/fragments/modal :: projectEditForm}"></th:block>
+	
+-->
+<th:block th:fragment="projectEditBtn">
+	<button type="button" class="btn btn-warning" th:onclick="'openModal(' + ${project.id} + ', \'editModal\')'">
+		<span th:text="#{label.edit}">編集</span>
+	</button>
+
+</th:block>
+
+<th:block th:fragment="projectEditForm">
+	<div class="modal fade" th:id="'editModal' + ${project.id}" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">
+						<span th:utext="#{icon.warning}"></span>
+						<span th:text="#{form.project.edit}">編集</span>
+					</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form
+						th:action="@{/projects/edit}"
+						th:object="${projectRegisterForm}" th:id="editprojecRegisterForm + ${project.id}"
+						method="post">
+						<input type="hidden" name="id" th:value="${project.id}" required/>
+						<div class="mb-3">
+							<label th:text="#{field.project_name}" class="form-label" for="editprojectName">テーブル名</label>
+							<input type="text" class="form-control" id="editprojectName" name="projectName"
+								th:value="${project.projectName}" required />
+						</div>
+						<div class="mb-3">
+							<label th:text="#{field.application_name}" class="form-label" for="editApplicationName">表示名</label>
+							<input type="text" class="form-control" id="editApplicationName" name="applicationName"
+								th:value="${project.ApplicationName}" />
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+						th:text="#{label.close}">閉じる</button>
+					<button type="submit" class="btn btn-warning" th:form="editprojecRegisterForm + ${project.id}"
+						th:text="#{label.save}">保存</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</th:block>

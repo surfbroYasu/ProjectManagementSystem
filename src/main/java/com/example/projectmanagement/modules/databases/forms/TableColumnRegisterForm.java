@@ -19,22 +19,19 @@ public class TableColumnRegisterForm {
 	private String alias;
 	private String dataType;
 	private String dataTypeParam;
-	private Boolean isPk;
+	private Boolean isPrimary;
 	private Boolean isUnique;
-	private Boolean isFK;
+	private Boolean isForign;
 	private Boolean isNullable;
 	private Boolean isAutoIncrement;
 	private String defaultValue;
-	private Integer fkId;
+	private Integer forignId;
 	private String checkConstraint;
 	private String comment;
 	private String onDelete;
 	private String onUpdate;
 	
-	public List<TableColumn> fkOptions;
-	
-	public List<String> getFkConstraintOptions(){
-		return List.of("CASCADE", "SET NULL", "RESTRICTED", "NO ACTION");
-	}
+	public List<TableColumn> forignOptions;
+
 	
 }

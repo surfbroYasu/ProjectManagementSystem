@@ -1,21 +1,28 @@
 import { defineConfig } from 'vite';
-import { resolve } from 'path';
 
 export default defineConfig({
   root: '.',
   build: {
-    outDir: '../src/main/resources/static/js/bundle',
+    outDir: '../src/main/resources/static/assets',
     emptyOutDir: true,
     assetsDir: '.',
     rollupOptions: {
-      input: './src/codeblock.js', 
+      input: {
+        codeblock: './src/codeblock.js'
+      },
       output: {
-        entryFileNames: 'codeblock.js', 
+        entryFileNames: (chunkInfo) => {
+          if (chunkInfo.name === 'codeblock') return 'codeblock/codeblock.js';
+          return '[name].js';
+        },
         assetFileNames: (chunkInfo) => {
-          // CSSだけは固定名にする
-          if (chunkInfo.name === 'color-brewer.css') return 'highlight.css';
+          if (chunkInfo.name === 'codeblock.css' || chunkInfo.name.includes('color-brewer')) {
+            return 'codeblock/codeblock.css';
+          }
           return '[name][extname]';
         }
+        
+        
       }
     }
   }

@@ -7,6 +7,8 @@ import lombok.Data;
 
 @Data
 public class ProjectRegisterForm {
+	
+	private Integer id;
 
 	@NotBlank
 	private String projectName;

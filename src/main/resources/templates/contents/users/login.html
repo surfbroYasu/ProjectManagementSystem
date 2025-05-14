@@ -1,22 +1,52 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>ログイン</title>
-</head>
-<body>
-<h2>ログイン画面</h2>
-<form th:action="@{/login}" method="post">
-    <div>
-        <label>ユーザー名</label>
-        <input type="text" name="username">
-    </div>
-    <div>
-        <label>パスワード</label>
-        <input type="password" name="password">
-    </div>
-    <div>
-        <button type="submit">ログイン</button>
-    </div>
-</form>
-</body>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{contents/users/authentication.html}">
+
+<th:block layout:fragment="form">
+	<p class="text-center h3 fw-bold mb-5 mx-1 mx-md-4 mt-4" th:text="#{title.login}"></p>
+
+	<form class="mx-1 mx-md-4" th:action="@{/login}" th:object="${loginForm}" method="post">
+		
+		
+		<div class="alert alert-danger" th:if="${loginError}">
+			<span th:text="#{error.auth.invalid}">メールアドレスまたはパスワードが違います。</span>
+		</div>
+
+		<div class="d-flex flex-row align-items-center mb-4">
+			<div data-mdb-input-init class="form-outline flex-fill mb-0">
+				<input type="email" th:field="*{email}" class="form-control" required />
+				<label class="form-label" for="email" th:text="#{field.auth.email}">Your Email</label>
+			</div>
+		</div>
+
+		<div class="d-flex flex-row align-items-center mb-4 position-relative">
+			<div data-mdb-input-init class="form-outline flex-fill mb-0">
+				<div class="input-group">
+					<input type="password" th:field="*{password}" class="form-control" id="password"
+						aria-describedby="button-addon1" required />
+
+					<button class="btn btn-outline-secondary" type="button" id="button-addon1"
+						onclick="togglePassword('password', this)"><i class="bx bx-show"></i></button>
+
+				</div>
+				<label class="form-label" for="password" th:text="#{field.auth.pass}">Password</label>
+			</div>
+		</div>
+
+
+		<div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+			<button type="submit" class="btn btn-primary btn-lg" th:text="#{title.login}">Log in</button>
+		</div>
+
+	</form>
+
+
+</th:block>
+
+
+<th:block layout:fragment="link">
+	<!-- ここに記述-->
+	<div class="text-center mt-3" th:utext="#{field.auth.to_signup}"></div>
+</th:block>
+
 </html>

@@ -23,19 +23,20 @@
 							データベース詳細
 						</a>
 
-						<a th:href="@{/project/{projectId}/database/{dbId}/print(projectId=${project.id}, dbId=${db.id})}" class="btn btn-outline-secondary btn-sm" th:text="#{title.table_def.print}">
+						<a th:href="@{/project/{projectId}/database/{dbId}/print(projectId=${project.id}, dbId=${db.id})}"
+							class="btn btn-outline-secondary btn-sm" th:text="#{title.table_def.print}">
 							テーブル定義書
 						</a>
 
-<!--						<a th:href="@{/project/{projectId}/modules(projectId=${projectId})}"-->
-<!--							class="btn btn-outline-secondary btn-sm">-->
-<!--							モジュール-->
-<!--						</a>-->
+						<!--						<a th:href="@{/project/{projectId}/modules(projectId=${projectId})}"-->
+						<!--							class="btn btn-outline-secondary btn-sm">-->
+						<!--							モジュール-->
+						<!--						</a>-->
 
-<!--						<a th:href="@{/project/{projectId}/requirements(projectId=${projectId})}"-->
-<!--							class="btn btn-outline-secondary btn-sm">-->
-<!--							要件定義-->
-<!--						</a>-->
+						<!--						<a th:href="@{/project/{projectId}/requirements(projectId=${projectId})}"-->
+						<!--							class="btn btn-outline-secondary btn-sm">-->
+						<!--							要件定義-->
+						<!--						</a>-->
 
 						<th:block th:insert="~{contents/databases/fragments/modal :: dbEditBtn}"></th:block>
 						<th:block th:insert="~{contents/databases/fragments/modal :: dbEditForm}"></th:block>
@@ -82,15 +83,15 @@
 							テーブル詳細
 						</a>
 
-						<a th:href="@{/project/{projectId}/database/{dbId}/table/{tableId}/print(projectId=${project.id}, dbId=${db.id}, tableId=${table.id})}" 
-						class="btn btn-outline-secondary btn-sm" th:text="#{title.table_def.print}">
+						<a th:href="@{/project/{projectId}/database/{dbId}/table/{tableId}/print(projectId=${project.id}, dbId=${db.id}, tableId=${table.id})}"
+							class="btn btn-outline-secondary btn-sm" th:text="#{title.table_def.print}">
 							テーブル定義書
 						</a>
-
+						<!-- 
 						<th:block th:insert="~{contents/databases/fragments/modal :: tableEditBtn}"></th:block>
 						<th:block th:insert="~{contents/databases/fragments/modal :: tableEditForm}"></th:block>
 						<th:block th:insert="~{contents/databases/fragments/modal :: tableDeleteBtn}"></th:block>
-						<th:block th:insert="~{contents/databases/fragments/modal :: tableDeleteForm}"></th:block>
+						<th:block th:insert="~{contents/databases/fragments/modal :: tableDeleteForm}"></th:block> -->
 
 						<hr />
 
@@ -107,15 +108,15 @@
 							</thead>
 							<tbody th:if="${columnMap[table.id] != null}">
 								<tr th:each="col : ${columnMap[table.id]}"
-									th:onclick="'openModal(' + ${col.id} + ', \'colModal\')'">
+									th:onclick="|location.href='@{/project/{projectId}/database/{dbId}/table/{tableId}(projectId=${project.id}, dbId=${db.id}, tableId=${table.id})}'|">
 									<td th:text="${col.columnName}">column</td>
 									<td th:text="${col.alias}">alias</td>
 									<td
 										th:text="${col.dataType + (col.dataTypeParam != null ? '(' + col.dataTypeParam + ')' : '')}">
 										type</td>
 
-									<td th:text="${col.isPk ? '○' : ''}">pk</td>
-									<td th:text="${col.isFK ? '○' : ''}">fk</td>
+									<td th:text="${col.isPrimary ? '○' : ''}">pk</td>
+									<td th:text="${col.isForign ? '○' : ''}">fk</td>
 									<td th:text="${col.isUnique ? '○' : ''}">uq</td>
 
 									<th:block th:insert="~{contents/databases/fragments/modal :: columModal}">
@@ -126,7 +127,7 @@
 
 						<!--クイック-->
 						<hr />
-						<div class="bg-light p-3">
+						<!-- <div class="bg-light p-3">
 
 							<button th:id="'toggleBtnAdd' + ${table.id}" class="btn btn-primary"
 								th:onclick="'toggleSection({id: ' + ${table.id} + ', sectionPrefix: \'formAdd\', buttonPrefix: \'toggleBtnAdd\', labelType: \'add\'})'">
@@ -139,7 +140,7 @@
 								</th:block>
 							</div>
 
-						</div>
+						</div> -->
 
 					</div>
 				</div>

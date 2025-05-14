@@ -16,16 +16,25 @@
 			</tr>
 		</thead>
 		<tbody th:if="${columnList.size()>0}">
-			<tr th:each="col : ${columnList}" th:onclick="'openModal(' + ${col.id} + ', \'colModal\')'">
+			<tr th:each="col : ${columnList}" th:id="'colRow' + ${col.id}" th:data-id="${col.id}"
+				th:data-column-name="${col.columnName}" th:data-alias="${col.alias}" th:data-data-type="${col.dataType}"
+				th:data-data-type-param="${col.dataTypeParam}" th:data-is-primary="${col.isPrimary}"
+				th:data-is-unique="${col.isUnique}" th:data-is-forign="${col.isForign}"
+				th:data-is-nullable="${col.isNullable}" th:data-is-auto-increment="${col.isAutoIncrement}"
+				th:data-default-value="${col.defaultValue}" th:data-check-constraint="${col.checkConstraint}"
+				th:data-on-delete="${col.onDelete}" th:data-on-update="${col.onUpdate}" th:data-comment="${col.comment}"
+				th:data-forign-id="${col.forignId}" th:data-ref-column-name="${col.refColumnName}"
+				th:onclick="'openColumnModalFromRow(' + ${col.id} + ')'">
+				<!-- <tr th:each="col : ${columnList}" th:onclick="'openModal(' + ${col.id} + ', \'colModal\')'"> -->
 				<td style="width: 14%" th:text="${col.columnName}">column</td>
 				<td style="width: 12%" th:text="${col.alias}">alias</td>
 				<td style="width: 10%"
 					th:text="${col.dataType + (col.dataTypeParam != null ? '(' + col.dataTypeParam + ')' : '')}">
 					type</td>
 
-				<td style="width: 4%" class="text-center" th:text="${col.isPk ? '○' : ''}">pk</td>
+				<td style="width: 4%" class="text-center" th:text="${col.isPrimary ? '○' : ''}">pk</td>
 				<td style="width: 4%" class="text-center" th:text="${col.isUnique ? '○' : ''}">uk</td>
-				<td style="width: 4%" class="text-center" th:text="${col.isFK ? '○' : ''}">fk</td>
+				<td style="width: 4%" class="text-center" th:text="${col.isForign ? '○' : ''}">fk</td>
 				<td style="width: 4%" class="text-center" th:text="${col.isNullable ? '○' : ''}">nullable</td>
 				<td style="width: 4%" class="text-center" th:text="${col.isAutoIncrement ? '○' : ''}">auto</td>
 
@@ -50,18 +59,24 @@
 
 				<td style="width: 18%">
 					<span th:text="${col.comment}"></span>
-					<div th:if="${col.fkId != null}">
+					<div th:if="${col.forignId != null}">
 						<span class="fw-lighter">参照: </span>
 						<span th:text="${col.refTableName + '.' + col.refColumnName}"></span>
 					</div>
 				</td>
 
-
-				<th:block th:unless="${print}" th:insert="~{contents/databases/fragments/modal :: columModal}">
+				<!-- <th:block th:if="${errorColumnId != null and col.id == errorColumnId}"
+					th:insert="~{contents/databases/fragments/modal :: columModal}">
 				</th:block>
+
+				<th:block th:if="${col.id != errorColumnId and (print == null or !print)}"
+					th:insert="~{contents/databases/fragments/modal :: columModal}">
+				</th:block> -->
+
 
 			</tr>
 		</tbody>
+
 	</table>
 	<div class="page-break"></div>
 </th:block>
@@ -81,8 +96,12 @@
 					<div><span th:text="${table.tableAlias}">テーブル呼称</span></div>
 				</td>
 				<td style="width: 25%">
-					<div>担当者</div>
-					<div>作成日</div>
+					<div>
+						<strong>担当者</strong>
+					</div>
+					<div>
+						<strong> 作成日</strong>
+					</div>
 				</td>
 			</tr>
 		</tbody>

@@ -28,13 +28,13 @@
 	    <result property="alias" column="alias" />
 	    <result property="dataType" column="data_type" />
 	    <result property="dataTypeParam" column="data_type_param" />
-	    <result property="isPk" column="is_pk" />
+	    <result property="isPrimary" column="is_pk" />
 	    <result property="isUnique" column="is_unique" />
-	    <result property="isFK" column="is_fk" />
+	    <result property="isForign" column="is_fk" />
 	    <result property="isNullable" column="is_nullable" />
 	    <result property="isAutoIncrement" column="is_auto_increment" />
 	    <result property="defaultValue" column="default_val" />
-	    <result property="fkId" column="fk_id" />
+	    <result property="forignId" column="fk_id" />
 	    <result property="checkConstraint" column="check_constraint" />
 	    <result property="comment" column="comment" />
 	    <result property="onDelete" column="on_delete" />
@@ -203,7 +203,7 @@
 	    #{dataType},
 	    #{dataTypeParam},
 	    <choose>
-	      <when test="isPk != null">#{isPk}</when>
+	      <when test="isPrimary != null">#{isPrimary}</when>
 	      <otherwise>false</otherwise>
 	    </choose>,
 	    <choose>
@@ -211,7 +211,7 @@
 	      <otherwise>false</otherwise>
 	    </choose>,
 	    <choose>
-	      <when test="isFK != null">#{isFK}</when>
+	      <when test="isForign != null">#{isForign}</when>
 	      <otherwise>false</otherwise>
 	    </choose>,
 	    <choose>
@@ -223,7 +223,7 @@
 	      <otherwise>false</otherwise>
 	    </choose>,
 	    #{defaultValue},
-	    #{fkId},
+	    #{forignId},
 	    #{checkConstraint},
 	    #{comment},
 	    #{onDelete},
@@ -240,7 +240,7 @@
 	    data_type = #{dataType},
 	    data_type_param = #{dataTypeParam},
 	    is_pk = <choose>
-	              <when test="isPk != null">#{isPk}</when>
+	              <when test="isPrimary != null">#{isPrimary}</when>
 	              <otherwise>false</otherwise>
 	            </choose>,
 	    is_unique = <choose>
@@ -248,7 +248,7 @@
 	                  <otherwise>false</otherwise>
 	                </choose>,
 	    is_fk = <choose>
-	              <when test="isFK != null">#{isFK}</when>
+	              <when test="isForign != null">#{isForign}</when>
 	              <otherwise>false</otherwise>
 	            </choose>,
 	    is_nullable = <choose>
@@ -260,7 +260,7 @@
 	                          <otherwise>false</otherwise>
 	                        </choose>,
 	    default_val = #{defaultValue},
-	    fk_id = #{fkId},
+	    fk_id = #{forignId},
 	    check_constraint = #{checkConstraint},
 	    comment = #{comment},
 	    on_delete = #{onDelete},

@@ -15,7 +15,6 @@
 </th:block>
 
 <th:block layout:fragment="mainContent">
-
 	<div class="row justify-content-center">
 		<div class="col-lg-12">
 
@@ -30,6 +29,7 @@
 			<!-- アコーディオン -->
 			<th:block th:if="${tableList.size()>0}">
 				<th:block th:insert="~{contents/databases/fragments/accordion :: tableInfoAccordion}"></th:block>
+				<!-- TODO: テーブル名編集機能 -->
 			</th:block>
 
 		</div>

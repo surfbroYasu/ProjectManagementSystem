@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.projectmanagement.modules.projects.domain.Project;
-import com.example.projectmanagement.modules.projects.domain.ProjectDeveloper;
-import com.example.projectmanagement.persistence.modules.projects.ProjectMapper;
+import com.example.projectmanagement.modules.projects.datastructure.entity.Project;
+import com.example.projectmanagement.modules.projects.datastructure.entity.ProjectDeveloper;
+import com.example.projectmanagement.modules.projects.persistence.ProjectMapper;
 
 @Service
 public class ProjectService {

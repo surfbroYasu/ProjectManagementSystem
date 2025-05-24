@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.projectmanagement.modules.projects.persistence.ProjectMapper">
+
+<resultMap id="ProjectResultMap" type="com.example.projectmanagement.modules.projects.datastructure.entity.Project">
+    <id property="id" column="id"/>
+    <result property="projectName" column="project_name"/>
+    <result property="applicationName" column="application_name"/>
+    <result property="clientId" column="client_id"/>
+    <result property="startDate" column="start_date"/>
+</resultMap>
+
+<!--	not being used currently-->
+    <select id="getAllProjects" resultMap="ProjectResultMap">
+        SELECT * FROM projects
+    </select>
+    
+	<select id="existsUserProject" resultType="boolean">
+	    SELECT EXISTS (
+	        SELECT 1 FROM project_developers
+	        WHERE user_id = #{userId}
+	        AND project_id = #{projectId}
+	    )
+	</select>
+    
+
+    <select id="getAllProjectsByUser" resultMap="ProjectResultMap">
+        SELECT * FROM projects p
+        INNER JOIN project_developers pd ON
+        	pd.project_id = p.id
+        <where>
+        	pd.user_id = #{userId}
+        </where>
+    </select>
+
+    <select id="getProjectById" resultMap="ProjectResultMap">
+        SELECT * FROM projects
+        <where>
+        	id=#{projectId}
+        </where>
+    </select>
+
+	<insert id="insertProject"
+	        parameterType="com.example.projectmanagement.modules.projects.datastructure.entity.Project"
+	        useGeneratedKeys="true" keyProperty="id">
+	    INSERT INTO projects (project_name, application_name, client_id, start_date)
+	    VALUES (#{projectName}, #{applicationName}, #{clientId}, #{startDate});
+	</insert>
+
+	<insert id="insertProjectDev" >
+	    INSERT INTO project_developers (user_id, member_name, project_id, dev_role)
+	    VALUES (#{userId}, #{memberName}, #{projectId}, #{devRole});
+	</insert>
+	
+	<update id="updateProject">
+	    UPDATE projects
+	    SET
+	        project_name = #{projectName},
+	        application_name = #{applicationName}
+	   <where>
+	    	 id = #{id}
+	   </where>
+	</update>
+	
+	<delete id="deleteProject">
+	    DELETE FROM projects
+	    WHERE id = #{projectId}
+	</delete>
+
+
+</mapper>

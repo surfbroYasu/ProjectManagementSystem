@@ -2,11 +2,9 @@ package com.example.projectmanagement.modules.databases.controllers;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,19 +16,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.projectmanagement.modules.databases.domain.DBInfo;
-import com.example.projectmanagement.modules.databases.domain.TableColumn;
-import com.example.projectmanagement.modules.databases.domain.TableInfo;
-import com.example.projectmanagement.modules.databases.forms.DBInfoRegisterForm;
-import com.example.projectmanagement.modules.databases.forms.TableColumnRegisterForm;
-import com.example.projectmanagement.modules.databases.forms.TableInfoRegisterForm;
-import com.example.projectmanagement.modules.databases.services.ColumnValidationService;
-import com.example.projectmanagement.modules.databases.services.DatabaseService;
-import com.example.projectmanagement.modules.databases.sqlgenerator.DataTypeResolver;
-import com.example.projectmanagement.modules.databases.sqlgenerator.DataTypeResolverFactory;
-import com.example.projectmanagement.modules.databases.sqlgenerator.SqlGeneratorFactory;
-import com.example.projectmanagement.modules.databases.sqlgenerator.SqlSyntaxGenerator;
-import com.example.projectmanagement.modules.projects.services.ProjectService;
+import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfo;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfo;
+import com.example.projectmanagement.modules.databases.datastructure.form.DBInfoRegisterForm;
+import com.example.projectmanagement.modules.databases.datastructure.form.TableColumnRegisterForm;
+import com.example.projectmanagement.modules.databases.datastructure.form.TableInfoRegisterForm;
+import com.example.projectmanagement.modules.databases.services.application.DBViewContextService;
+import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.DataTypeResolver;
+import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.DataTypeResolverFactory;
+import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.SqlGeneratorFactory;
+import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.SqlSyntaxGenerator;
+import com.example.projectmanagement.modules.databases.services.application.validation.columnstructure.ColumnValidationService;
+import com.example.projectmanagement.modules.databases.services.domain.DatabaseService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -41,20 +39,16 @@ public class DatabaseSettingController {
 	private static final String TEMPLATE_ROOT = "contents/databases/";
 
 	@Autowired
-	private ProjectService projectService;
+	private DBViewContextService contextService;
 
 	@Autowired
-	private DatabaseService service;
+	private DatabaseService domainService;
 
 	@Autowired
 	private DataTypeResolverFactory resolverFactory;
 
 	@Autowired
 	private ColumnValidationService validationService;
-	
-	@Autowired
-	private MessageSource messageSource;
-
 
 	@Autowired
 	private SqlGeneratorFactory sqlFactory;
@@ -69,50 +63,13 @@ public class DatabaseSettingController {
 		return new TableInfoRegisterForm();
 	}
 
-	private void setProjectToModel(Model model, Integer projectId) {
-		model.addAttribute("project", projectService.getProjectById(projectId));
-	}
-
-	private DBInfo setProjectFromDatabase(Model model, Integer databaseId) {
-		DBInfo db = service.getDBInfoByDBId(databaseId);
-		model.addAttribute("project", projectService.getProjectById(db.getProjectId()));
-		model.addAttribute("db", db);
-		return db;
-	}
-
-	private DBInfo setProjectFromTable(Model model, Integer tableId) {
-		TableInfo table = service.getTableByTableId(tableId);
-		DBInfo db = service.getDBInfoByDBId(table.getDbInfoId());
-		model.addAttribute("project", projectService.getProjectById(db.getProjectId()));
-		model.addAttribute("db", db);
-		model.addAttribute("table", table);
-		return db;
-	}
-
-	/**
-	 * prep Foreign Key select options 
-	 * @param model
-	 * @param databaseId
-	 */
-	private void setColumnFormToModel(Model model, Integer databaseId, String dbms) {
-		TableColumnRegisterForm form = new TableColumnRegisterForm();
-		form.setForignOptions(service.getFKList(databaseId));
-		model.addAttribute("tableColumnRegisterForm", form);
-		DataTypeResolver dataTypeResolver = resolverFactory.getResolver(dbms);
-		model.addAttribute("dataTypeResolver", dataTypeResolver);
-	}
-
-
 	@GetMapping("")
 	public String showDbInfo(@PathVariable Integer projectId, Model model) {
 		model.addAttribute("title", "title.db.top");
-		setProjectToModel(model, projectId);
+		contextService.setProjectToModel(model, projectId);
 
-		List<DBInfo> dbInfo = service.getAll(projectId);
-		model.addAttribute("dbList", dbInfo);
-
-		Map<Integer, List<TableInfo>> tableInfoMap = service.getRelatedTableInfo(dbInfo);
-		model.addAttribute("tableInfoMap", tableInfoMap);
+		List<DBInfo> dbInfo = domainService.getAll(projectId);
+		contextService.setAllDatabaseTablesContext(model, dbInfo);
 
 		return TEMPLATE_ROOT + "list";
 	}
@@ -136,17 +93,10 @@ public class DatabaseSettingController {
 		domain.setProjectId(projectId);
 
 		switch (action) {
-		case "add":
-			service.insertDatabase(domain);
-			break;
-		case "edit":
-			service.updateDatabase(domain);
-			break;
-		case "delete":
-			service.deleteDatabase(domain.getId());
-			break;
-		default:
-			throw new IllegalArgumentException("Unsupported action: " + action);
+		case "add" -> domainService.insertDatabase(domain);
+		case "edit" -> domainService.updateDatabase(domain);
+		case "delete" -> domainService.deleteDatabase(domain.getId());
+		default -> throw new IllegalArgumentException("Unsupported action: " + action);
 		}
 
 		return "redirect:" + referer;
@@ -155,16 +105,11 @@ public class DatabaseSettingController {
 	@GetMapping("/{databaseId}/detail")
 	public String renderDBDetail(@PathVariable Integer projectId, @PathVariable Integer databaseId, Model model) {
 
-		List<TableInfo> relatedTables = service.getTableInfoByDbIds(List.of(databaseId));
-
 		model.addAttribute("title", "title.db.details");
 
-		DBInfo db = setProjectFromDatabase(model, databaseId);
-
-		model.addAttribute("tableList", relatedTables);
-		model.addAttribute("columnMap", service.getRelatedColumns(relatedTables));
-
-		setColumnFormToModel(model, databaseId, db.getDbms());
+		DBInfo db = contextService.setDatabaseContext(model, databaseId);
+		contextService.setDatabaseTablesContext(model, databaseId);
+		contextService.prepareColumnFormForModel(model, databaseId, db.getDbms());
 
 		return TEMPLATE_ROOT + "detailDB";
 	}
@@ -188,17 +133,10 @@ public class DatabaseSettingController {
 		BeanUtils.copyProperties(form, domain);
 
 		switch (action) {
-		case "add":
-			service.insertTable(domain);
-			break;
-		case "edit":
-			service.updateTable(domain);
-			break;
-		case "delete":
-			service.deleteTable(domain.getId());
-			break;
-		default:
-			throw new IllegalArgumentException("Unsupported action: " + action);
+		case "add" -> domainService.insertTable(domain);
+		case "edit" -> domainService.updateTable(domain);
+		case "delete" -> domainService.deleteTable(domain.getId());
+		default -> throw new IllegalArgumentException("Unsupported action: " + action);
 		}
 
 		return "redirect:" + referer;
@@ -211,14 +149,13 @@ public class DatabaseSettingController {
 			@PathVariable Integer tableId) {
 		model.addAttribute("title", "title.db.tables");
 
-		TableInfo targetTable = service.getTableByTableId(tableId);
-		List<TableColumn> columnList = service.getTableColumns(List.of(targetTable.getId()));
-		model.addAttribute("columnList", columnList);
+		List<TableColumn> columnList = domainService.getTableColumns(List.of(tableId));
 
-		DBInfo db = setProjectFromTable(model, tableId);
-		setColumnFormToModel(model, targetTable.getDbInfoId(), db.getDbms());
-	
-		//		TODO : SQL generator
+		DBInfo db = contextService.setDatabaseContext(model, databaseId);
+		TableInfo targetTable = contextService.setSingleTableContext(model, tableId, columnList);
+		contextService.prepareColumnFormForModel(model, targetTable.getDbInfoId(), db.getDbms());
+
+		//	 SQL generator
 		SqlSyntaxGenerator sqlGen = sqlFactory.getGenerator(db.getDbms());
 		model.addAttribute("createTableSQL", sqlGen.createTable(targetTable, columnList));
 		model.addAttribute("dropTableSQL", sqlGen.dropTable(targetTable.getTableName()));
@@ -228,72 +165,65 @@ public class DatabaseSettingController {
 
 	@PostMapping("/{databaseId}/table/{tableId}/column")
 	public String handleColumnAction(HttpServletRequest request,
-	        @PathVariable Integer projectId,
-	        @PathVariable Integer databaseId,
-	        @PathVariable Integer tableId,
-	        @RequestParam("action") String action,
-	        @Validated @ModelAttribute("tableColumnRegisterForm") TableColumnRegisterForm form,
-	        BindingResult bindingResult,
-	        Model model,
-	        Locale locale) {
+			@PathVariable Integer projectId,
+			@PathVariable Integer databaseId,
+			@PathVariable Integer tableId,
+			@RequestParam("action") String action,
+			@Validated @ModelAttribute("tableColumnRegisterForm") TableColumnRegisterForm form,
+			BindingResult bindingResult,
+			Model model,
+			Locale locale) {
 
-	    String redirectUrl = "redirect:" + request.getHeader("Referer");
-	    
-	    if ("delete".equals(action)) {
-	        service.deleteColumn(form.getId());
-	        return redirectUrl;
-	    }
+		String redirectUrl = "redirect:" + request.getHeader("Referer");
 
-	    validationService.setFalseToNull(form);
-	    String dbms = service.getDBInfoByDBId(databaseId).getDbms();
-	    validationService.validateForm(bindingResult, dbms, form);
+		if ("delete".equals(action)) {
+			domainService.deleteColumn(form.getId());
+			return redirectUrl;
+		}
 
-	    if (bindingResult.hasErrors()) {
-	    	System.out.println(bindingResult);
-	    	
-	        model.addAttribute("errorColumnId", form.getId());
-	        
+		validationService.setFalseToNull(form);
+		String dbms = domainService.getDBInfoByDBId(databaseId).getDbms();
+		validationService.validateForm(bindingResult, dbms, form);
+
+		if (bindingResult.hasErrors()) {
+
+			model.addAttribute("errorColumnId", form.getId());
+
 			model.addAttribute("title", "title.db.tables");
 
-			TableInfo targetTable = service.getTableByTableId(tableId);
-			List<TableColumn> columnList = service.getTableColumns(List.of(targetTable.getId()));
-			model.addAttribute("columnList", columnList);
+			List<TableColumn> columnList = domainService.getTableColumns(List.of(tableId));
 
-			DBInfo db = setProjectFromTable(model, tableId);
+			DBInfo db = contextService.setDatabaseContext(model, databaseId);
+			TableInfo targetTable = contextService.setSingleTableContext(model, tableId, columnList);
+			contextService.prepareColumnFormForModel(model, targetTable.getDbInfoId(), db.getDbms());
+
 			DataTypeResolver dataTypeResolver = resolverFactory.getResolver(dbms);
 			model.addAttribute("dataTypeResolver", dataTypeResolver);
-		
+
 			SqlSyntaxGenerator sqlGen = sqlFactory.getGenerator(db.getDbms());
 			model.addAttribute("createTableSQL", sqlGen.createTable(targetTable, columnList));
 			model.addAttribute("dropTableSQL", sqlGen.dropTable(targetTable.getTableName()));
 
 			return TEMPLATE_ROOT + "detailTable";
-	    }
+		}
 
+		TableColumn domain = new TableColumn();
+		BeanUtils.copyProperties(form, domain);
 
-	    TableColumn domain = new TableColumn();
-	    BeanUtils.copyProperties(form, domain);
+		switch (action) {
+		case "add" -> domainService.insertColumn(domain);
+		case "edit" -> domainService.updateColumn(domain);
+		default -> throw new IllegalArgumentException("Unsupported action: " + action);
+		}
 
-	    switch (action) {
-	        case "add" -> service.insertColumn(domain);
-	        case "edit" -> service.updateColumn(domain);
-	        default -> throw new IllegalArgumentException("Unsupported action: " + action);
-	    }
-
-	    return "redirect:/project/" + projectId + "/database/" + databaseId + "/table/" + tableId;
+		return "redirect:/project/" + projectId + "/database/" + databaseId + "/table/" + tableId;
 	}
-
-
 
 	@GetMapping("/{databaseId}/print")
 	public String printDBTables(@PathVariable Integer projectId, @PathVariable Integer databaseId, Model model) {
 
-		List<TableInfo> relatedTables = service.getTableInfoByDbIds(List.of(databaseId));
-
-		setProjectFromDatabase(model, databaseId);
-
-		model.addAttribute("tableList", relatedTables);
-		model.addAttribute("columnMap", service.getRelatedColumns(relatedTables));
+		contextService.setDatabaseContext(model, databaseId);
+		contextService.setDatabaseTablesContext(model, databaseId);
 
 		return TEMPLATE_ROOT + "printTable";
 	}
@@ -305,11 +235,11 @@ public class DatabaseSettingController {
 			@PathVariable Integer tableId,
 			Model model) {
 
-		TableInfo targetTable = service.getTableByTableId(tableId);
-		List<TableColumn> columnList = service.getTableColumns(List.of(targetTable.getId()));
+		List<TableColumn> columnList = domainService.getTableColumns(List.of(tableId));
 
-		setProjectFromTable(model, tableId);
-		model.addAttribute("columnList", columnList);
+		DBInfo db = contextService.setDatabaseContext(model, databaseId);
+		TableInfo targetTable = contextService.setSingleTableContext(model, tableId, columnList);
+		contextService.prepareColumnFormForModel(model, targetTable.getDbInfoId(), db.getDbms());
 		model.addAttribute("print", "print");
 
 		return TEMPLATE_ROOT + "printTable";

@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.projectmanagement.modules.projects.domain.Project;
-import com.example.projectmanagement.modules.projects.domain.ProjectDevRoleEnum;
-import com.example.projectmanagement.modules.projects.domain.ProjectDeveloper;
-import com.example.projectmanagement.modules.projects.forms.ProjectRegisterForm;
+import com.example.projectmanagement.modules.projects.datastructure.entity.Project;
+import com.example.projectmanagement.modules.projects.datastructure.entity.ProjectDeveloper;
+import com.example.projectmanagement.modules.projects.datastructure.form.ProjectRegisterForm;
+import com.example.projectmanagement.modules.projects.datastructure.model.ProjectDevRoleEnum;
 import com.example.projectmanagement.modules.projects.services.ProjectService;
 import com.example.projectmanagement.users.security.CustomUserDetails;
 

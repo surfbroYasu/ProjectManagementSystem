@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/parentLayout.html}">
+
+<th:block layout:fragment="meta">
+
+	<!-- これだけでOK：codeblock.js に highlight.js / clipboard.js をすべて含めてある -->
+	<script th:src="@{/assets/codeblock/codeblock.js}"></script>
+	<link rel="stylesheet" th:href="@{/assets/codeblock/codeblock.css}" />
+
+</th:block>
+
+<script layout:fragment="meta-script">
+
+</script>
+
+<!--<th:block layout:fragment="breadCrumb">-->
+
+<!--	<th:block th:insert="~{contents/databases/fragments/breadcrumb :: parent}"></th:block>-->
+<!--	<th:block th:insert="~{contents/databases/fragments/breadcrumb :: child}"></th:block>-->
+<!--	<li class="breadcrumb-item active" aria-current="page" th:text="#{title.db.tables}">テーブル詳細</li>-->
+
+<!--</th:block>-->
+
+<th:block layout:fragment="mainContent">
+
+<!--	<th:block th:insert="~{contents/databases/fragments/infoCard :: tableInfo}"></th:block>-->
+
+<!--	<div class="mb-3">-->
+<!--		<a class="btn btn-primary" th:text="#{label.pdf.export}"-->
+<!--			th:href="@{/project/{projectId}/database/{dbId}/table/{tableId}/print(projectId=${project.id}, dbId=${db.id}, tableId=${table.id})}">PDF出力</a>-->
+<!--	</div>-->
+
+<!--	 テーブル -->
+<!--	<th:block th:insert="~{contents/databases/fragments/table :: columnTable}"></th:block>-->
+
+<!--	 新規追加ボタン -->
+<!--	<div class="mb-3 text-end no-print">-->
+<!--		<button type="button" class="btn btn-primary" onclick="openColumnModalFromRow(0)">-->
+<!--			<i class='bx bx-plus'></i>-->
+<!--			<span th:text="#{form.column.add}">カラム追加</span>-->
+<!--			<span>[F2]</span>-->
+<!--		</button>-->
+<!--	</div>-->
+<!--	 モーダル -->
+<!--	<th:block th:insert="~{contents/databases/fragments/modal :: columModal}">-->
+<!--	</th:block>-->
+
+
+	<!-- SQL 表示用 -->
+	<div class="bg-light rounded p-3 border overflow-auto">
+		<!-- ボタン -->
+		<button class="btn btn-light clipboard" data-clipboard-target="#createSQL"
+			th:utext="#{icon.clipboard}">コピー</button>
+		<pre><code id="createSQL" class="language-java" th:text="${entity}"></code></pre>
+	</div>
+
+
+	<div id="copyToast" class="alert alert-success alert-dismissible fade shadow rounded-pill px-4 py-2 text-center"
+		role="alert"
+		style="position: fixed; bottom: 24px; right: 24px; min-width: 220px; max-width: 320px; z-index: 1055; display: none;">
+		コピーしました！
+	</div>
+
+
+<!--	<div id="message-container" th:data-add="#{label.column.add}" th:data-close="#{label.close}"></div>-->
+</th:block>
+
+<script layout:fragment="bodyScript" th:if="${errorColumnId != null}" th:inline="javascript">
+	/*<![CDATA[*/
+	let id = /*[[${errorColumnId}]]*/ 0;
+	openColumnModalFromRow(id, getColumnRowData(id));
+	/*]]>*/
+</script>
+
+</html>

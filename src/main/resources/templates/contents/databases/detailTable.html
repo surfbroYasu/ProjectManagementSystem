@@ -13,6 +13,13 @@
 	<script th:src="@{/js/designated/dbSetting/columnForm.js}"></script>
 </th:block>
 
+<script layout:fragment="meta-script">
+  document.addEventListener("keydown", function(event) {
+    if (event.key === "F2") {
+      openColumnModalFromRow(0); 
+    }
+  });
+</script>
 
 <th:block layout:fragment="breadCrumb">
 
@@ -39,12 +46,19 @@
 		<button type="button" class="btn btn-primary" onclick="openColumnModalFromRow(0)">
 			<i class='bx bx-plus'></i>
 			<span th:text="#{form.column.add}">カラム追加</span>
+			<span>[F2]</span>
 		</button>
 	</div>
 	<!-- モーダル -->
 	<th:block th:insert="~{contents/databases/fragments/modal :: columModal}">
 	</th:block>
 
+	<form th:action="@{/project/{projectId}/classdef/database-entity/{tableId}(projectId=${project.id}, tableId=${table.id})}">
+		<select name="lang" id="lang">
+			<option value="java">java</option>
+		</select>
+		<input type="submit" class="btn btn-primary" value="クラスを生成する"/>
+	</form>
 
 	<!-- SQL 表示用 -->
 	<div class="bg-light rounded p-3 border overflow-auto">
@@ -78,8 +92,5 @@
 	openColumnModalFromRow(id, getColumnRowData(id));
 	/*]]>*/
 </script>
-
-
-
 
 </html>

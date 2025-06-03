@@ -36,13 +36,10 @@ public class ClassDefContextService extends ProjectViewContextService {
 		TableInfo table = tableService.getTableByTableId(tableId);
 		DBInfo db = dbService.getDBInfoByDBId(table.getDbInfoId());
 		List<TableColumn> columnList = columnService.getTableColumns(List.of(tableId));
-		System.out.println(columnList);
-		
 		
 		ModelGenerator modelGenerator = modelFactory.getGenerator(lang);
 		ClassDefinitionModel classDef =  modelGenerator.createEntityClassFromDBTable(db, table, columnList, dataUseType);
 		
-		System.out.println(classDef);
 		model.addAttribute("entity", modelGenerator.stringBuilder(classDef));
 		
 		setProjectToModel(model, db.getProjectId());

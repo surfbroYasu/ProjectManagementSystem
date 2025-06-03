@@ -85,7 +85,7 @@ public class DBViewContextService extends ProjectViewContextService {
 				entity.getOnUpdate(),
 				entity.getTableName(),
 				entity.getRefTableName(),
-				entity.getRefTableName());
+				entity.getRefColumnName());
 	}
 
 	/**

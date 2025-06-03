@@ -19,6 +19,8 @@ import com.example.projectmanagement.modules.databases.datastructure.form.TableC
 import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.DataTypeResolver;
 import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.DataTypeResolverFactory;
 import com.example.projectmanagement.modules.databases.services.domain.DatabaseService;
+import com.example.projectmanagement.modules.databases.services.domain.DbTableColumnService;
+import com.example.projectmanagement.modules.databases.services.domain.DbTableService;
 import com.example.projectmanagement.modules.projects.services.ProjectViewContextService;
 
 @Component
@@ -26,6 +28,10 @@ public class DBViewContextService extends ProjectViewContextService {
 
 	@Autowired
 	private DatabaseService databaseService;
+	@Autowired
+	private DbTableService tableService;
+	@Autowired
+	private DbTableColumnService columnService;
 
 	@Autowired
 	private DataTypeResolverFactory resolverFactory;
@@ -83,15 +89,14 @@ public class DBViewContextService extends ProjectViewContextService {
 	}
 
 	/**
-	 * プロジェクトに関連する全てのDBとそのテーブルを取得するロジック。
-	 * 	<hr>
-	 * Modelに追加されるキー(thymeleaf) ：オブジェクト（Java）<br>
-	 * - "dbList" : ArrayList<DBInfoDtoRecord> <br>
+	 * プロジェクトに関連する全てのDBとそのテーブルを取得し、Modelに追加する。
+	 * 
+	 * Modelに追加されるキー（thymeleaf対応）：
+	 * - "dbList" : List<DBInfoDtoRecord>
 	 * - "tableInfoMap" : Map<Integer, List<TableInfoDtoRecord>>
-	 *<hr>
-	 * 	
-	 * @param model
-	 * @param List<DBInfo> databases of a project
+	 *
+	 * @param model Modelオブジェクト
+	 * @param dbs プロジェクトに紐づくDBのリスト
 	 */
 	public void setAllDatabaseTablesContext(Model model, List<DBInfo> dbs) {
 		List<DBInfoDtoRecord> dbList = new ArrayList<>();
@@ -105,21 +110,20 @@ public class DBViewContextService extends ProjectViewContextService {
 				.map(DBInfo::getId)
 				.collect(Collectors.toList());
 		Map<Integer, List<TableInfoDtoRecord>> tablesWithRelatedDBId = convertToTableDtoMap(
-				databaseService.getTableInfoByDbIds(ids));
+				tableService.getTableInfoByDbIds(ids));
 		model.addAttribute("tableInfoMap", tablesWithRelatedDBId);
 	}
 
 	/**
 	 * データベースIDをもとに、DB情報とプロジェクト情報を取得してModelに追加する。
-	 *<hr>
-	 * Modelに追加されるキー(thymeleaf) ：オブジェクト（Java）<br>
-	 * - "project" : ProjectDtoRecord<br>
-	 * - "dbDto" : DBInfoDtoRecord
-	 *<hr>
+	 * 
+	 * Modelに追加されるキー（thymeleaf対応）：
+	 * - "project" : ProjectDtoRecord
+	 * - "db" : DBInfoDtoRecord
 	 *
 	 * @param model Modelオブジェクト
 	 * @param databaseId 対象のデータベースID
-	 * @return DBInfoオブジェクト
+	 * @return DBInfoエンティティ
 	 */
 	public DBInfo setDatabaseContext(Model model, Integer databaseId) {
 		DBInfo db = databaseService.getDBInfoByDBId(databaseId);
@@ -131,20 +135,18 @@ public class DBViewContextService extends ProjectViewContextService {
 	}
 
 	/**
-	 * テーブルIDをもとに、TableInfo、DBInfo、Project情報を取得してModelに追加する。
-	 *<hr>
-	 * Modelに追加されるキー(thymeleaf) ：オブジェクト（Java）<br>
-	 * - "project" : ProjectDtoRecord<br>
-	 * - "table" : TableInfoDtoRecord
-	 * <hr>
+	 * データベースIDをもとに、関連するテーブル情報とカラム情報を取得し、Modelに追加する。
+	 * 
+	 * Modelに追加されるキー（thymeleaf対応）：
+	 * - "tableList" : List<TableInfoDtoRecord>
+	 * - "columnMap" : Map<Integer, List<ColumnDtoRecord>>
 	 *
 	 * @param model Modelオブジェクト
-	 * @param tableId 対象のテーブルID
-	 * @return TableInfoオブジェクト
+	 * @param databaseId 対象のデータベースID
 	 */
 	public void setDatabaseTablesContext(Model model, Integer databaseId) {
 		
-		List<TableInfo> relatedTables = databaseService.getTableInfoByDbIds(List.of(databaseId));		
+		List<TableInfo> relatedTables = tableService.getTableInfoByDbIds(List.of(databaseId));		
 		List <TableInfoDtoRecord> dtoTables = new ArrayList<>();
 		for (TableInfo each : relatedTables) {
 			dtoTables.add(tableInfoToDto(each));
@@ -156,13 +158,25 @@ public class DBViewContextService extends ProjectViewContextService {
 				.collect(Collectors.toList());
 		
 		Map<Integer, List<ColumnDtoRecord>> columnsWithRelatedTableId = convertToColumnDtoMap(
-				databaseService.getTableColumns(ids));
+				columnService.getTableColumns(ids));
 		model.addAttribute("columnMap", columnsWithRelatedTableId);
 		
 	}
 	
+	/**
+	 * 単一のテーブル情報およびそのカラム情報をModelに追加する。
+	 * 
+	 * Modelに追加されるキー（thymeleaf対応）：
+	 * - "table" : TableInfoDtoRecord
+	 * - "columnList" : List<ColumnDtoRecord>
+	 *
+	 * @param model Modelオブジェクト
+	 * @param tableId テーブルID
+	 * @param columnList テーブルに紐づくカラム情報
+	 * @return TableInfoエンティティ
+	 */
 	public TableInfo setSingleTableContext(Model model, Integer tableId, List<TableColumn> columnList) {
-		TableInfo table = databaseService.getTableByTableId(tableId);
+		TableInfo table = tableService.getTableByTableId(tableId);
 
 		TableInfoDtoRecord tableDto = tableInfoToDto(table);
 		model.addAttribute("table", tableDto);
@@ -178,18 +192,18 @@ public class DBViewContextService extends ProjectViewContextService {
 
 	/**
 	 * テーブルカラム登録フォームとデータ型解決オブジェクトをModelに追加する。
-	 *<hr>
-	 * Modelに追加されるキー(thymeleaf) ：オブジェクト（Java）<br>
-	 * - "tableColumnRegisterForm" : TableColumnRegisterForm<br>
-	 * - "dataTypeResolver": DataTypeResolver
-	 *<hr>
+	 * 
+	 * Modelに追加されるキー（thymeleaf対応）：
+	 * - "tableColumnRegisterForm" : TableColumnRegisterForm
+	 * - "dataTypeResolver" : DataTypeResolver
+	 *
 	 * @param model Modelオブジェクト
-	 * @param databaseId 外部キー取得用のDB ID
-	 * @param dbms 対象DBMSの名前（例：mariadb, postgresql）
+	 * @param databaseId 外部キー選択肢取得用のデータベースID
+	 * @param dbms 対象DBMSの名称（例：mariadb, postgresql）
 	 */
 	public void prepareColumnFormForModel(Model model, Integer databaseId, String dbms) {
 		TableColumnRegisterForm form = new TableColumnRegisterForm();
-		form.setForignOptions(databaseService.getFKList(databaseId));
+		form.setForignOptions(columnService.getFKList(databaseId));
 		model.addAttribute("tableColumnRegisterForm", form);
 		DataTypeResolver dataTypeResolver = resolverFactory.getResolver(dbms);
 		model.addAttribute("dataTypeResolver", dataTypeResolver);

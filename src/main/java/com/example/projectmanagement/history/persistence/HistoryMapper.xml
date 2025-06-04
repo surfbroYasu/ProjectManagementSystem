@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.projectmanagement.history.persistence.HistoryMapper">
+	<resultMap id="historyGroupMap" type="com.example.projectmanagement.history.datastructures.entity.HistoryGroupEntity">
+	  <id column="id" property="id"/>
+	  <result column="group_name" property="groupName"/>
+	  <result column="start_date" property="startDate"/>
+	  <result column="original_author" property="originalAuthor"/>
+	</resultMap>
+
+
+
+	<select id="findById"  resultMap="historyGroupMap">
+	  SELECT * FROM history_group WHERE id = #{id}
+	</select>
+
+	<select id="findByIdList"  resultMap="historyGroupMap">
+	  SELECT * FROM history_group 
+	<where>
+		<if test="list != null and list.size() > 0">
+			id IN
+			<foreach item="id" collection="list" open="(" separator="," close=")">
+				#{id}
+			</foreach>
+		</if>
+	</where>
+	</select>
+	
+    <insert id="insertHistoryGroup">
+	    INSERT INTO history_group (group_name, start_date, original_author_id) 
+	    VALUES (#{groupName}, #{startDate}, #{originalAuthorId})
+    </insert>
+    
+    <update id="updateHistoryGroupName">
+    	UPDATE history_group SET 
+    	history_group= #{groupName}
+    	<where>
+    		id = #{id}
+    	</where>
+    </update>
+
+</mapper>

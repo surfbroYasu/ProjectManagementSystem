@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.projectmanagement.modules.coding.services.ClassDefContextService;
+import com.example.projectmanagement.modules.coding.services.application.ClassDefContextService;
 
 @Controller
 @RequestMapping("/project/{projectId}/classdef")

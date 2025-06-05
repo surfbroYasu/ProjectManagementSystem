@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.projectmanagement.modules.designs.app.modules.persistence.ModuleDefMapper">
+
+	<resultMap id="moduleMap" type="com.example.projectmanagement.modules.designs.app.modules.datastructures.entity.ModuleDefinitionEntity">
+	  <id column="id" property="id"/>
+	  <result column="module_name" property="moduleName"/>
+	  <result column="program_module_name" property="programModuleName"/>
+	  <result column="context" property="context"/>
+	  <result column="project_id" property="projectId"/>
+	</resultMap>
+
+	<select id="getAllModules"  resultMap="moduleMap">
+	  SELECT * FROM module_definitions WHERE project_id = #{projectId}
+	</select>
+
+	<select id="findById"  resultMap="moduleMap">
+	  SELECT * FROM module_definitions WHERE id = #{id}
+	</select>
+
+    <insert id="insertModule">
+	    INSERT INTO module_definitions (feature_name, program_feature_name, project_id, history_id) 
+	    VALUES (#{featureName}, #{programFeatureName}, #{projectId}, #{historyId})
+    </insert>
+    
+    <update id="updateModule">
+    	UPDATE application_features SET 
+    	feature_name= #{featureName}, 
+    	program_feature_name= #{programFeatureName}, 
+    	project_id= #{projectId},
+    	history_id= #{historyId}
+    	<where>
+    		id = #{id}
+    	</where>
+    </update>
+    
+	<delete id="deleteModule">
+		DELETE FROM module_definitions
+		WHERE id = #{targetId}
+	</delete>
+
+</mapper>

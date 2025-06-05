@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/parentLayout.html}">
+
+<th:block layout:fragment="meta">
+	<script th:src="@{/js/ui/accordion.js}"></script>
+	<script th:src="@{/js/ui/toggleForm.js}"></script>
+</th:block>
+
+
+<th:block layout:fragment="breadCrumb">
+</th:block>
+
+<th:block layout:fragment="mainContent">
+
+
+<!--	<th:block th:if="${dbList.size()>0}">-->
+<!--		<th:block th:insert="~{contents/databases/fragments/accordion :: dbInfoAccordion}"></th:block>-->
+<!--	</th:block>-->
+
+
+	<div class="my-5">
+<!--		<th:block th:insert="~{contents/databases/fragments/register :: DBRegisterForm}"></th:block>-->
+	</div>
+
+
+</th:block>
+
+
+</html>

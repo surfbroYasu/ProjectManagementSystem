@@ -1,7 +1,7 @@
 package com.example.projectmanagement.modules.designs.app.modules.services.application;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,17 +18,28 @@ public class ModuleContextService extends ProjectViewContextService {
 	@Autowired
 	private ModuleDefMapper mapper;
 	
-	public void getAllModuleEntities(Model model, int projectId, String titleMessagePropertyKey) {
+	public List<Integer> makeModuleIdList(List<ModuleDefinitionEntity> modules){
+		return modules.stream()
+	            .map(ModuleDefinitionEntity::getId)
+	            .toList();
+	}
+	
+	public ModuleDefDto setModuleDefDto(ModuleDefinitionEntity entity) {
+		return new ModuleDefDto(
+				entity.getId(),
+				entity.getModuleName(),
+				entity.getProgramModuleName(),
+				entity.getContext(),
+	            entity.getProjectId()
+				);
+	}
+		
+	public void setAllModuleEntitiesToModel(Model model, int projectId, String titleMessagePropertyKey) {
 	    List<ModuleDefinitionEntity> entities = mapper.getAllModules(projectId);
-	    List<ModuleDefDto> dtos = entities.stream()
-	        .map(e -> new ModuleDefDto(
-	            e.getId(),
-	            e.getModuleName(),
-	            e.getProgramModuleName(),
-	            e.getContext(),
-	            projectId))
-	        .collect(Collectors.toList());
-
+	    List<ModuleDefDto> dtos = new ArrayList<>();
+	    for (ModuleDefinitionEntity e : entities) {
+	    	dtos.add(setModuleDefDto(e));
+	    }
 	    model.addAttribute("moduleList", dtos);
 	    	    
 	    setProjectToModel(model, projectId);

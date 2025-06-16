@@ -11,6 +11,7 @@ public interface ModuleDefMapper {
 
 	public ModuleDefinitionEntity getModuleById();
 	public List<ModuleDefinitionEntity> getAllModules(int projectId);
+	public List<ModuleDefinitionEntity> getModulesByIds(List<Integer>lsit);
 	public void insertModule(ModuleDefinitionEntity domain);
 	public void updateModule(ModuleDefinitionEntity domain);
 	public void deleteModule(int targetId);

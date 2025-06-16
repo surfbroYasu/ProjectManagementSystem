@@ -21,6 +21,19 @@
 	  SELECT * FROM module_definitions WHERE id = #{id}
 	</select>
 
+	<select id="getModulesByIds"  resultMap="moduleMap">
+	  SELECT * FROM module_definitions WHERE id = #{id}
+		<where>
+			<if test="list != null and list.size() > 0">
+				id IN
+				<foreach item="id" collection="list" open="(" separator=","
+					close=")">
+					#{id}
+				</foreach>
+			</if>
+		</where>
+	</select>
+
     <insert id="insertModule">
 	    INSERT INTO module_definitions (feature_name, program_feature_name, project_id, history_id) 
 	    VALUES (#{featureName}, #{programFeatureName}, #{projectId}, #{historyId})

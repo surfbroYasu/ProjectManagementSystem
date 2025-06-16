@@ -3,7 +3,7 @@ package com.example.projectmanagement.modules.designs.app.features.datastructure
 import lombok.Data;
 
 @Data
-public class ModelFeatureRelationEntity {
+public class ModuleFeatureRelationEntity {
     private Integer id;
     private Integer moduleId;
     private Integer featureId;

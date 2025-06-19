@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.example.projectmanagement.persistence.modules.designs.app.features.FeatureMapper">
+
+	<resultMap id="featureMap"
+		type="com.example.projectmanagement.modules.designs.app.features.datastructures.entity.ApplicationFeatureEntity">
+		<id column="id" property="id" />
+		<result column="feature_name" property="featureName" />
+		<result column="program_feature_name"
+			property="programFeatureName" />
+		<result column="project_id" property="projectId" />
+		<result column="history_id" property="historyId" />
+	</resultMap>
+
+	<resultMap id="moduleFeatureMap"
+		type="com.example.projectmanagement.modules.designs.app.features.datastructures.entity.ModuleFeatureRelationEntity">
+		<id column="id" property="id" />
+		<result column="module_id" property="moduleId" />
+		<result column="feature_id" property="featureId" />
+		<result column="description" property="description" />
+		<result column="schedule_id" property="scheduleId" />
+	</resultMap>
+
+	<select id="findById" resultMap="featureMap">
+		SELECT * FROM application_features WHERE id = #{id}
+	</select>
+
+	<select id="findByIdList" resultMap="featureMap">
+		SELECT * FROM application_features
+		<where>
+			<if test="list != null and list.size() > 0">
+				id IN
+				<foreach item="id" collection="list" open="(" separator=","
+					close=")">
+					#{id}
+				</foreach>
+			</if>
+		</where>
+	</select>
+
+
+	<insert id="insertApplicationFeature" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO application_features (feature_name, program_feature_name,
+		project_id, history_id)
+		VALUES (#{featureName}, #{programFeatureName}, #{projectId}, #{historyId})
+	</insert>
+
+	<update id="updateApplicationFeature">
+		UPDATE application_features SET
+		feature_name= #{featureName},
+		program_feature_name= #{programFeatureName},
+		project_id= #{projectId},
+		history_id= #{historyId}
+		<where>
+			id = #{id}
+		</where>
+	</update>
+
+	<delete id="deleteModule">
+		DELETE FROM application_features
+		WHERE id = #{targetId}
+	</delete>
+
+	<select id="findModuleFeatureByModuleIdList" resultMap="moduleFeatureMap">
+		SELECT * FROM module_feature_relations
+		<where>
+			<if test="list != null and list.size() > 0">
+				module_id IN
+				<foreach item="id" collection="list" open="(" separator=","
+					close=")">
+					#{id}
+				</foreach>
+			</if>
+		</where>
+	</select>
+
+
+	<insert id="insertFeatureModuleRelation">
+		INSERT INTO module_feature_relations(module_id, feature_id, description, schedule_id)
+		VALUES(#{moduleId}, #{featureId}, #{description}, #{scheduleId})
+	</insert>
+
+</mapper>

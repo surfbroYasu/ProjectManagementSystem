@@ -1,0 +1,31 @@
+<th:block th:fragment="moduleRegisterForm">
+	<div class="card p-4 shadow-sm rounded-3">
+		<h5 class="card-title mb-3" th:text="#{label.new.register}">新規登録</h5>
+		<form th:action="@{/project/{projectId}/module/add(projectId=${project.id})}" 
+		      th:object="${moduleDefForm}" 
+		      method="post" 
+		      class="row g-3 align-items-center">
+
+			<input type="hidden" name="projectId" th:value="${projectId}" />
+
+			<div class="col-md-4">
+				<label for="moduleName" class="form-label">モジュール名</label>
+				<input type="text" required th:field="*{moduleName}" id="moduleName" class="form-control" placeholder="例: User管理">
+			</div>
+
+			<div class="col-md-4">
+				<label for="programModuleName" class="form-label">プログラムモジュール呼称</label>
+				<input type="text" required th:field="*{programModuleName}" id="programModuleName" class="form-control" placeholder="例: userModule">
+			</div>
+
+			<div class="col-md-12">
+				<label for="context" class="form-label">モジュール説明</label>
+				<textarea th:field="*{context}" id="context" class="form-control" rows="4" placeholder="このモジュールの目的や使用方法を記述してください"></textarea>
+			</div>
+
+			<div class="col-md-2 mt-3">
+				<button type="submit" class="btn btn-primary w-100">登録</button>
+			</div>
+		</form>
+	</div>
+</th:block>

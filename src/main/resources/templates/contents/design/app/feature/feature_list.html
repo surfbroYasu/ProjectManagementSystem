@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/parentLayout.html}">
+
+<th:block layout:fragment="meta">
+	<script th:src="@{/js/ui/accordion.js}"></script>
+	<script th:src="@{/js/ui/toggleForm.js}"></script>
+</th:block>
+
+
+<th:block layout:fragment="breadCrumb">
+</th:block>
+
+<th:block layout:fragment="mainContent">
+
+	<th:block th:if="${moduleFeaturesList.size()>0}">
+		<div class="my-5">
+
+			<th:block th:each="dto, stat : ${moduleFeaturesList}">
+				<th:block th:insert="~{contents/design/app/module/fragments/cards :: moduleCard}">
+				</th:block>
+
+			</th:block>
+
+		</div>
+	</th:block>
+
+
+<!--	<div class="my-5">-->
+<!--		<th:block th:insert="~{contents/design/app/feature/fragments/register :: featureRegisterForm}"></th:block>-->
+<!--	</div>-->
+
+
+</th:block>
+
+
+</html>

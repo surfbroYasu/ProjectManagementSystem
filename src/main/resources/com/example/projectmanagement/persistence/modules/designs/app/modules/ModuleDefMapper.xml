@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.projectmanagement.persistence.modules.designs.app.modules.ModuleDefMapper">
+
+	<resultMap id="moduleMap" type="com.example.projectmanagement.modules.designs.app.modules.datastructures.entity.ModuleDefinitionEntity">
+	  <id column="id" property="id"/>
+	  <result column="module_name" property="moduleName"/>
+	  <result column="program_module_name" property="programModuleName"/>
+	  <result column="context" property="context"/>
+	  <result column="project_id" property="projectId"/>
+	</resultMap>
+
+	<select id="getAllModules"  resultMap="moduleMap">
+	  SELECT * FROM module_definitions WHERE project_id = #{projectId}
+	</select>
+
+	<select id="getModuleById"  resultMap="moduleMap">
+	  SELECT * FROM module_definitions WHERE id = #{id}
+	</select>
+
+	<select id="getModulesByIds"  resultMap="moduleMap">
+	  SELECT * FROM module_definitions WHERE id = #{id}
+		<where>
+			<if test="list != null and list.size() > 0">
+				id IN
+				<foreach item="id" collection="list" open="(" separator=","
+					close=")">
+					#{id}
+				</foreach>
+			</if>
+		</where>
+	</select>
+
+    <insert id="insertModule">
+	    INSERT INTO module_definitions (module_name, program_module_name, context, project_id) 
+	    VALUES (#{moduleName}, #{programModuleName}, #{context}, #{projectId})
+    </insert>
+    
+    <update id="updateModule">
+    	UPDATE application_modules SET 
+    	module_name= #{moduleName}, 
+    	program_module_name= #{programModuleName}, 
+    	context=#{context},
+    	project_id= #{projectId}
+    	<where>
+    		id = #{id}
+    	</where>
+    </update>
+    
+	<delete id="deleteModule">
+		DELETE FROM module_definitions
+		WHERE id = #{targetId}
+	</delete>
+
+</mapper>

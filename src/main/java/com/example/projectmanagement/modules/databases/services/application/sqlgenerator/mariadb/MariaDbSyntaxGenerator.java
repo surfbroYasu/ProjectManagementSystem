@@ -56,7 +56,7 @@ public class MariaDbSyntaxGenerator extends AbstractSqlSyntaxGenerator {
 					&& col.getRefTableName() != null && col.getRefColumnName() != null) {
 
 				StringBuilder fk = new StringBuilder();
-				fk.append("  CONSTRAINT fk_").append(col.getColumnName())
+				fk.append("  CONSTRAINT fk_").append(table.getTableName()).append("_").append(col.getColumnName())
 						.append(" FOREIGN KEY (").append(col.getColumnName()).append(")")
 						.append(" REFERENCES ").append(col.getRefTableName())
 						.append("(").append(col.getRefColumnName()).append(")");

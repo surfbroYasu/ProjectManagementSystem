@@ -87,6 +87,7 @@ public class JavaModelGenerator implements ModelGenerator {
 		case "tinyint":
 			return "Boolean";
 		case "date":
+			return "LocalDate";
 		case "datetime":
 		case "timestamp":
 			return "LocalDateTime";
@@ -115,6 +116,7 @@ public class JavaModelGenerator implements ModelGenerator {
 		case "boolean":
 			return "Boolean";
 		case "date":
+			return "LocalDate";
 		case "timestamp":
 		case "timestamptz":
 			return "LocalDateTime";

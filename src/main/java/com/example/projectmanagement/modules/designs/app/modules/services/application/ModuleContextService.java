@@ -9,8 +9,8 @@ import org.springframework.ui.Model;
 
 import com.example.projectmanagement.modules.designs.app.modules.datastructures.dto.ModuleDefDto;
 import com.example.projectmanagement.modules.designs.app.modules.datastructures.entity.ModuleDefinitionEntity;
-import com.example.projectmanagement.modules.designs.app.modules.persistence.ModuleDefMapper;
 import com.example.projectmanagement.modules.projects.services.ProjectViewContextService;
+import com.example.projectmanagement.persistence.modules.designs.app.modules.ModuleDefMapper;
 
 @Service
 public class ModuleContextService extends ProjectViewContextService {

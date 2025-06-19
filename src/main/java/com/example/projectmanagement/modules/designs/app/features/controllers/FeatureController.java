@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.projectmanagement.modules.designs.app.features.datastructures.entity.ApplicationFeatureEntity;
+import com.example.projectmanagement.modules.designs.app.features.datastructures.entity.ModuleFeatureRelationEntity;
 import com.example.projectmanagement.modules.designs.app.features.datastructures.form.ApplicationFeatureForm;
 import com.example.projectmanagement.modules.designs.app.features.services.application.FeatureContextService;
 import com.example.projectmanagement.modules.designs.app.features.services.domain.FeatureDomainService;
@@ -74,9 +75,12 @@ public class FeatureController {
 
 		ApplicationFeatureEntity entity = new ApplicationFeatureEntity();
 		BeanUtils.copyProperties(form, entity);
+		
+		ModuleFeatureRelationEntity relations = new ModuleFeatureRelationEntity();
+		BeanUtils.copyProperties(form, relations);
 
 		switch (action) {
-		case "add" -> domainService.createFeature(entity);
+		case "add" -> domainService.createFeatureNModuleRelation(entity, relations);
 		case "update" -> domainService.updateFeature(entity);
 
 		default -> throw new IllegalArgumentException("Unexpected value: " + action);
@@ -84,13 +88,28 @@ public class FeatureController {
 		return onSuccessUrl;
 	}
 
-	@GetMapping("s/module/{moduleId}")
+	@GetMapping("/list/module/{moduleId}")
 	public String renderFeaturesOfAModule(@PathVariable Integer projectId,
 			@PathVariable Integer moduleId,
 			Model model) {
 
-		String pageTitleMK = "title.module_def.list";
-		contextService.setFeaturesMapContextFromModules(model, contextService.getModuleById(moduleId), projectId, pageTitleMK);
-		return TEMPLATE_ROOT + "feature_list";
+		String pageTitleMK = "title.module_feature.list";
+		ModuleDefinitionEntity moduleDef = contextService.getModuleById(moduleId);
+		try {
+			contextService.setFeaturesMapContextFromModules(model, List.of(moduleDef), projectId, pageTitleMK);
+		} catch (NullPointerException npe) {
+			contextService.setFeaturesMapContextFromModules(model, List.of(), projectId, pageTitleMK);
+		}
+
+		return TEMPLATE_ROOT + "/feature_list";
+	}
+	
+	
+	
+	@GetMapping("/{featureId}/detail")
+	public String renderFeatureDetail(@PathVariable Integer projectId, @PathVariable Integer featureId, Model model) {
+		model.addAttribute("title", "title.feature.detail");
+		contextService.setProjectToModel(model, projectId);
+		return TEMPLATE_ROOT + "/feature_detail";
 	}
 }

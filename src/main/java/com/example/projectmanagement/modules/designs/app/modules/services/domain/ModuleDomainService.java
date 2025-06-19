@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.projectmanagement.modules.designs.app.modules.datastructures.entity.ModuleDefinitionEntity;
-import com.example.projectmanagement.modules.designs.app.modules.persistence.ModuleDefMapper;
+import com.example.projectmanagement.persistence.modules.designs.app.modules.ModuleDefMapper;
 
 @Service
 public class ModuleDomainService {

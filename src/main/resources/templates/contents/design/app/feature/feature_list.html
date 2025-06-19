@@ -13,16 +13,22 @@
 
 <th:block layout:fragment="mainContent">
 
+	<th:block th:if="${moduleFeaturesList.size()>0}">
+		<div class="my-5">
 
-	<th:block th:if="${moduleList.size()>0}">
-		<th:block th:insert="~{contents/design/app/module/fragments/accordion :: moduleAccordion}"></th:block>
+			<th:block th:each="dto, stat : ${moduleFeaturesList}">
+				<th:block th:insert="~{contents/design/app/module/fragments/cards :: moduleCard}">
+				</th:block>
+
+			</th:block>
+
+		</div>
 	</th:block>
 
 
-	<div class="my-5">
-<!--		<th:block th:insert="~{contents/databases/fragments/register :: DBRegisterForm}"></th:block>-->
-		<th:block th:insert="~{contents/design/app/module/fragments/register :: moduleRegisterForm}"></th:block>
-	</div>
+<!--	<div class="my-5">-->
+<!--		<th:block th:insert="~{contents/design/app/feature/fragments/register :: featureRegisterForm}"></th:block>-->
+<!--	</div>-->
 
 
 </th:block>

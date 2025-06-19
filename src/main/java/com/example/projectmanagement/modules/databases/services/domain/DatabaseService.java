@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfo;
-import com.example.projectmanagement.modules.databases.persistence.DBInfoMapper;
+import com.example.projectmanagement.persistence.modules.databases.DBInfoMapper;
 
 @Service
 public class DatabaseService {

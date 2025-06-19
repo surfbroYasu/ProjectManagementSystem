@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfo;
-import com.example.projectmanagement.modules.databases.persistence.DBInfoMapper;
+import com.example.projectmanagement.persistence.modules.databases.DBInfoMapper;
 
 @Service
 public class DbTableColumnService {

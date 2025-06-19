@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.projectmanagement.history.datastructures.entity.HistoryGroupEntity;
-import com.example.projectmanagement.history.persistence.HistoryMapper;
+import com.example.projectmanagement.persistence.history.HistoryMapper;
 
 @Service
 public class HistoryGroupService {

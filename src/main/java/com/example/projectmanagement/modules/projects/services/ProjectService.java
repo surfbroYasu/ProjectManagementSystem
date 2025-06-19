@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.projectmanagement.modules.projects.datastructure.entity.Project;
 import com.example.projectmanagement.modules.projects.datastructure.entity.ProjectDeveloper;
-import com.example.projectmanagement.modules.projects.persistence.ProjectMapper;
+import com.example.projectmanagement.persistence.modules.projects.ProjectMapper;
 
 @Service
 public class ProjectService {

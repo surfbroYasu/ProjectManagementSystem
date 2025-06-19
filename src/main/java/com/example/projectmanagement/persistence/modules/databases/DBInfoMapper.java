@@ -1,4 +1,4 @@
-package com.example.projectmanagement.modules.databases.persistence;
+package com.example.projectmanagement.persistence.modules.databases;
 
 import java.util.List;
 

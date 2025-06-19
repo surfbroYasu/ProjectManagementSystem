@@ -1,4 +1,4 @@
-package com.example.projectmanagement.modules.designs.app.features.persistence;
+package com.example.projectmanagement.persistence.modules.designs.app.features;
 
 import java.util.List;
 
@@ -15,6 +15,8 @@ public interface FeatureMapper {
 	public void insertApplicationFeature(ApplicationFeatureEntity domain);
 	public void updateApplicationFeature(ApplicationFeatureEntity domain);
 	public void deleteApplicationFeature(int targetId);
+	
+	public void insertFeatureModuleRelation(ModuleFeatureRelationEntity rel);
 	
 	public List<ModuleFeatureRelationEntity> findModuleFeatureByModuleIdList(List<Integer> list);
 	public List<ModuleFeatureRelationEntity> findModuleFeatureByFeatureIdList(List<Integer> list);

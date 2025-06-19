@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.projectmanagement.modules.designs.app.modules.persistence.ModuleDefMapper">
+<mapper namespace="com.example.projectmanagement.persistence.modules.designs.app.modules.ModuleDefMapper">
 
 	<resultMap id="moduleMap" type="com.example.projectmanagement.modules.designs.app.modules.datastructures.entity.ModuleDefinitionEntity">
 	  <id column="id" property="id"/>
@@ -17,7 +17,7 @@
 	  SELECT * FROM module_definitions WHERE project_id = #{projectId}
 	</select>
 
-	<select id="findById"  resultMap="moduleMap">
+	<select id="getModuleById"  resultMap="moduleMap">
 	  SELECT * FROM module_definitions WHERE id = #{id}
 	</select>
 
@@ -35,16 +35,16 @@
 	</select>
 
     <insert id="insertModule">
-	    INSERT INTO module_definitions (feature_name, program_feature_name, project_id, history_id) 
-	    VALUES (#{featureName}, #{programFeatureName}, #{projectId}, #{historyId})
+	    INSERT INTO module_definitions (module_name, program_module_name, context, project_id) 
+	    VALUES (#{moduleName}, #{programModuleName}, #{context}, #{projectId})
     </insert>
     
     <update id="updateModule">
-    	UPDATE application_features SET 
-    	feature_name= #{featureName}, 
-    	program_feature_name= #{programFeatureName}, 
-    	project_id= #{projectId},
-    	history_id= #{historyId}
+    	UPDATE application_modules SET 
+    	module_name= #{moduleName}, 
+    	program_module_name= #{programModuleName}, 
+    	context=#{context},
+    	project_id= #{projectId}
     	<where>
     		id = #{id}
     	</where>

@@ -1,4 +1,4 @@
-package com.example.projectmanagement.modules.designs.app.modules.persistence;
+package com.example.projectmanagement.persistence.modules.designs.app.modules;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import com.example.projectmanagement.modules.designs.app.modules.datastructures.
 @Mapper
 public interface ModuleDefMapper {
 
-	public ModuleDefinitionEntity getModuleById();
+	public ModuleDefinitionEntity getModuleById(int id);
 	public List<ModuleDefinitionEntity> getAllModules(int projectId);
 	public List<ModuleDefinitionEntity> getModulesByIds(List<Integer>lsit);
 	public void insertModule(ModuleDefinitionEntity domain);

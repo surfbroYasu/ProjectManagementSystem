@@ -1,4 +1,4 @@
-package com.example.projectmanagement.history.persistence;
+package com.example.projectmanagement.persistence.history;
 
 import java.util.List;
 

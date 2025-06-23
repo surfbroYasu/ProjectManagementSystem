@@ -14,6 +14,8 @@ public class ProjectRegisterForm {
 	private String projectName;
 
 	private String applicationName;
+
+	private String serverSideLang;
 	
 	private Integer clientId;
 	

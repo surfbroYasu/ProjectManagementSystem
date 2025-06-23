@@ -1,4 +1,4 @@
-package com.example.projectmanagement.modules.projects.services;
+package com.example.projectmanagement.modules.projects.services.domain;
 
 import java.util.List;
 

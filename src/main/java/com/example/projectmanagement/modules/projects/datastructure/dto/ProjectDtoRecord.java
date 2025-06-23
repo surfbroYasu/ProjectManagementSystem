@@ -7,5 +7,6 @@ public record ProjectDtoRecord(
 		Integer id,
 		String projectName,
 		String applicationName,
+		String serverSideLang,
 		Integer clientId,
 		LocalDate startDate) {}

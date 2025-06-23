@@ -20,6 +20,7 @@
 					<div class="accordion-body">
 						<p><strong>開始日：</strong> <span th:text="${project.startDate}">2025-04-01</span></p>
 						<p><strong>クライアント：</strong> <span th:text="${project.clientId}">1</span></p>
+						<p><strong th:text="#{field.server_side_lang}">サーバーサイド言語：</strong> <span th:text="${project.serverSideLang}">java</span></p>
 
 						<!-- <form th:action="@{projects/delete}">
 							<input type="hidden" th:value="${project.id}" name="projectId">

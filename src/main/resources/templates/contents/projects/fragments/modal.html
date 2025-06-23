@@ -6,48 +6,48 @@
 	
 -->
 <th:block th:fragment="projectDeleteBtn">
-    <button type="button" class="btn btn-danger"
-        th:onclick="'openModal(' + ${project.id} + ', \'deleteModal\')'">削除</button>
+	<button type="button" class="btn btn-danger"
+		th:onclick="'openModal(' + ${project.id} + ', \'deleteModal\')'">削除</button>
 
 </th:block>
 
 <th:block th:fragment="projectDeleteForm">
-    <div class="modal" th:id="'deleteModal' + ${project.id}" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
-                        <span th:utext="#{icon.danger}"></span>
-                        <span th:text="#{form.project.delete}"></span>
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>
-                        <span th:utext="#{icon.trash}"></span>
-                        <b th:text="${project.projectName} + '（' + ${project.applicationName} + '）'"></b>
-                    </p>
-                    <small th:text="#{message.conf.action}"></small>
+	<div class="modal" th:id="'deleteModal' + ${project.id}" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">
+						<span th:utext="#{icon.danger}"></span>
+						<span th:text="#{form.project.delete}"></span>
+					</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<p>
+						<span th:utext="#{icon.trash}"></span>
+						<b th:text="${project.projectName} + '（' + ${project.applicationName} + '）'"></b>
+					</p>
+					<small th:text="#{message.conf.action}"></small>
 
-                    <form th:action="@{/projects/delete}" th:object="${projectRegisterForm}"
-                        th:id="deleteprojectRegisterForm + ${project.id}" method="post">
-                        <input type="text" name="id" th:value="${project.id}" />
-                    </form>
+					<form th:action="@{/projects/delete}" th:object="${projectRegisterForm}"
+						th:id="deleteprojectRegisterForm + ${project.id}" method="post">
+						<input type="text" name="id" th:value="${project.id}" />
+					</form>
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                        th:text="#{label.close}">Close</button>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+						th:text="#{label.close}">Close</button>
 
-                    <button type="submit" class="btn btn-danger" th:text="#{label.delete}"
-                        th:form="deleteprojectRegisterForm + ${project.id}">
-                        Save changes
-                    </button>
+					<button type="submit" class="btn btn-danger" th:text="#{label.delete}"
+						th:form="deleteprojectRegisterForm + ${project.id}">
+						Save changes
+					</button>
 
-                </div>
-            </div>
-        </div>
-    </div>
+				</div>
+			</div>
+		</div>
+	</div>
 </th:block>
 
 
@@ -77,20 +77,28 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<form
-						th:action="@{/projects/edit}"
-						th:object="${projectRegisterForm}" th:id="editprojecRegisterForm + ${project.id}"
-						method="post">
-						<input type="hidden" name="id" th:value="${project.id}" required/>
+					<form th:action="@{/projects/edit}" th:object="${projectRegisterForm}"
+						th:id="editprojecRegisterForm + ${project.id}" method="post">
+						<input type="hidden" name="id" th:value="${project.id}" required />
 						<div class="mb-3">
-							<label th:text="#{field.project_name}" class="form-label" for="editprojectName">テーブル名</label>
+							<label th:text="#{field.project_name}" class="form-label"
+								for="editprojectName">テーブル名</label>
 							<input type="text" class="form-control" id="editprojectName" name="projectName"
 								th:value="${project.projectName}" required />
 						</div>
 						<div class="mb-3">
-							<label th:text="#{field.application_name}" class="form-label" for="editApplicationName">表示名</label>
+							<label th:text="#{field.application_name}" class="form-label"
+								for="editApplicationName">表示名</label>
 							<input type="text" class="form-control" id="editApplicationName" name="applicationName"
-								th:value="${project.ApplicationName}" />
+								th:value="${project.applicationName}" />
+						</div>
+						<div class="mb-3">
+							<label th:text="#{field.server_side_lang}" class="form-label"
+								for="editServerSideLang">サーバーサイド言語</label>
+							<select id="editServerSideLang" name="serverSideLang"  class="form-control" th:value="${project.serverSideLang}">
+								<option th:each="lang : ${serverSideLangs}" th:value="${lang}" th:text="${lang}">Java
+								</option>
+							</select>
 						</div>
 					</form>
 				</div>

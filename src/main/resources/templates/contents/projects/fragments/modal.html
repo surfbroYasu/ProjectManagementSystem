@@ -95,7 +95,8 @@
 						<div class="mb-3">
 							<label th:text="#{field.server_side_lang}" class="form-label"
 								for="editServerSideLang">サーバーサイド言語</label>
-							<select id="editServerSideLang" name="serverSideLang"  class="form-control" th:value="${project.serverSideLang}">
+							<select id="editServerSideLang" name="serverSideLang" class="form-control"
+								th:value="${project.serverSideLang}">
 								<option th:each="lang : ${serverSideLangs}" th:value="${lang}" th:text="${lang}">Java
 								</option>
 							</select>

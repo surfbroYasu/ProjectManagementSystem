@@ -6,8 +6,10 @@ import lombok.Data;
 
 @Data
 public class HistoryGroupEntity {
+	
 	private Integer id;
 	private String groupName;
 	private LocalDate startDate;
 	private Integer originalAuthor;
+	
 }

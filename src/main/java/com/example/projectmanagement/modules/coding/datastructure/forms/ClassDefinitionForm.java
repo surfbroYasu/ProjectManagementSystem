@@ -1,10 +1,12 @@
-package com.example.projectmanagement.modules.coding.domain.entity;
+package com.example.projectmanagement.modules.coding.datastructure.forms;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class ClassDefinition {
+public class ClassDefinitionForm {
 	private Integer id;
+	@NotBlank
     private String className;
     private String classAlias;
     private String description;

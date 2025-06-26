@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import com.example.projectmanagement.modules.coding.domain.models.ClassDefinitionModel;
+import com.example.projectmanagement.modules.coding.datastructure.models.ClassDefinitionModel;
 import com.example.projectmanagement.modules.coding.langgenerator.ModelGenerator;
 import com.example.projectmanagement.modules.coding.langgenerator.ModelGeneratorFactory;
 import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfo;
@@ -15,7 +15,9 @@ import com.example.projectmanagement.modules.databases.datastructure.entity.Tabl
 import com.example.projectmanagement.modules.databases.services.domain.DatabaseService;
 import com.example.projectmanagement.modules.databases.services.domain.DbTableColumnService;
 import com.example.projectmanagement.modules.databases.services.domain.DbTableService;
-import com.example.projectmanagement.modules.projects.services.ProjectViewContextService;
+import com.example.projectmanagement.modules.projects.services.application.ProjectViewContextService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class ClassDefContextService extends ProjectViewContextService {
 
@@ -38,9 +40,22 @@ public class ClassDefContextService extends ProjectViewContextService {
 		List<TableColumn> columnList = columnService.getTableColumns(List.of(tableId));
 		
 		ModelGenerator modelGenerator = modelFactory.getGenerator(lang);
-		ClassDefinitionModel classDef =  modelGenerator.createEntityClassFromDBTable(db, table, columnList, dataUseType);
+		ClassDefinitionModel classDef =  modelGenerator.createClassAndFieldsFromDBTable(db, table, columnList, dataUseType);
 		
 		model.addAttribute("entity", modelGenerator.stringBuilder(classDef));
+		
+		
+		
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonClassDef;
+		try {
+			jsonClassDef = mapper.writeValueAsString(classDef);
+			model.addAttribute("classDefJson", jsonClassDef);
+		} catch (JsonProcessingException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+
 		
 		setProjectToModel(model, db.getProjectId());
 	}

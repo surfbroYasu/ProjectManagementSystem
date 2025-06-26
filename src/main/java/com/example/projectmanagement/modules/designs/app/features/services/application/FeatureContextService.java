@@ -13,7 +13,7 @@ import com.example.projectmanagement.modules.designs.app.features.datastructures
 import com.example.projectmanagement.modules.designs.app.features.datastructures.entity.ModuleFeatureRelationEntity;
 import com.example.projectmanagement.modules.designs.app.modules.datastructures.entity.ModuleDefinitionEntity;
 import com.example.projectmanagement.modules.designs.app.modules.services.application.ModuleContextService;
-import com.example.projectmanagement.modules.projects.services.ProjectViewContextService;
+import com.example.projectmanagement.modules.projects.services.application.ProjectViewContextService;
 import com.example.projectmanagement.persistence.modules.designs.app.features.FeatureMapper;
 import com.example.projectmanagement.persistence.modules.designs.app.modules.ModuleDefMapper;
 

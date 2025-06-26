@@ -3,11 +3,14 @@ package com.example.projectmanagement.modules.coding.langgenerator.java;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import com.example.projectmanagement.generalutil.CaseConverter;
-import com.example.projectmanagement.modules.coding.domain.models.ClassDefinitionModel;
-import com.example.projectmanagement.modules.coding.domain.models.FieldModel;
+import com.example.projectmanagement.modules.coding.datastructure.entity.ClassDefinition;
+import com.example.projectmanagement.modules.coding.datastructure.entity.ClassField;
+import com.example.projectmanagement.modules.coding.datastructure.models.ClassDefinitionModel;
+import com.example.projectmanagement.modules.coding.datastructure.models.FieldModel;
 import com.example.projectmanagement.modules.coding.langgenerator.ModelGenerator;
 import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfo;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
@@ -36,16 +39,14 @@ public class JavaModelGenerator implements ModelGenerator {
 	}
 
 	@Override
-	public ClassDefinitionModel createEntityClassFromDBTable(DBInfo dbInfo, TableInfo tableInfo, List<TableColumn> columnList,
+	public ClassDefinitionModel createClassAndFieldsFromDBTable(DBInfo dbInfo, TableInfo tableInfo,
+			List<TableColumn> columnList,
 			String dataUseType) {
-		ClassDefinitionModel dto = new ClassDefinitionModel();
-		dto.setClassName(CaseConverter.toPascalCase(tableInfo.getTableName()));
-		dto.setClassAlias(tableInfo.getTableAlias());
-		dto.setDescription(tableInfo.getTableAlias());
-		dto.setDataUseType(dataUseType);
-		dto.setLangage("Java");
-		dto.setProjectId(dbInfo.getProjectId());
 
+		ClassDefinition classDefEntity = createClassFromDBTable(dbInfo.getProjectId(), tableInfo, dataUseType);
+		ClassDefinitionModel dto = new ClassDefinitionModel();
+		BeanUtils.copyProperties(classDefEntity, dto);
+		
 		List<FieldModel> fields = new ArrayList<>();
 		for (TableColumn col : columnList) {
 			FieldModel f = new FieldModel();
@@ -59,6 +60,27 @@ public class JavaModelGenerator implements ModelGenerator {
 	}
 
 	@Override
+	public ClassDefinition createClassFromDBTable(Integer projectId, TableInfo tableInfo, String dataUseType) {
+		return new ClassDefinition(
+				CaseConverter.toPascalCase(tableInfo.getTableName()),
+				tableInfo.getTableAlias(),
+				tableInfo.getTableAlias(),
+				dataUseType,
+				"Java",
+				projectId
+				);
+	}
+	
+	@Override
+	public ClassField createFieldFromDBColumn(TableColumn column, Integer classId, String dbms) {
+		return new ClassField(
+				CaseConverter.toCamelCase(column.getColumnName()),
+				dataTypeConverter(column.getDataType(), dbms),
+				classId
+				);
+	}
+
+	@Override
 	public String stringBuilder(ClassDefinitionModel classDefinition) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("public class " + classDefinition.getClassName() + "{\n");
@@ -67,7 +89,7 @@ public class JavaModelGenerator implements ModelGenerator {
 			//	とりあえずインデントは４文字
 			sb.append("    private " + f.getDataType() + " " + f.getFieldName() + ";\n");
 		}
-		
+
 		sb.append("}");
 		return sb.toString();
 	}

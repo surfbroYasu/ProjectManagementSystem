@@ -1,4 +1,4 @@
-package com.example.projectmanagement.modules.coding.domain.entity;
+package com.example.projectmanagement.modules.coding.datastructure.entity;
 
 import lombok.Data;
 

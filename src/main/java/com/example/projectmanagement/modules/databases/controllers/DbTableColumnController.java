@@ -101,11 +101,11 @@ public class DbTableColumnController {
 
 		switch (action) {
 		case "add" -> {
-			columnService.insertColumn(domain);
+			columnService.insertColumn(domain, dbms);
 			entityService.createEntityFieldFromTableCol(serverSideLang, projectId, dbms, classDef.getId(), domain);
 		}
 		case "edit" -> {
-			columnService.updateColumn(domain);
+			columnService.updateColumn(domain, dbms);
 		}
 		default -> throw new IllegalArgumentException("Unsupported action: " + action);
 		}

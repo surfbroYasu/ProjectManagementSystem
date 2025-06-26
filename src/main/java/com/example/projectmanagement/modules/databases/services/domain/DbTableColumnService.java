@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfo;
+import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.DataTypeResolver;
+import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.DataTypeResolverFactory;
 import com.example.projectmanagement.persistence.modules.databases.DBInfoMapper;
 
 @Service
@@ -16,16 +18,22 @@ public class DbTableColumnService {
 
 	@Autowired
 	private DBInfoMapper mapper;
+	
+	@Autowired
+	private DataTypeResolverFactory DTRfactory;
 	/*
 	 * ----COLUMNS----
 	 */
-	public void insertColumn(TableColumn domain) {
-		intParamChecker(domain);
+	public void insertColumn(TableColumn domain, String dbms) {
+		
+		DataTypeResolver resolver = DTRfactory.getResolver(dbms);
+		resolver.adjustDataTypeParam(domain);
 		mapper.insertNewColumn(domain);
 	}
 
-	public void updateColumn(TableColumn domain) {
-		intParamChecker(domain);
+	public void updateColumn(TableColumn domain, String dbms) {
+		DataTypeResolver resolver = DTRfactory.getResolver(dbms);
+		resolver.adjustDataTypeParam(domain);
 		mapper.updateColumn(domain);
 	}
 
@@ -51,30 +59,4 @@ public class DbTableColumnService {
 		return relatedColumns.stream().collect(Collectors.groupingBy(TableColumn::getTableInfoId));
 	}
 
-	/**
-	 * 
-	 * 数値型の引数の入力チェックを行う
-	 * 引数がない場合のデフォルト値を11にセットする。
-	 * @param domain
-	 * @return　ユーザー入力数値・またはデフォルト11
-	 */
-	private TableColumn intParamChecker(TableColumn domain) {
-		switch (domain.getDataType()) {
-		case "INT":			
-			if (domain.getDataTypeParam().isBlank()) {
-				domain.setDataTypeParam("11");
-			}
-			break;
-
-		case "TINYINT":
-			if (domain.getDataTypeParam().isBlank()) {
-				domain.setDataTypeParam("1");
-			}
-			break;
-
-		default:
-			break;
-		}
-		return domain;
-	}
 }

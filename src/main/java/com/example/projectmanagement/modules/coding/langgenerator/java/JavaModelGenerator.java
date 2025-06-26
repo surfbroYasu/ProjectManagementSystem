@@ -24,15 +24,14 @@ public class JavaModelGenerator implements ModelGenerator {
 		if (dataType == null || dbms == null)
 			return "String";
 
-		String normalized = dataType.toLowerCase().split("\\(")[0].trim();
 		String db = dbms.toLowerCase();
 
 		switch (db) {
 		case "mariadb":
 		case "mysql":
-			return convertFromMariaDB(normalized);
+			return convertFromMariaDB(dataType);
 		case "postgresql":
-			return convertFromPostgreSQL(normalized);
+			return convertFromPostgreSQL(dataType);
 		default:
 			return "String";
 		}
@@ -96,17 +95,21 @@ public class JavaModelGenerator implements ModelGenerator {
 
 	@Override
 	public String convertFromMariaDB(String type) {
-		switch (type) {
+		switch (type.toLowerCase()) {
 		case "int":
 		case "integer":
 			return "Integer";
+		case "int unsigned":
 		case "bigint":
 			return "Long";
+		case "bigint unsigned":
+			return "BigInteger";
 		case "decimal":
 		case "double":
 		case "float":
 			return "Double";
 		case "tinyint":
+		case "boolean":
 			return "Boolean";
 		case "date":
 			return "LocalDate";
@@ -124,7 +127,7 @@ public class JavaModelGenerator implements ModelGenerator {
 
 	@Override
 	public String convertFromPostgreSQL(String type) {
-		switch (type) {
+		switch (type.toLowerCase()) {
 		case "serial":
 		case "integer":
 			return "Integer";

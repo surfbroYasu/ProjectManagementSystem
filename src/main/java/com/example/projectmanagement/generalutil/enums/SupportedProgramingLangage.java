@@ -1,9 +1,13 @@
 package com.example.projectmanagement.generalutil.enums;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public enum SupportedProgramingLangage {
 	JAVA("java")
-	//	, PYTHON("python")
-	//	, TYPESCRIPT("typescript")
+//		, PYTHON("python")
+//		, TYPESCRIPT("typescript")
 	//**** ADD MORE ****
 	;
 
@@ -25,4 +29,11 @@ public enum SupportedProgramingLangage {
 		}
 		throw new IllegalArgumentException("Unsupported language: " + code);
 	}
+	
+	public static List<String> getStringLanguageCodes() {
+	    return Arrays.stream(SupportedProgramingLangage.values())
+	        .map(SupportedProgramingLangage::getCode)
+	        .collect(Collectors.toList());
+	}
+
 }

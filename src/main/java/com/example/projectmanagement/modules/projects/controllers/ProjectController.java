@@ -18,7 +18,8 @@ import com.example.projectmanagement.modules.projects.datastructure.entity.Proje
 import com.example.projectmanagement.modules.projects.datastructure.entity.ProjectDeveloper;
 import com.example.projectmanagement.modules.projects.datastructure.form.ProjectRegisterForm;
 import com.example.projectmanagement.modules.projects.datastructure.model.ProjectDevRoleEnum;
-import com.example.projectmanagement.modules.projects.services.ProjectService;
+import com.example.projectmanagement.modules.projects.services.application.PreProjectContextService;
+import com.example.projectmanagement.modules.projects.services.domain.ProjectService;
 import com.example.projectmanagement.users.security.CustomUserDetails;
 
 @Controller
@@ -29,6 +30,9 @@ public class ProjectController {
 
 	@Autowired
 	private ProjectService service;
+	
+	@Autowired
+	private PreProjectContextService preProjectContextService;
 
 	@ModelAttribute("projectRegisterForm")
 	public ProjectRegisterForm setRegistForm() {
@@ -37,8 +41,7 @@ public class ProjectController {
 
 	@GetMapping("")
 	public String renderProjectIndex(@AuthenticationPrincipal CustomUserDetails loginUser, Model model) {
-		model.addAttribute("title", "title.project.top");
-		model.addAttribute("projects", service.getProjects(loginUser.getUserId()));
+		preProjectContextService.setPerProjectContext(model, loginUser, "title.project.top");
 		return TEMPLATE_ROOT + "list";
 	}
 
@@ -49,8 +52,7 @@ public class ProjectController {
 			Model model) {
 
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("projects", service.getProjects(loginUser.getUserId()));
-			model.addAttribute("title", "title.project.top");
+			preProjectContextService.setPerProjectContext(model, loginUser, "title.project.top");
 			return "contents/projects/list";
 		}
 
@@ -58,10 +60,7 @@ public class ProjectController {
 		BeanUtils.copyProperties(form, project);
 
 		ProjectDeveloper devInfo = new ProjectDeveloper(
-				null, //id
 				loginUser.getUserId(), //userId
-				null, //teamId
-				null, //projectId …サービス側で（プロジェクトをDBに登録後に）セット
 				loginUser.getFormattedFullName(locale), //memberName
 				ProjectDevRoleEnum.DEV.name() //devRole
 		);
@@ -77,13 +76,11 @@ public class ProjectController {
 			BindingResult bindingResult, Model model) {
 		
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("projects", service.getProjects(loginUser.getUserId()));
-			model.addAttribute("title", "title.project.top");
+			preProjectContextService.setPerProjectContext(model, loginUser, "title.project.top");
 			return "contents/projects/list";
 		}
 		Project project = new Project();
 		BeanUtils.copyProperties(form, project);
-		System.out.println(project);
 		service.updateProject(project);
 		return "redirect:/projects";
 	}

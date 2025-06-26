@@ -1,4 +1,4 @@
-package com.example.projectmanagement.modules.coding.domain.models;
+package com.example.projectmanagement.modules.coding.datastructure.models;
 
 import java.util.List;
 

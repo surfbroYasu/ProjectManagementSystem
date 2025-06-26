@@ -10,6 +10,7 @@ public class Project {
 	private Integer id;
 	private String projectName;
 	private String applicationName;
+	private String serverSideLang;
 	private Integer clientId;
 	private LocalDate startDate;
 	

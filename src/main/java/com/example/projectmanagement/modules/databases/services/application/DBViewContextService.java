@@ -18,10 +18,12 @@ import com.example.projectmanagement.modules.databases.datastructure.entity.Tabl
 import com.example.projectmanagement.modules.databases.datastructure.form.TableColumnRegisterForm;
 import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.DataTypeResolver;
 import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.DataTypeResolverFactory;
+import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.SqlGeneratorFactory;
+import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.SqlSyntaxGenerator;
 import com.example.projectmanagement.modules.databases.services.domain.DatabaseService;
 import com.example.projectmanagement.modules.databases.services.domain.DbTableColumnService;
 import com.example.projectmanagement.modules.databases.services.domain.DbTableService;
-import com.example.projectmanagement.modules.projects.services.ProjectViewContextService;
+import com.example.projectmanagement.modules.projects.services.application.ProjectViewContextService;
 
 @Component
 public class DBViewContextService extends ProjectViewContextService {
@@ -32,61 +34,12 @@ public class DBViewContextService extends ProjectViewContextService {
 	private DbTableService tableService;
 	@Autowired
 	private DbTableColumnService columnService;
-
 	@Autowired
 	private DataTypeResolverFactory resolverFactory;
-
-	private Map<Integer, List<TableInfoDtoRecord>> convertToTableDtoMap(List<TableInfo> tableInfos) {
-		return tableInfos.stream()
-				.map(this::tableInfoToDto)
-				.collect(Collectors.groupingBy(TableInfoDtoRecord::dbInfoId));
-	}
-	
-	private Map<Integer, List<ColumnDtoRecord>> convertToColumnDtoMap(List<TableColumn> columns) {
-		return columns.stream()
-				.map(this::columnInfoToDto)
-				.collect(Collectors.groupingBy(ColumnDtoRecord::tableInfoId));
-	}
-
-	private DBInfoDtoRecord dbInfoToDto(DBInfo entity) {
-		return new DBInfoDtoRecord(
-				entity.getId(),
-				entity.getProjectId(),
-				entity.getDbName(),
-				entity.getDbms());
-	}
-
-	private TableInfoDtoRecord tableInfoToDto(TableInfo entity) {
-		return new TableInfoDtoRecord(
-				entity.getId(),
-				entity.getDbInfoId(),
-				entity.getTableName(),
-				entity.getTableAlias());
-	}
-
-	private ColumnDtoRecord columnInfoToDto(TableColumn entity) {
-		return new ColumnDtoRecord(
-				entity.getId(),
-				entity.getTableInfoId(),
-				entity.getColumnName(),
-				entity.getAlias(),
-				entity.getDataType(),
-				entity.getDataTypeParam(),
-				entity.getIsPrimary(),
-				entity.getIsUnique(),
-				entity.getIsForign(),
-				entity.getIsNullable(),
-				entity.getIsAutoIncrement(),
-				entity.getDefaultValue(),
-				entity.getForignId(),
-				entity.getCheckConstraint(),
-				entity.getComment(),
-				entity.getOnDelete(),
-				entity.getOnUpdate(),
-				entity.getTableName(),
-				entity.getRefTableName(),
-				entity.getRefColumnName());
-	}
+	@Autowired
+	private SqlGeneratorFactory sqlFactory;
+	@Autowired
+	private DBContextHelperService helper;
 
 	/**
 	 * プロジェクトに関連する全てのDBとそのテーブルを取得し、Modelに追加する。
@@ -101,7 +54,7 @@ public class DBViewContextService extends ProjectViewContextService {
 	public void setAllDatabaseTablesContext(Model model, List<DBInfo> dbs) {
 		List<DBInfoDtoRecord> dbList = new ArrayList<>();
 		for (DBInfo each : dbs) {
-			DBInfoDtoRecord eachDto = dbInfoToDto(each);
+			DBInfoDtoRecord eachDto = helper.dbInfoToDto(each);
 			dbList.add(eachDto);
 		}
 		model.addAttribute("dbList", dbList);
@@ -109,7 +62,7 @@ public class DBViewContextService extends ProjectViewContextService {
 		List<Integer> ids = dbs.stream()
 				.map(DBInfo::getId)
 				.collect(Collectors.toList());
-		Map<Integer, List<TableInfoDtoRecord>> tablesWithRelatedDBId = convertToTableDtoMap(
+		Map<Integer, List<TableInfoDtoRecord>> tablesWithRelatedDBId = helper.convertToTableDtoMap(
 				tableService.getTableInfoByDbIds(ids));
 		model.addAttribute("tableInfoMap", tablesWithRelatedDBId);
 	}
@@ -127,7 +80,7 @@ public class DBViewContextService extends ProjectViewContextService {
 	 */
 	public DBInfo setDatabaseContext(Model model, Integer databaseId) {
 		DBInfo db = databaseService.getDBInfoByDBId(databaseId);
-		DBInfoDtoRecord dbDto = dbInfoToDto(db);
+		DBInfoDtoRecord dbDto = helper.dbInfoToDto(db);
 
 		setProjectToModel(model, db.getProjectId());
 		model.addAttribute("db", dbDto);
@@ -145,45 +98,44 @@ public class DBViewContextService extends ProjectViewContextService {
 	 * @param databaseId 対象のデータベースID
 	 */
 	public void setDatabaseTablesContext(Model model, Integer databaseId) {
-		
-		List<TableInfo> relatedTables = tableService.getTableInfoByDbIds(List.of(databaseId));		
-		List <TableInfoDtoRecord> dtoTables = new ArrayList<>();
+
+		List<TableInfo> relatedTables = tableService.getTableInfoByDbIds(List.of(databaseId));
+		List<TableInfoDtoRecord> dtoTables = new ArrayList<>();
 		for (TableInfo each : relatedTables) {
-			dtoTables.add(tableInfoToDto(each));
+			dtoTables.add(helper.tableInfoToDto(each));
 		}
 		model.addAttribute("tableList", dtoTables);
-		
+
 		List<Integer> ids = relatedTables.stream()
 				.map(TableInfo::getId)
 				.collect(Collectors.toList());
-		
-		Map<Integer, List<ColumnDtoRecord>> columnsWithRelatedTableId = convertToColumnDtoMap(
+
+		Map<Integer, List<ColumnDtoRecord>> columnsWithRelatedTableId = helper.convertToColumnDtoMap(
 				columnService.getTableColumns(ids));
 		model.addAttribute("columnMap", columnsWithRelatedTableId);
-		
+
 	}
-	
+
 	/**
 	 * 単一のテーブル情報およびそのカラム情報をModelに追加する。
 	 * 
 	 * Modelに追加されるキー（thymeleaf対応）：
 	 * - "table" : TableInfoDtoRecord
-	 * - "columnList" : List<ColumnDtoRecord>
-	 *
+	 * 
 	 * @param model Modelオブジェクト
 	 * @param tableId テーブルID
-	 * @param columnList テーブルに紐づくカラム情報
 	 * @return TableInfoエンティティ
 	 */
-	public TableInfo setSingleTableContext(Model model, Integer tableId, List<TableColumn> columnList) {
+	public TableInfo setSingleTableContext(Model model, Integer tableId) {
 		TableInfo table = tableService.getTableByTableId(tableId);
 
-		TableInfoDtoRecord tableDto = tableInfoToDto(table);
+		List<TableColumn> columnList = columnService.getTableColumns(List.of(table.getId()));
+		TableInfoDtoRecord tableDto = helper.tableInfoToDto(table);
 		model.addAttribute("table", tableDto);
-		
+
 		List<ColumnDtoRecord> columnListDto = new ArrayList<>();
 		for (TableColumn each : columnList) {
-			columnListDto.add(columnInfoToDto(each));
+			columnListDto.add(helper.columnInfoToDto(each));
 		}
 		model.addAttribute("columnList", columnListDto);
 
@@ -209,4 +161,25 @@ public class DBViewContextService extends ProjectViewContextService {
 		model.addAttribute("dataTypeResolver", dataTypeResolver);
 	}
 
+	/**
+	 * TableInfoをもとにSQLを生成します。
+	 * @param model
+	 * @param dbms
+	 * @param targetTable
+	 */
+	public void setSQLtoModel(Model model, String dbms, TableInfo targetTable) {
+
+		List<TableColumn> columnList = columnService.getTableColumns(List.of(targetTable.getId()));
+
+		List<String> columnNames = columnList.stream()
+				.map(TableColumn::getColumnName)
+				.collect(Collectors.toList());
+
+		SqlSyntaxGenerator sqlGen = sqlFactory.getGenerator(dbms);
+		model.addAttribute("createTableSQL", sqlGen.createTable(targetTable, columnList));
+		model.addAttribute("dropTableSQL", sqlGen.dropTable(targetTable.getTableName()));
+		model.addAttribute("insertTemplateSQL", sqlGen.insertTemplate(targetTable.getTableName(), columnNames));
+		model.addAttribute("updateTemplateSQL", sqlGen.updateTemplate(targetTable.getTableName(), columnNames, "id"));
+		model.addAttribute("deleteTemplateSQL", sqlGen.deleteTemplate(targetTable.getTableName(), columnNames.getFirst()));
+	}
 }

@@ -24,29 +24,30 @@
 
 <th:block layout:fragment="mainContent">
 
-<!--	<th:block th:insert="~{contents/databases/fragments/infoCard :: tableInfo}"></th:block>-->
+	<!--	<th:block th:insert="~{contents/databases/fragments/infoCard :: tableInfo}"></th:block>-->
 
-<!--	<div class="mb-3">-->
-<!--		<a class="btn btn-primary" th:text="#{label.pdf.export}"-->
-<!--			th:href="@{/project/{projectId}/database/{dbId}/table/{tableId}/print(projectId=${project.id}, dbId=${db.id}, tableId=${table.id})}">PDF出力</a>-->
-<!--	</div>-->
+	<!--	<div class="mb-3">-->
+	<!--		<a class="btn btn-primary" th:text="#{label.pdf.export}"-->
+	<!--			th:href="@{/project/{projectId}/database/{dbId}/table/{tableId}/print(projectId=${project.id}, dbId=${db.id}, tableId=${table.id})}">PDF出力</a>-->
+	<!--	</div>-->
 
-<!--	 テーブル -->
-<!--	<th:block th:insert="~{contents/databases/fragments/table :: columnTable}"></th:block>-->
+	<!--	 テーブル -->
+	<!--	<th:block th:insert="~{contents/databases/fragments/table :: columnTable}"></th:block>-->
 
-<!--	 新規追加ボタン -->
-<!--	<div class="mb-3 text-end no-print">-->
-<!--		<button type="button" class="btn btn-primary" onclick="openColumnModalFromRow(0)">-->
-<!--			<i class='bx bx-plus'></i>-->
-<!--			<span th:text="#{form.column.add}">カラム追加</span>-->
-<!--			<span>[F2]</span>-->
-<!--		</button>-->
-<!--	</div>-->
-<!--	 モーダル -->
-<!--	<th:block th:insert="~{contents/databases/fragments/modal :: columModal}">-->
-<!--	</th:block>-->
+	<!--	 新規追加ボタン -->
+	<!--	<div class="mb-3 text-end no-print">-->
+	<!--		<button type="button" class="btn btn-primary" onclick="openColumnModalFromRow(0)">-->
+	<!--			<i class='bx bx-plus'></i>-->
+	<!--			<span th:text="#{form.column.add}">カラム追加</span>-->
+	<!--			<span>[F2]</span>-->
+	<!--		</button>-->
+	<!--	</div>-->
+	<!--	 モーダル -->
+	<!--	<th:block th:insert="~{contents/databases/fragments/modal :: columModal}">-->
+	<!--	</th:block>-->
 
-<button onclick="history.back()" class="btn btn-primary" th:text="#{label.return}">戻る</button>
+
+	<button onclick="history.back()" class="btn btn-primary" th:text="#{label.return}">戻る</button>
 
 	<!-- SQL 表示用 -->
 	<div class="bg-light rounded p-3 border overflow-auto">
@@ -64,7 +65,14 @@
 	</div>
 
 
-<!--	<div id="message-container" th:data-add="#{label.column.add}" th:data-close="#{label.close}"></div>-->
+	<form th:action="@{/project/{projectId}/classdef/create/enitty(projectId=${project.id})}" method="post" class="my-3">
+		<input type="hidden" name="classDefJson" th:value="${classDefJson}"  />
+		<input class="btn btn-primary" type="submit" th:value="エンティティークラス生成・登録"  />
+	</form>
+	<p>エンティティーはDBテーブルとの連携用のクラスで、１テーブルに１クラス生成することを推奨します。なおJOINした状態で取得するクラスはDTOから生成してください</p>
+
+
+	<!--	<div id="message-container" th:data-add="#{label.column.add}" th:data-close="#{label.close}"></div>-->
 </th:block>
 
 <script layout:fragment="bodyScript" th:if="${errorColumnId != null}" th:inline="javascript">

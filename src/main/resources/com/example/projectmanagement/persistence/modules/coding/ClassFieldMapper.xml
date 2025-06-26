@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.example.projectmanagement.persistence.modules.coding.ClassFieldMapper">
+	
+	<resultMap type="com.example.projectmanagement.modules.coding.datastructure.entity.ClassField" id="fieldMap">
+	  <id property="id" column="id" />
+	  <result property="classId" column="class_id" />
+	  <result property="fieldName" column="field_name" />
+	  <result property="dataType" column="data_type" />
+	</resultMap>
+
+	<insert id="insertClassField" useGeneratedKeys="true">
+		INSERT INTO class_fields (
+		class_id, field_name, data_type
+		)
+		VALUES(#{classId}, #{fieldName}, #{dataType})
+	</insert>
+	
+	<update id="updateClassField">
+		UPDATE class_fields SET
+			class_id = #{classId}, 
+			field_name = #{fieldName}, 
+			data_type = #{dataType}
+		<where>
+			id = #{id}
+		</where>
+	</update>
+	
+	<delete id="deleteById">
+		DELETE FROM class_fields
+		<where>
+			id = #{id}
+		</where>
+	</delete>
+
+	<select id="findById" resultMap="fieldMap">
+		SELECT * FROM class_fields
+		<where>
+			id = #{id}
+		</where>
+		
+	</select>
+	
+</mapper>
+

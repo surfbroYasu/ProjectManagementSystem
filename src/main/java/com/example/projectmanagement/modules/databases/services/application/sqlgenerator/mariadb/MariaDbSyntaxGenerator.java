@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
+import com.example.projectmanagement.generalutil.CaseConverter;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfo;
 import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.AbstractSqlSyntaxGenerator;
@@ -132,7 +133,7 @@ public class MariaDbSyntaxGenerator extends AbstractSqlSyntaxGenerator {
 	}
 
 	/**
-	 * INSERT文テンプレートを生成する（? プレースホルダ付き）。
+	 * INSERT文テンプレートを生成する（?#{}プレースホルダ付き）。
 	 *
 	 * @param tableName テーブル名
 	 * @param columnNames カラム名リスト
@@ -143,14 +144,15 @@ public class MariaDbSyntaxGenerator extends AbstractSqlSyntaxGenerator {
 		StringBuilder sb = new StringBuilder();
 		sb.append("INSERT INTO ").append(tableName).append(" (")
 				.append(String.join(", ", columnNames)).append(")\nVALUES (");
-
-		for (int i = 0; i < columnNames.size(); i++) {
-			sb.append("?");
-			if (i < columnNames.size() - 1)
-				sb.append(", ");
+		
+		for (String columnName : columnNames) {
+			sb.append("\n  #{" + CaseConverter.toCamelCase(columnName) + "}");
+			if (!columnNames.getLast().equals(columnName)) {
+				sb.append(",");
+			}
 		}
 
-		sb.append(");");
+		sb.append("\n);");
 		return sb.toString();
 	}
 
@@ -229,14 +231,17 @@ public class MariaDbSyntaxGenerator extends AbstractSqlSyntaxGenerator {
 	@Override
 	public String updateTemplate(String tableName, List<String> columnNames, String whereClause) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("UPDATE ").append(tableName).append(" SET\n");
-		for (int i = 0; i < columnNames.size(); i++) {
-			sb.append("  ").append(columnNames.get(i)).append(" = ?");
-			if (i < columnNames.size() - 1)
-				sb.append(",\n");
+		sb.append("UPDATE ").append(tableName).append(" SET");
+		
+		for (String columnName : columnNames) {
+			sb.append("\n  ").append(columnName).append(" = ").append("#{" + CaseConverter.toCamelCase(columnName) + "}");
+			if (!columnNames.getLast().equals(columnName)) {
+				sb.append(",");
+			}
 		}
+		
 		if (whereClause != null && !whereClause.isBlank()) {
-			sb.append("\nWHERE ").append(whereClause);
+			sb.append("\nWHERE ").append(whereClause).append(" = ").append("#{" +CaseConverter.toCamelCase(whereClause) + "}");
 		}
 		sb.append(";");
 		return sb.toString();

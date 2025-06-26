@@ -17,4 +17,11 @@ public class ProjectDeveloper {
 	private String memberName;
 	private String devRole;
 	
+	
+	public ProjectDeveloper(Integer userId, String memberName, String devRole) {
+		this.userId = userId;
+		this.memberName = memberName;
+		this.devRole = devRole;
+	}
+	
 }

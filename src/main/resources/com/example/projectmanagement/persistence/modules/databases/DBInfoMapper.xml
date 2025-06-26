@@ -113,7 +113,7 @@
 	</select>
 
   
-	 <insert id="insertNewTable">
+	 <insert id="insertNewTable" useGeneratedKeys="true">
 	   INSERT INTO table_info (
 	     db_info_id,
 	     table_name,
@@ -127,7 +127,7 @@
 	   )
 	 </insert>
 	 
-	<update id="updateTable" >
+	<update id="updateTable" useGeneratedKeys="true">
 	  UPDATE table_info
 	  SET 
 	    table_name = #{tableName},
@@ -178,7 +178,7 @@
 	  </where>
 	</select>
 	
-	<insert id="insertNewColumn" parameterType="com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn">
+	<insert id="insertNewColumn" parameterType="com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn" useGeneratedKeys="true">
 	  INSERT INTO table_columns (
 	    table_info_id,
 	    column_name,
@@ -232,7 +232,7 @@
 	</insert>
 
 		
-	<update id="updateColumn" >
+	<update id="updateColumn" useGeneratedKeys="true">
 	  UPDATE table_columns
 	  SET
 	    column_name = #{columnName},

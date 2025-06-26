@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.example.projectmanagement.persistence.modules.coding.EntityMapper">
+	
+	<resultMap id="entityMap" type="com.example.projectmanagement.modules.coding.datastructure.entity.Entity">
+	  <id property="id" column="id" />
+	  <result property="tableColumnId" column="table_column_id" />
+	  <result property="fieldId" column="field_id" />
+	  <result property="projectId" column="project_id" />
+	</resultMap>
+
+
+	<insert id="insertEnity" >
+		INSERT INTO entities (
+		field_id, table_column_id, project_id
+		)
+		VALUES(#{fieldId}, #{tableColumnId}, #{projectId})
+	</insert>
+	
+	
+	<delete id="deleteEntityByTableColId">
+		DELETE FROM entities
+		<where>
+			table_column_id = #{tableColId}
+		</where>
+	</delete>
+	
+	
+	<select id="findEntityByTableColId" resultMap="entityMap">
+		SELECT * 
+		FROM entities
+		<where>
+			table_column_id = #{tableColumnId}
+		</where>
+	</select>
+	
+	
+</mapper>
+

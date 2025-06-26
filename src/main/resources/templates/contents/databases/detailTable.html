@@ -14,11 +14,11 @@
 </th:block>
 
 <script layout:fragment="meta-script">
-  document.addEventListener("keydown", function(event) {
-    if (event.key === "F2") {
-      openColumnModalFromRow(0); 
-    }
-  });
+	document.addEventListener("keydown", function (event) {
+		if (event.key === "F2") {
+			openColumnModalFromRow(0);
+		}
+	});
 </script>
 
 <th:block layout:fragment="breadCrumb">
@@ -53,27 +53,63 @@
 	<th:block th:insert="~{contents/databases/fragments/modal :: columModal}">
 	</th:block>
 
-	<form th:action="@{/project/{projectId}/classdef/database-entity/{tableId}(projectId=${project.id}, tableId=${table.id})}">
+	<form
+		th:action="@{/project/{projectId}/classdef/database-entity/{tableId}(projectId=${project.id}, tableId=${table.id})}">
 		<select name="lang" id="lang">
 			<option value="java">java</option>
 		</select>
-		<input type="submit" class="btn btn-primary" value="クラスを生成する"/>
+		<input type="submit" class="btn btn-primary" value="クラスを生成する" />
 	</form>
 
-	<!-- SQL 表示用 -->
-	<div class="bg-light rounded p-3 border overflow-auto">
-		<!-- ボタン -->
-		<button class="btn btn-light clipboard" data-clipboard-target="#createSQL"
-			th:utext="#{icon.clipboard}">コピー</button>
-		<pre><code id="createSQL" class="language-sql" th:text="${createTableSQL}"></code></pre>
+	<div class="card p-3">
+		<h5>DDL</h5>
+		<!-- SQL 表示用 -->
+		<div class="bg-light rounded p-3 border overflow-auto">
+			<!-- ボタン -->
+			<button class="btn btn-light clipboard" data-clipboard-target="#createSQL"
+				th:utext="#{icon.clipboard}">コピー</button>
+			<pre><code id="createSQL" class="language-sql" th:text="${createTableSQL}"></code></pre>
+		</div>
+
+		<!-- SQL 表示用 -->
+		<div class="bg-light rounded p-3 border overflow-auto">
+			<!-- ボタン -->
+			<button class="btn btn-light clipboard" data-clipboard-target="#dropSQL"
+				th:utext="#{icon.clipboard}">コピー</button>
+			<pre><code id="dropSQL" class="language-sql" th:text="${dropTableSQL}"></code></pre>
+		</div>
+
 	</div>
 
-	<!-- SQL 表示用 -->
-	<div class="bg-light rounded p-3 border overflow-auto">
-		<!-- ボタン -->
-		<button class="btn btn-light clipboard" data-clipboard-target="#dropSQL"
-			th:utext="#{icon.clipboard}">コピー</button>
-		<pre><code id="dropSQL" class="language-sql" th:text="${dropTableSQL}"></code></pre>
+
+	<div class="card p-3">
+		<h5>DML</h5>
+
+		<!--TODO: 条件指定をしてSQLをカスタマイズ生成できるページに遷移するボタン-->
+
+		<!-- SQL 表示用 -->
+		<div class="bg-light rounded p-3 border overflow-auto">
+			<!-- ボタン -->
+			<button class="btn btn-light clipboard" data-clipboard-target="#insertTemplateSQL"
+				th:utext="#{icon.clipboard}">コピー</button>
+			<pre><code id="insertTemplateSQL" class="language-sql" th:text="${insertTemplateSQL}"></code></pre>
+		</div>
+
+		<!-- SQL 表示用 -->
+		<div class="bg-light rounded p-3 border overflow-auto">
+			<!-- ボタン -->
+			<button class="btn btn-light clipboard" data-clipboard-target="#updateTemplateSQL"
+				th:utext="#{icon.clipboard}">コピー</button>
+			<pre><code id="updateTemplateSQL" class="language-sql" th:text="${updateTemplateSQL}"></code></pre>
+		</div>
+
+		<!-- SQL 表示用 -->
+		<div class="bg-light rounded p-3 border overflow-auto">
+			<!-- ボタン -->
+			<button class="btn btn-light clipboard" data-clipboard-target="#deleteTemplateSQL"
+				th:utext="#{icon.clipboard}">コピー</button>
+			<pre><code id="deleteTemplateSQL" class="language-sql" th:text="${deleteTemplateSQL}"></code></pre>
+		</div>
 	</div>
 
 	<div id="copyToast" class="alert alert-success alert-dismissible fade shadow rounded-pill px-4 py-2 text-center"

@@ -9,6 +9,7 @@
     <id property="id" column="id"/>
     <result property="projectName" column="project_name"/>
     <result property="applicationName" column="application_name"/>
+    <result property="serverSideLang" column="server_side_lang"/>
     <result property="clientId" column="client_id"/>
     <result property="startDate" column="start_date"/>
 </resultMap>
@@ -46,8 +47,8 @@
 	<insert id="insertProject"
 	        parameterType="com.example.projectmanagement.modules.projects.datastructure.entity.Project"
 	        useGeneratedKeys="true" keyProperty="id">
-	    INSERT INTO projects (project_name, application_name, client_id, start_date)
-	    VALUES (#{projectName}, #{applicationName}, #{clientId}, #{startDate});
+	    INSERT INTO projects (project_name, application_name, server_side_lang, client_id, start_date)
+	    VALUES (#{projectName}, #{applicationName}, #{serverSideLang}, #{clientId}, #{startDate});
 	</insert>
 
 	<insert id="insertProjectDev" >
@@ -59,7 +60,8 @@
 	    UPDATE projects
 	    SET
 	        project_name = #{projectName},
-	        application_name = #{applicationName}
+	        application_name = #{applicationName},
+	        server_side_lang=#{serverSideLang}
 	   <where>
 	    	 id = #{id}
 	   </where>

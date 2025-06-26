@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.example.projectmanagement.modules.projects.services.ProjectService;
+import com.example.projectmanagement.modules.projects.services.domain.ProjectService;
 import com.example.projectmanagement.users.domain.UserRoleEnum;
 import com.example.projectmanagement.users.security.CustomUserDetails;
 

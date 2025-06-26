@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.projectmanagement.modules.coding.services.application.EntityFieldService;
 import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfo;
 import com.example.projectmanagement.modules.databases.datastructure.form.DBInfoRegisterForm;
 import com.example.projectmanagement.modules.databases.datastructure.form.TableInfoRegisterForm;
 import com.example.projectmanagement.modules.databases.services.application.DBViewContextService;
 import com.example.projectmanagement.modules.databases.services.domain.DatabaseService;
+import com.example.projectmanagement.modules.projects.services.domain.ProjectService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -33,6 +35,12 @@ public class DatabaseSettingController {
 
 	@Autowired
 	private DatabaseService domainService;
+	
+	@Autowired
+	private ProjectService projctService;
+	
+	@Autowired
+	private EntityFieldService entityService;
 
 
 	@ModelAttribute("dbInfoRegisterForm")
@@ -63,11 +71,18 @@ public class DatabaseSettingController {
 			@Validated @ModelAttribute("dbInfoRegisterForm") DBInfoRegisterForm form,
 			BindingResult bindingResult,
 			Model model) {
-
+		
 		String referer = request.getHeader("Referer");
+		String redirectUrl =  "redirect:" + referer;
+		
+		if ("delete".equals(action)) {
+			domainService.deleteDatabase(form.getId());
+			return redirectUrl;
+		}
+
 
 		if (bindingResult.hasErrors()) {
-			return "redirect:" + referer;
+			return redirectUrl;
 		}
 
 		DBInfo domain = new DBInfo();
@@ -77,11 +92,10 @@ public class DatabaseSettingController {
 		switch (action) {
 		case "add" -> domainService.insertDatabase(domain);
 		case "edit" -> domainService.updateDatabase(domain);
-		case "delete" -> domainService.deleteDatabase(domain.getId());
 		default -> throw new IllegalArgumentException("Unsupported action: " + action);
 		}
 
-		return "redirect:" + referer;
+		return redirectUrl;
 	}
 
 	@GetMapping("/{databaseId}/detail")

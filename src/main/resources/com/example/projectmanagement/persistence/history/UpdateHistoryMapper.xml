@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper
-	namespace="com.example.projectmanagement.persistence.history.UpdateHistoryDomainMapper">
+	namespace="com.example.projectmanagement.persistence.history.UpdateHistoryMapper">
 
 
 	<resultMap

@@ -15,12 +15,12 @@ public class HistoryLocatorService {
 	private HistoryLocatorMapper mapper;
 	
 	public HistoryGroupEntity findHistoryGroupById(int id) {
-		return mapper.findById(id);
+		return mapper.findHistoryGroupById(id);
 	}
 	
 	
 	public List<HistoryGroupEntity> findListOfHistoryGroups(List<Integer> ids){
-		return mapper.findByIdList(ids);
+		return mapper.findHistoryGroupByIdList(ids);
 	}
 	
 	

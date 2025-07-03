@@ -7,11 +7,26 @@ import com.example.projectmanagement.history.datastructures.entity.UpdateHistory
 @Mapper
 public interface UpdateHistoryMapper {
 
+	/*
+	 * 新規登録
+	 */
 	public void insertUpdateHistory(UpdateHistoryEntity entity);
-	
-	//同じ人から5分以内に同じグループ内でアップデートがあった際は、Logとコメントにアペンドする
-	
+
+	/**
+	 * 履歴のアップデート(ロジックなし)
+	 * 
+	 * @param entity
+	 */
+	public void updateUpdateHistory(UpdateHistoryEntity entity);
+
+	/**
+	 * interval に指定された分数以内に同じユーザーから更新履歴がある場合に deleteUpdateHistoryByGroupIdを返す
+	 * 
+	 * @param entity
+	 * @param interval
+	 * @return　UpdateHistoryEntity　latestUpdateWithinIntervalMin
+	 */
+	public UpdateHistoryEntity findRecentUpdate(UpdateHistoryEntity entity, int interval);
+
 	public void deleteUpdateHistoryByGroupId(int groupId);
-	
-	
 }

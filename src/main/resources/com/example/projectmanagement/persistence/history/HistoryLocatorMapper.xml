@@ -25,12 +25,12 @@
 	</resultMap>
 
 
-	<select id="findById" resultMap="historyGroupMap">
+	<select id="findHistoryGroupById" resultMap="historyGroupMap">
 		SELECT * FROM history_group
 		WHERE id = #{id}
 	</select>
 
-	<select id="findByIdList" resultMap="historyGroupMap">
+	<select id="findHistoryGroupByIdList" resultMap="historyGroupMap">
 		SELECT * FROM history_group
 		<where>
 			<if test="list != null and list.size() > 0">

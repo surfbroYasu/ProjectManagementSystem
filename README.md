@@ -8,4 +8,4 @@ PMシステムは、中小規模のシステム開発を管理するためのプ
 - **バックエンド**: Java 21, Spring Boot, MyBatis
 - **フロントエンド**: Thymeleaf, Bootstrap, jQuery, Vite, Node
 - **データベース**: MariaDB
-- **補助ツール**: Apache POI, Pandas (Python API)
+- **補助ツール**: Apache POI

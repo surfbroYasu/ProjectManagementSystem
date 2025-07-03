@@ -4,7 +4,8 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.projectmanagement.persistence.users.UserMapper">
-	<resultMap id="userMap" type="com.example.projectmanagement.users.domain.User">
+
+	<resultMap id="userMap" type="com.example.projectmanagement.users.datastructure.entity.User">
 	  <id column="id" property="id"/>
 	  <result column="email" property="email"/>
 	  <result column="password_hash" property="passwordHash"/>

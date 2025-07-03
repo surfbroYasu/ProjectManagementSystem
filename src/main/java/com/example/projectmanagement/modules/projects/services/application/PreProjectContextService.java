@@ -10,8 +10,8 @@ import org.springframework.ui.Model;
 import com.example.projectmanagement.generalutil.enums.SupportedProgramingLangage;
 import com.example.projectmanagement.modules.projects.datastructure.dto.ProjectDtoRecord;
 import com.example.projectmanagement.modules.projects.datastructure.entity.Project;
-import com.example.projectmanagement.modules.projects.services.domain.ProjectService;
-import com.example.projectmanagement.users.security.CustomUserDetails;
+import com.example.projectmanagement.modules.projects.services.repository.ProjectService;
+import com.example.projectmanagement.users.services.application.security.CustomUserDetails;
 
 @Service
 public class PreProjectContextService {

@@ -18,7 +18,7 @@ import com.example.projectmanagement.modules.designs.app.features.datastructures
 import com.example.projectmanagement.modules.designs.app.features.datastructures.entity.ModuleFeatureRelationEntity;
 import com.example.projectmanagement.modules.designs.app.features.datastructures.form.ApplicationFeatureForm;
 import com.example.projectmanagement.modules.designs.app.features.services.application.FeatureContextService;
-import com.example.projectmanagement.modules.designs.app.features.services.domain.FeatureDomainService;
+import com.example.projectmanagement.modules.designs.app.features.services.repository.FeatureRepositoryService;
 import com.example.projectmanagement.modules.designs.app.modules.datastructures.entity.ModuleDefinitionEntity;
 
 @Controller
@@ -29,7 +29,7 @@ public class FeatureController {
 	private FeatureContextService contextService;
 
 	@Autowired
-	private FeatureDomainService domainService;
+	private FeatureRepositoryService domainService;
 
 	@ModelAttribute("featureForm")
 	private ApplicationFeatureForm setFeatureDefForm() {

@@ -10,8 +10,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.example.projectmanagement.users.domain.User;
-import com.example.projectmanagement.users.security.CustomUserDetails;
+import com.example.projectmanagement.users.datastructure.entity.User;
+import com.example.projectmanagement.users.services.application.security.CustomUserDetails;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

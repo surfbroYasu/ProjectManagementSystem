@@ -20,9 +20,9 @@ import com.example.projectmanagement.modules.databases.services.application.sqlg
 import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.DataTypeResolverFactory;
 import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.SqlGeneratorFactory;
 import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.SqlSyntaxGenerator;
-import com.example.projectmanagement.modules.databases.services.domain.DatabaseService;
-import com.example.projectmanagement.modules.databases.services.domain.DbTableColumnService;
-import com.example.projectmanagement.modules.databases.services.domain.DbTableService;
+import com.example.projectmanagement.modules.databases.services.repository.DatabaseService;
+import com.example.projectmanagement.modules.databases.services.repository.DbTableColumnService;
+import com.example.projectmanagement.modules.databases.services.repository.DbTableService;
 import com.example.projectmanagement.modules.projects.services.application.ProjectViewContextService;
 
 @Component

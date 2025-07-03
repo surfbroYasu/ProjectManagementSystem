@@ -4,7 +4,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.example.projectmanagement.users.domain.User;
+import com.example.projectmanagement.users.datastructure.entity.User;
 
 public class FullNameFormatter {
     public static String format(User user, Locale locale) {

@@ -7,7 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import com.example.projectmanagement.users.security.CustomUserDetails;
+import com.example.projectmanagement.users.services.application.security.CustomUserDetails;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

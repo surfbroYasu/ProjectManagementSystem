@@ -12,9 +12,9 @@ import com.example.projectmanagement.modules.coding.langgenerator.ModelGenerator
 import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfo;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfo;
-import com.example.projectmanagement.modules.databases.services.domain.DatabaseService;
-import com.example.projectmanagement.modules.databases.services.domain.DbTableColumnService;
-import com.example.projectmanagement.modules.databases.services.domain.DbTableService;
+import com.example.projectmanagement.modules.databases.services.repository.DatabaseService;
+import com.example.projectmanagement.modules.databases.services.repository.DbTableColumnService;
+import com.example.projectmanagement.modules.databases.services.repository.DbTableService;
 import com.example.projectmanagement.modules.projects.services.application.ProjectViewContextService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

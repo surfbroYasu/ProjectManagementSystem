@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.projectmanagement.users.domain.User;
-import com.example.projectmanagement.users.domain.UserRoleEnum;
-import com.example.projectmanagement.users.forms.SimpleUserRegistForm;
-import com.example.projectmanagement.users.forms.UserInfoForm;
-import com.example.projectmanagement.users.security.CustomUserDetails;
-import com.example.projectmanagement.users.services.UserService;
+import com.example.projectmanagement.users.datastructure.entity.User;
+import com.example.projectmanagement.users.datastructure.enums.UserRoleEnum;
+import com.example.projectmanagement.users.datastructure.forms.SimpleUserRegistForm;
+import com.example.projectmanagement.users.datastructure.forms.UserInfoForm;
+import com.example.projectmanagement.users.services.application.security.CustomUserDetails;
+import com.example.projectmanagement.users.services.repository.UserService;
 
 /*
  * 次のURLで始まるエンドポイントはセキュリティー保護の対象外となる

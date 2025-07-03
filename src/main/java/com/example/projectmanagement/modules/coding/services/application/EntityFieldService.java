@@ -14,15 +14,15 @@ import com.example.projectmanagement.modules.coding.datastructure.models.ClassDe
 import com.example.projectmanagement.modules.coding.datastructure.models.FieldModel;
 import com.example.projectmanagement.modules.coding.langgenerator.ModelGenerator;
 import com.example.projectmanagement.modules.coding.langgenerator.ModelGeneratorFactory;
-import com.example.projectmanagement.modules.coding.services.domain.ClassDefDomainService;
-import com.example.projectmanagement.modules.coding.services.domain.ClassFieldDomainService;
-import com.example.projectmanagement.modules.coding.services.domain.EntityDomainService;
+import com.example.projectmanagement.modules.coding.services.repository.ClassDefRepositoryService;
+import com.example.projectmanagement.modules.coding.services.repository.ClassFieldRepostitoryService;
+import com.example.projectmanagement.modules.coding.services.repository.EntityRepostitoryService;
 import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfo;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfo;
-import com.example.projectmanagement.modules.databases.services.domain.DatabaseService;
-import com.example.projectmanagement.modules.databases.services.domain.DbTableColumnService;
-import com.example.projectmanagement.modules.databases.services.domain.DbTableService;
+import com.example.projectmanagement.modules.databases.services.repository.DatabaseService;
+import com.example.projectmanagement.modules.databases.services.repository.DbTableColumnService;
+import com.example.projectmanagement.modules.databases.services.repository.DbTableService;
 
 @Service
 public class EntityFieldService {
@@ -40,13 +40,13 @@ public class EntityFieldService {
 	private ModelGeneratorFactory modelFactory;
 	
 	@Autowired
-	private ClassDefDomainService classDefService;
+	private ClassDefRepositoryService classDefService;
 	
 	@Autowired
-	private ClassFieldDomainService fieldService;
+	private ClassFieldRepostitoryService fieldService;
 	
 	@Autowired
-	private EntityDomainService entityService;
+	private EntityRepostitoryService entityService;
 
 	
 	@Transactional

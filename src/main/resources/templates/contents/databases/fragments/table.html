@@ -29,8 +29,10 @@
 				<td style="width: 14%" th:text="${col.columnName}">column</td>
 				<td style="width: 12%" th:text="${col.alias}">alias</td>
 				<td style="width: 10%"
-					th:text="${col.dataType + (col.dataTypeParam != null ? '(' + col.dataTypeParam + ')' : '')}">
-					type</td>
+					th:text="${col.dataType + (!#strings.isEmpty(col.dataTypeParam) ? '(' + col.dataTypeParam + ')' : '')}">
+					type
+				</td>
+
 
 				<td style="width: 4%" class="text-center" th:text="${col.isPrimary ? '○' : ''}">pk</td>
 				<td style="width: 4%" class="text-center" th:text="${col.isUnique ? '○' : ''}">uk</td>

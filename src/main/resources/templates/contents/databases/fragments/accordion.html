@@ -87,11 +87,11 @@
 							class="btn btn-outline-secondary btn-sm" th:text="#{title.table_def.print}">
 							テーブル定義書
 						</a>
-						 
+
 						<th:block th:insert="~{contents/databases/fragments/modal :: tableEditBtn}"></th:block>
 						<th:block th:insert="~{contents/databases/fragments/modal :: tableEditForm}"></th:block>
 						<th:block th:insert="~{contents/databases/fragments/modal :: tableDeleteBtn}"></th:block>
-						<th:block th:insert="~{contents/databases/fragments/modal :: tableDeleteForm}"></th:block> 
+						<th:block th:insert="~{contents/databases/fragments/modal :: tableDeleteForm}"></th:block>
 
 						<hr />
 
@@ -111,9 +111,11 @@
 									th:onclick="|location.href='@{/project/{projectId}/database/{dbId}/table/{tableId}(projectId=${project.id}, dbId=${db.id}, tableId=${table.id})}'|">
 									<td th:text="${col.columnName}">column</td>
 									<td th:text="${col.alias}">alias</td>
-									<td
-										th:text="${col.dataType + (col.dataTypeParam != null ? '(' + col.dataTypeParam + ')' : '')}">
-										type</td>
+									<td style="width: 10%"
+										th:text="${col.dataType + (!#strings.isEmpty(col.dataTypeParam) ? '(' + col.dataTypeParam + ')' : '')}">
+										type
+									</td>
+
 
 									<td th:text="${col.isPrimary ? '○' : ''}">pk</td>
 									<td th:text="${col.isForign ? '○' : ''}">fk</td>

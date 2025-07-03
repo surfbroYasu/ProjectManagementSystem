@@ -2,7 +2,7 @@ package com.example.projectmanagement.persistence.users;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.example.projectmanagement.users.domain.User;
+import com.example.projectmanagement.users.datastructure.entity.User;
 
 @Mapper
 public interface UserMapper {

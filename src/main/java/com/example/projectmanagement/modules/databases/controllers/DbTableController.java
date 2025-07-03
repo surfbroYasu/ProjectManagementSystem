@@ -17,8 +17,8 @@ import com.example.projectmanagement.modules.databases.datastructure.entity.DBIn
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfo;
 import com.example.projectmanagement.modules.databases.datastructure.form.TableInfoRegisterForm;
 import com.example.projectmanagement.modules.databases.services.application.DBViewContextService;
-import com.example.projectmanagement.modules.databases.services.domain.DbTableService;
-import com.example.projectmanagement.modules.projects.services.domain.ProjectService;
+import com.example.projectmanagement.modules.databases.services.repository.DbTableService;
+import com.example.projectmanagement.modules.projects.services.repository.ProjectService;
 
 import jakarta.servlet.http.HttpServletRequest;
 

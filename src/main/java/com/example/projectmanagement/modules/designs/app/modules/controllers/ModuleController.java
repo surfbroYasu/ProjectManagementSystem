@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.projectmanagement.modules.designs.app.modules.datastructures.entity.ModuleDefinitionEntity;
 import com.example.projectmanagement.modules.designs.app.modules.datastructures.form.ModuleDefinitionForm;
 import com.example.projectmanagement.modules.designs.app.modules.services.application.ModuleContextService;
-import com.example.projectmanagement.modules.designs.app.modules.services.domain.ModuleDomainService;
+import com.example.projectmanagement.modules.designs.app.modules.services.repository.ModuleRepostitoryService;
 
 @Controller
 @RequestMapping("/project/{projectId}/module")
@@ -25,7 +25,7 @@ public class ModuleController {
 	private ModuleContextService contextService;
 
 	@Autowired
-	private ModuleDomainService domainService;
+	private ModuleRepostitoryService domainService;
 
 	@ModelAttribute("moduleDefForm")
 	private ModuleDefinitionForm setModuleDefForm() {

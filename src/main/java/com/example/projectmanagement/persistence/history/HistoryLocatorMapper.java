@@ -29,4 +29,5 @@ public interface HistoryLocatorMapper {
 	
 	public List<UpdateHistoryEntity> getAllUpdates(int groupId);
 	
+	
 }

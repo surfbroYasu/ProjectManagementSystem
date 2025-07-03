@@ -19,8 +19,8 @@ import com.example.projectmanagement.modules.projects.datastructure.entity.Proje
 import com.example.projectmanagement.modules.projects.datastructure.form.ProjectRegisterForm;
 import com.example.projectmanagement.modules.projects.datastructure.model.ProjectDevRoleEnum;
 import com.example.projectmanagement.modules.projects.services.application.PreProjectContextService;
-import com.example.projectmanagement.modules.projects.services.domain.ProjectService;
-import com.example.projectmanagement.users.security.CustomUserDetails;
+import com.example.projectmanagement.modules.projects.services.repository.ProjectService;
+import com.example.projectmanagement.users.services.application.security.CustomUserDetails;
 
 @Controller
 @RequestMapping("/projects")

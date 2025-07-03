@@ -16,16 +16,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.projectmanagement.modules.coding.datastructure.entity.ClassDefinition;
 import com.example.projectmanagement.modules.coding.services.application.EntityFieldService;
-import com.example.projectmanagement.modules.coding.services.domain.ClassDefDomainService;
+import com.example.projectmanagement.modules.coding.services.repository.ClassDefRepositoryService;
 import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfo;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfo;
 import com.example.projectmanagement.modules.databases.datastructure.form.TableColumnRegisterForm;
 import com.example.projectmanagement.modules.databases.services.application.DBViewContextService;
 import com.example.projectmanagement.modules.databases.services.application.validation.columnstructure.ColumnValidationService;
-import com.example.projectmanagement.modules.databases.services.domain.DatabaseService;
-import com.example.projectmanagement.modules.databases.services.domain.DbTableColumnService;
-import com.example.projectmanagement.modules.projects.services.domain.ProjectService;
+import com.example.projectmanagement.modules.databases.services.repository.DatabaseService;
+import com.example.projectmanagement.modules.databases.services.repository.DbTableColumnService;
+import com.example.projectmanagement.modules.projects.services.repository.ProjectService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -54,7 +54,7 @@ public class DbTableColumnController {
 	private EntityFieldService entityService;
 
 	@Autowired
-	private ClassDefDomainService classDefService;
+	private ClassDefRepositoryService classDefService;
 
 	@PostMapping("/{databaseId}/table/{tableId}/column")
 	public String handleColumnAction(HttpServletRequest request,
@@ -101,11 +101,11 @@ public class DbTableColumnController {
 
 		switch (action) {
 		case "add" -> {
-			columnService.insertColumn(domain);
+			columnService.insertColumn(domain, dbms);
 			entityService.createEntityFieldFromTableCol(serverSideLang, projectId, dbms, classDef.getId(), domain);
 		}
 		case "edit" -> {
-			columnService.updateColumn(domain);
+			columnService.updateColumn(domain, dbms);
 		}
 		default -> throw new IllegalArgumentException("Unsupported action: " + action);
 		}

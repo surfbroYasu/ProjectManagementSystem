@@ -6,7 +6,7 @@
 <mapper
 	namespace="com.example.projectmanagement.persistence.modules.coding.ClassDefMapper">
 	
-	<resultMap id="classDefMap" type="com.example.projectmanagement.modules.coding.datastructure.entity.ClassDefinition">
+	<resultMap id="classDefMap" type="com.example.projectmanagement.modules.coding.datastructure.entity.ClassDefinitionEntity">
 		<id property="id" column="id" />
 		<result property="className" column="class_name"/>
 		<result property="classAlias" column="class_alias"/>

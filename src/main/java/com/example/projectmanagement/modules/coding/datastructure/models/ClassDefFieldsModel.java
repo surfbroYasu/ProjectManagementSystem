@@ -2,10 +2,14 @@ package com.example.projectmanagement.modules.coding.datastructure.models;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class ClassDefinitionModel {
+@AllArgsConstructor
+@NoArgsConstructor
+public class ClassDefFieldsModel {
     private Integer id;
     private String className;
     private String classAlias;
@@ -14,5 +18,5 @@ public class ClassDefinitionModel {
     private Integer historyId;
     private String langage;
     private Integer projectId;
-    private List<FieldModel> fields; 
+    private List<ClassFieldModel> fields; 
 }

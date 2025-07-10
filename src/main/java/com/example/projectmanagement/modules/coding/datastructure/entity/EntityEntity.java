@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Entity {
+public class EntityEntity {
 
 	private Integer id;
 	private Integer tableColumnId;
@@ -15,7 +15,7 @@ public class Entity {
 	private Integer projectId;
 	
 	
-	public Entity(Integer tableColumnId, Integer fieldId, Integer projectId) {
+	public EntityEntity(Integer tableColumnId, Integer fieldId, Integer projectId) {
 		super();
 		this.tableColumnId = tableColumnId;
 		this.fieldId = fieldId;

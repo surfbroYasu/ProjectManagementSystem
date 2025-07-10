@@ -6,7 +6,7 @@
 <mapper
 	namespace="com.example.projectmanagement.persistence.modules.coding.EntityMapper">
 	
-	<resultMap id="entityMap" type="com.example.projectmanagement.modules.coding.datastructure.entity.Entity">
+	<resultMap id="entityMap" type="com.example.projectmanagement.modules.coding.datastructure.entity.EntityEntity">
 	  <id property="id" column="id" />
 	  <result property="tableColumnId" column="table_column_id" />
 	  <result property="fieldId" column="field_id" />

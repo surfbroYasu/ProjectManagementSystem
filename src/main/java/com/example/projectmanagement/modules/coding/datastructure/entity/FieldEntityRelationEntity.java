@@ -3,7 +3,7 @@ package com.example.projectmanagement.modules.coding.datastructure.entity;
 import lombok.Data;
 
 @Data
-public class FieldEntityRelation {
+public class FieldEntityRelationEntity {
 
 	private Integer id;
 	private Integer entityId;

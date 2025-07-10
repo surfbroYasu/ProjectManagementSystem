@@ -6,7 +6,7 @@
 <mapper
 	namespace="com.example.projectmanagement.persistence.modules.coding.ClassFieldMapper">
 	
-	<resultMap type="com.example.projectmanagement.modules.coding.datastructure.entity.ClassField" id="fieldMap">
+	<resultMap type="com.example.projectmanagement.modules.coding.datastructure.entity.ClassFieldEntity" id="fieldMap">
 	  <id property="id" column="id" />
 	  <result property="classId" column="class_id" />
 	  <result property="fieldName" column="field_name" />
@@ -44,6 +44,16 @@
 		</where>
 		
 	</select>
+
+	<select id="findByClassId" resultMap="fieldMap">
+		SELECT * FROM class_fields
+		<where>
+			id = #{classId}
+		</where>
+		
+	</select>
+	
+	
 	
 </mapper>
 

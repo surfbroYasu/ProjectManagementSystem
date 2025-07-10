@@ -2,9 +2,9 @@ package com.example.projectmanagement.modules.coding.langgenerator;
 
 import java.util.List;
 
-import com.example.projectmanagement.modules.coding.datastructure.entity.ClassDefinition;
-import com.example.projectmanagement.modules.coding.datastructure.entity.ClassField;
-import com.example.projectmanagement.modules.coding.datastructure.models.ClassDefinitionModel;
+import com.example.projectmanagement.modules.coding.datastructure.entity.ClassDefinitionEntity;
+import com.example.projectmanagement.modules.coding.datastructure.entity.ClassFieldEntity;
+import com.example.projectmanagement.modules.coding.datastructure.models.ClassDefFieldsModel;
 import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfo;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfo;
@@ -28,7 +28,7 @@ public interface ModelGenerator {
 	 * @param dataUseType
 	 * @return　 ClassDefinitionModel
 	 */
-	public ClassDefinitionModel createClassAndFieldsFromDBTable(DBInfo dbInfo, TableInfo tableInfo, List<TableColumn> columnList, String dataUseType);
+	public ClassDefFieldsModel createClassAndFieldsFromDBTable(DBInfo dbInfo, TableInfo tableInfo, List<TableColumn> columnList, String dataUseType);
 	
 	/**
 	 * テーブルInfoをクラスに変換する。ClassDefinition（エンティティー）を使用する。
@@ -37,17 +37,17 @@ public interface ModelGenerator {
 	 * @param dataUseType
 	 * @return
 	 */
-	public ClassDefinition createClassFromDBTable(Integer projectId, TableInfo tableInfo, String dataUseType);
+	public ClassDefinitionEntity createClassFromDBTable(Integer projectId, TableInfo tableInfo, String dataUseType);
 	
 	
-	public ClassField createFieldFromDBColumn(TableColumn column, Integer classId, String dbms);
+	public ClassFieldEntity createFieldFromDBColumn(TableColumn column, Integer classId, String dbms);
 	
 	/**
 	 * ClassDefinitionModelからコードブロックを生成する。
 	 * @param classDefinition
 	 * @return
 	 */
-	public String stringBuilder(ClassDefinitionModel classDefinition);
+	public String stringBuilder(ClassDefFieldsModel classDefinition);
 	
 	/**
 	 * MariaDBのデータ型から、指定のプログラミング言語のデータ型に最適化します。

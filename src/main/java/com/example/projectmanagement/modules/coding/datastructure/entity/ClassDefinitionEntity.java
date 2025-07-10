@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClassDefinition {
+public class ClassDefinitionEntity {
 	private Integer id;
     private String className;
     private String classAlias;
@@ -19,7 +19,7 @@ public class ClassDefinition {
     private Integer tableId;
     private String structualType;
     
-	public ClassDefinition(String className, String classAlias, String description, String dataUseType, String language,
+	public ClassDefinitionEntity(String className, String classAlias, String description, String dataUseType, String language,
 			Integer projectId) {
 		super();
 		this.className = className;

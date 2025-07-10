@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.projectmanagement.modules.coding.datastructure.models.ClassDefinitionModel;
+import com.example.projectmanagement.modules.coding.datastructure.models.ClassDefFieldsModel;
 import com.example.projectmanagement.modules.coding.services.application.ClassDefContextService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -22,13 +22,21 @@ public class ClassDefController {
 
 	private static final String TEMPLATE_ROOT = "contents/coding/classdef";
 
+	/**
+	 * 
+	 * dbテーブルからエンティティーを作成する為の初期ページ
+	 * @param projectId
+	 * @param tableId
+	 * @param lang
+	 * @param model
+	 * @return
+	 */
 	@GetMapping("/database-entity/{tableId}")
 	public String renderModelGeneratorSetupForm(@PathVariable Integer projectId,
 			@PathVariable("tableId") Integer tableId,
 			@RequestParam("lang") String lang, Model model) {
 
-		model.addAttribute("title", "title.class_def");
-		contextService.setEntityView(model, lang, tableId, "entity");
+		contextService.setEntityViewFromDb(model, lang, tableId, "entity", "title.class_def");
 
 		return TEMPLATE_ROOT + "/codeBlock";
 	}
@@ -37,9 +45,9 @@ public class ClassDefController {
 	public String renderModelClassEditor(@PathVariable Integer projectId, @PathVariable String dataUseType,
 			@RequestParam String classDefJson, Model model) {
 		ObjectMapper mapper = new ObjectMapper();
-		ClassDefinitionModel classDef;
+		ClassDefFieldsModel classDef;
 		try {
-			classDef = mapper.readValue(classDefJson, ClassDefinitionModel.class);
+			classDef = mapper.readValue(classDefJson, ClassDefFieldsModel.class);
 			System.out.println(classDef);
 			model.addAttribute("classDef", classDef);
 			model.addAttribute("title", "title.class_def");
@@ -63,8 +71,6 @@ public class ClassDefController {
 	 * 
 	 * DBカラムが追加されたら自動で追加するか？
 	 * 
-	 * 
-	 * 
 	 */
 	
 	
@@ -74,4 +80,6 @@ public class ClassDefController {
 	 * エンティティーとの連携を解除し、クラスは温存する
 	 * 後々エンティティが生成されたときに紐づけ連携できるようにする
 	 */
+	
+	
 }

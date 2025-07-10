@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.projectmanagement.modules.coding.datastructure.entity.ClassDefinition;
+import com.example.projectmanagement.modules.coding.datastructure.entity.ClassDefinitionEntity;
 import com.example.projectmanagement.modules.coding.services.application.EntityFieldService;
 import com.example.projectmanagement.modules.coding.services.repository.ClassDefRepositoryService;
 import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfo;
@@ -97,7 +97,7 @@ public class DbTableColumnController {
 		BeanUtils.copyProperties(form, domain);
 
 		String serverSideLang = projctService.getProjectById(projectId).getServerSideLang();
-		ClassDefinition classDef = classDefService.findClassDefinitionByTableId(domain.getTableInfoId());
+		ClassDefinitionEntity classDef = classDefService.findClassDefinitionByTableId(domain.getTableInfoId());
 
 		switch (action) {
 		case "add" -> {

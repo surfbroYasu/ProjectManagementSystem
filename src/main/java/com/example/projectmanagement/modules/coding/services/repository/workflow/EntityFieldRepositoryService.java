@@ -1,8 +1,7 @@
-package com.example.projectmanagement.modules.coding.services.application;
+package com.example.projectmanagement.modules.coding.services.repository.workflow;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.projectmanagement.modules.coding.datastructure.entity.ClassDefinitionEntity;
 import com.example.projectmanagement.modules.coding.datastructure.entity.ClassFieldEntity;
@@ -14,63 +13,36 @@ import com.example.projectmanagement.modules.coding.services.repository.ClassFie
 import com.example.projectmanagement.modules.coding.services.repository.EntityRepostitoryService;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfo;
-import com.example.projectmanagement.modules.databases.services.repository.DatabaseService;
-import com.example.projectmanagement.modules.databases.services.repository.DbTableColumnService;
 import com.example.projectmanagement.modules.databases.services.repository.DbTableService;
 
+/**
+ * エンティティー専用のクラスフィールド永続化サービスです
+ * クラスフィールドとエンティティーの関連付けや、とランズアクションを用いた連動処理ロジックを行います
+ * @author yasufumimisono
+ *
+ */
 @Service
-public class EntityFieldService {
-
-	@Autowired
-	private DatabaseService dbService;
-
-	@Autowired
-	private DbTableService tableService;
-
-	@Autowired
-	private DbTableColumnService columnService;
-
+public class EntityFieldRepositoryService {
+	
 	@Autowired
 	private ModelGeneratorFactory modelFactory;
 	
 	@Autowired
-	private ClassDefRepositoryService classDefService;
+	private ClassDefRepositoryService classDefRepoService;
 	
 	@Autowired
-	private ClassFieldRepostitoryService fieldService;
+	private ClassFieldRepostitoryService fieldRepoService;
 	
 	@Autowired
-	private EntityRepostitoryService entityService;
+	private EntityRepostitoryService entityRepoService;
+	
+	@Autowired
+	private DbTableService tableService;
 
-	
-	@Transactional
-//	public void registerEntitiesFromTableId(String lang, Integer projectId, Integer tableId, String dataUseType) {
-//
-//		TableInfo table = tableService.getTableByTableId(tableId);
-//		DBInfo db = dbService.getDBInfoByDBId(table.getDbInfoId());
-//		List<TableColumn> dbColumnList = columnService.getTableColumns(List.of(tableId));
-//
-//		ModelGenerator modelGenerator = modelFactory.getGenerator(lang);
-//		ClassDefFieldsModel classDef = modelGenerator.createClassAndFieldsFromDBTable(db, table, dbColumnList,
-//				dataUseType);
-//
-//		ClassDefinitionEntity classDefEntity = new ClassDefinitionEntity();
-//		BeanUtils.copyProperties(classDef, classDefEntity);
-//		
-//		classDefService.registerClassDef(classDefEntity);
-//
-//		int classId = classDefEntity.getId();
-//
-//		for (ClassFieldModel each : classDef.getFields()) {
-//
-//			ClassFieldEntity classFieldEntity = new ClassFieldEntity(each.getFieldName(), each.getDataType(), classId);
-//			fieldService.registerClassField(classFieldEntity);
-//
-//			EntityEntity entityEntity = new EntityEntity(each.getTableColId(), each.getId(), projectId);
-//			entityService.registerEntity(entityEntity);
-//		}
-//	}
-	
+
+	@Autowired
+	private ClassDefRepositoryService classDefService;
+
 	public void createClassDefFromTableId(String lang, Integer projectId, Integer tableId, String dataUseType) {
 		TableInfo table = tableService.getTableByTableId(tableId);
 		ModelGenerator modelGenerator = modelFactory.getGenerator(lang);
@@ -84,7 +56,7 @@ public class EntityFieldService {
 
 		ModelGenerator modelGenerator = modelFactory.getGenerator(lang);
 		ClassFieldEntity classField = modelGenerator.createFieldFromDBColumn(column, classId, dbms);
-		fieldService.registerClassField(classField);
+		fieldRepoService.registerClassField(classField);
 		
 		EntityEntity entity = new EntityEntity(
 				column.getId(),
@@ -92,8 +64,19 @@ public class EntityFieldService {
 				projectId
 				);
 		
-		entityService.registerEntity(entity);
+		entityRepoService.registerEntity(entity);
 	}
 
 	
+	public void regenerateFieldFromColumn(TableColumn col, String dbms) {
+		EntityEntity entity = entityRepoService.findEntityByTableColId(col.getId());
+		ClassFieldEntity originalField = fieldRepoService.findClassFieldById(entity.getFieldId());
+		ClassDefinitionEntity classDef = classDefRepoService.findClassDefinitionById(originalField.getClassId());
+		
+		ModelGenerator modelGenerator = modelFactory.getGenerator(classDef.getLanguage());
+		ClassFieldEntity newRepo = modelGenerator.createFieldFromDBColumn(col, classDef.getId(), dbms);
+		newRepo.setId(originalField.getId());
+		
+		fieldRepoService.updateClassField(newRepo);
+	}
 }

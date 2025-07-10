@@ -3,7 +3,7 @@ package com.example.projectmanagement.modules.coding.services.repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.projectmanagement.modules.coding.datastructure.entity.ClassDefinition;
+import com.example.projectmanagement.modules.coding.datastructure.entity.ClassDefinitionEntity;
 import com.example.projectmanagement.persistence.modules.coding.ClassDefMapper;
 
 @Service
@@ -12,11 +12,11 @@ public class ClassDefRepositoryService {
 	@Autowired
 	private ClassDefMapper mapper;
 
-	public void registerClassDef(ClassDefinition classDefEntity) {
+	public void registerClassDef(ClassDefinitionEntity classDefEntity) {
 		mapper.insertClassDef(classDefEntity);
 	}
 	
-	public void updateClassDef(ClassDefinition classDefEntity) {
+	public void updateClassDef(ClassDefinitionEntity classDefEntity) {
 		mapper.updateClassDef(classDefEntity);
 	}
 	
@@ -25,11 +25,11 @@ public class ClassDefRepositoryService {
 	}
 	
 	
-	public ClassDefinition findClassDefinitionById(int classDefId) {
+	public ClassDefinitionEntity findClassDefinitionById(int classDefId) {
 		return mapper.findById(classDefId);
 	}
 	
-	public ClassDefinition findClassDefinitionByTableId(int tableId) {
+	public ClassDefinitionEntity findClassDefinitionByTableId(int tableId) {
 		return mapper.findByTableId(tableId);
 	}
 }

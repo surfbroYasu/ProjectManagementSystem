@@ -10,8 +10,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.example.projectmanagement.generalutil.FullNameFormatter;
 import com.example.projectmanagement.users.datastructure.entity.User;
-import com.example.projectmanagement.users.utils.FullNameFormatter;
 
 public class CustomUserDetails implements UserDetails {
     private final User user;
@@ -65,7 +65,7 @@ public class CustomUserDetails implements UserDetails {
     }
     
     public String getFormattedFullName(Locale locale) {
-        return FullNameFormatter.format(this.user, locale);
+        return FullNameFormatter.formatByUser(this.user, locale.getLanguage());
     }
 
 }

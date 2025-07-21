@@ -113,7 +113,7 @@
 	</select>
 
   
-	 <insert id="insertNewTable" useGeneratedKeys="true">
+	 <insert id="insertNewTable" useGeneratedKeys="true"  keyProperty="id">
 	   INSERT INTO table_info (
 	     db_info_id,
 	     table_name,
@@ -127,7 +127,7 @@
 	   )
 	 </insert>
 	 
-	<update id="updateTable" useGeneratedKeys="true">
+	<update id="updateTable" useGeneratedKeys="true" keyProperty="id">
 	  UPDATE table_info
 	  SET 
 	    table_name = #{tableName},

@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import com.example.projectmanagement.client.datastructures.dtos.ClientDtoRecord;
 import com.example.projectmanagement.client.datastructures.entities.ClientEntity;
 import com.example.projectmanagement.client.repository.ClientJpaRepository;
-import com.example.projectmanagement.modules.projects.datastructure.entity.Project;
+import com.example.projectmanagement.modules.projects.datastructure.entity.ProjectEntity;
 import com.example.projectmanagement.modules.projects.services.application.ProjectViewContextService;
 
 @Service
@@ -19,7 +19,7 @@ public class ClientContextService extends ProjectViewContextService {
 	public void setDetail(Model model, int projectId, String titleProp) {
 
 		setPageTitle(model, titleProp);
-		Project project = setProjectToModel(model, projectId);
+		ProjectEntity project = setProjectToModel(model, projectId);
 
 		jpaRepo.findById(project.getClientId())
 				.map(this::convert)

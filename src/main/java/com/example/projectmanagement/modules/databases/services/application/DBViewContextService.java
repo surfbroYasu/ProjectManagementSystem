@@ -169,17 +169,23 @@ public class DBViewContextService extends ProjectViewContextService {
 	 */
 	public void setSQLtoModel(Model model, String dbms, TableInfo targetTable) {
 
-		List<TableColumn> columnList = columnService.getTableColumns(List.of(targetTable.getId()));
+	    List<TableColumn> columnList = columnService.getTableColumns(List.of(targetTable.getId()));
 
-		List<String> columnNames = columnList.stream()
-				.map(TableColumn::getColumnName)
-				.collect(Collectors.toList());
+	    List<String> columnNames = columnList.stream()
+	            .map(TableColumn::getColumnName)
+	            .collect(Collectors.toList());
 
-		SqlSyntaxGenerator sqlGen = sqlFactory.getGenerator(dbms);
-		model.addAttribute("createTableSQL", sqlGen.createTable(targetTable, columnList));
-		model.addAttribute("dropTableSQL", sqlGen.dropTable(targetTable.getTableName()));
-		model.addAttribute("insertTemplateSQL", sqlGen.insertTemplate(targetTable.getTableName(), columnNames));
-		model.addAttribute("updateTemplateSQL", sqlGen.updateTemplate(targetTable.getTableName(), columnNames, "id"));
-		model.addAttribute("deleteTemplateSQL", sqlGen.deleteTemplate(targetTable.getTableName(), columnNames.getFirst()));
+	    SqlSyntaxGenerator sqlGen = sqlFactory.getGenerator(dbms);
+	    model.addAttribute("createTableSQL", sqlGen.createTable(targetTable, columnList));
+	    model.addAttribute("dropTableSQL", sqlGen.dropTable(targetTable.getTableName()));
+	    model.addAttribute("insertTemplateSQL", sqlGen.insertTemplate(targetTable.getTableName(), columnNames));
+	    model.addAttribute("updateTemplateSQL", sqlGen.updateTemplate(targetTable.getTableName(), columnNames, "id"));
+
+	    if (!columnNames.isEmpty()) {
+	        model.addAttribute("deleteTemplateSQL", sqlGen.deleteTemplate(targetTable.getTableName(), columnNames.getFirst()));
+	    } else {
+	        model.addAttribute("deleteTemplateSQL", "-- No columns available to generate DELETE SQL");
+	    }
 	}
+
 }

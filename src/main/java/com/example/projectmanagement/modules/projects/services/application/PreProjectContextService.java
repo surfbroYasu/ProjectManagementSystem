@@ -9,32 +9,32 @@ import org.springframework.ui.Model;
 
 import com.example.projectmanagement.generalutil.enums.SupportedProgramingLangage;
 import com.example.projectmanagement.modules.projects.datastructure.dto.ProjectDtoRecord;
-import com.example.projectmanagement.modules.projects.datastructure.entity.Project;
-import com.example.projectmanagement.modules.projects.services.repository.ProjectService;
+import com.example.projectmanagement.modules.projects.datastructure.entity.ProjectEntity;
+import com.example.projectmanagement.modules.projects.services.repository.ProjectRepositoryService;
 import com.example.projectmanagement.users.services.application.security.CustomUserDetails;
 
 @Service
 public class PreProjectContextService {
 
 	@Autowired
-	private ProjectService service;
+	private ProjectRepositoryService service;
 
 	public void setPerProjectContext(Model model, CustomUserDetails loginUser, String title) {
 		model.addAttribute("title", "title.project.top");
-		List<Project>projectEntities = service.getProjects(loginUser.getUserId());
+		List<ProjectEntity>projectEntities = service.getProjects(loginUser.getUserId());
 		
 		model.addAttribute("projects", convertProjectEntityToDto(projectEntities));
 		model.addAttribute("serverSideLangs", SupportedProgramingLangage.getStringLanguageCodes());
 	}
 	
-	private List<ProjectDtoRecord> convertProjectEntityToDto(List<Project> entities) {
+	private List<ProjectDtoRecord> convertProjectEntityToDto(List<ProjectEntity> entities) {
 		return entities.stream()
 			.map(this::projectEntityToDto)
 			.collect(Collectors.toList());
 	}
 
 	
-	private ProjectDtoRecord projectEntityToDto(Project entity) {
+	private ProjectDtoRecord projectEntityToDto(ProjectEntity entity) {
 		return new ProjectDtoRecord(
 				entity.getId(),
 				entity.getProjectName(),

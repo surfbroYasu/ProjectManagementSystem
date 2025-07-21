@@ -22,7 +22,7 @@
 	  SELECT * FROM users WHERE email = #{email}
 	</select>
 	
-    <insert id="insertUser">
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
 	    INSERT INTO users (password_hash, role, first_name, middle_name, last_name, email, is_active) 
 	    VALUES (#{passwordHash}, #{role}, #{firstName}, #{middleName}, #{lastName}, #{email}, #{isActive})
     </insert>

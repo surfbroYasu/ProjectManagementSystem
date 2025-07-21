@@ -20,7 +20,7 @@ import com.example.projectmanagement.modules.databases.datastructure.form.DBInfo
 import com.example.projectmanagement.modules.databases.datastructure.form.TableInfoRegisterForm;
 import com.example.projectmanagement.modules.databases.services.application.DBViewContextService;
 import com.example.projectmanagement.modules.databases.services.repository.DatabaseService;
-import com.example.projectmanagement.modules.projects.services.repository.ProjectService;
+import com.example.projectmanagement.modules.projects.services.repository.ProjectRepositoryService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -37,7 +37,7 @@ public class DatabaseSettingController {
 	private DatabaseService domainService;
 	
 	@Autowired
-	private ProjectService projctService;
+	private ProjectRepositoryService projctService;
 	
 	@Autowired
 	private EntityFieldService entityService;

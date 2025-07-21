@@ -22,11 +22,11 @@
 
 	<insert id="insertClassDef" useGeneratedKeys="true">
 		INSERT INTO class_definitions (
-		class_name, class_alias, decsription,
+		class_name, class_alias, description,
 		data_use_type, language, history_id, 
 		project_id, table_id, structual_type
 		) VALUES (
-		#{classNmae}, #{classAlias}, #{description},
+		#{className}, #{classAlias}, #{description},
 		#{dataUseType}, #{language},
 		#{historyId}, #{projectId}, #{tableId}, #{structualType}
 		)

@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import com.example.projectmanagement.modules.projects.services.repository.ProjectService;
+import com.example.projectmanagement.modules.projects.services.repository.ProjectRepositoryService;
 import com.example.projectmanagement.users.datastructure.enums.UserRoleEnum;
 import com.example.projectmanagement.users.services.application.security.CustomUserDetails;
 
@@ -20,7 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class ProjectAccessInterceptor implements HandlerInterceptor {
 
     @Autowired
-    private ProjectService projectService;
+    private ProjectRepositoryService projectService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)

@@ -25,10 +25,16 @@ import com.example.projectmanagement.modules.databases.services.application.DBVi
 import com.example.projectmanagement.modules.databases.services.application.validation.columnstructure.ColumnValidationService;
 import com.example.projectmanagement.modules.databases.services.repository.DatabaseService;
 import com.example.projectmanagement.modules.databases.services.repository.DbTableColumnService;
-import com.example.projectmanagement.modules.projects.services.repository.ProjectService;
+import com.example.projectmanagement.modules.projects.services.repository.ProjectRepositoryService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+
+/*
+ * TODO
+ * リファクタリングする
+ * サービスクラスにロジックを切り出す
+ */
 @Controller
 @RequestMapping("/project/{projectId}/database")
 public class DbTableColumnController {
@@ -48,7 +54,7 @@ public class DbTableColumnController {
 	private ColumnValidationService validationService;
 
 	@Autowired
-	private ProjectService projctService;
+	private ProjectRepositoryService projctService;
 
 	@Autowired
 	private EntityFieldService entityService;
@@ -96,7 +102,7 @@ public class DbTableColumnController {
 		TableColumn domain = new TableColumn();
 		BeanUtils.copyProperties(form, domain);
 
-		String serverSideLang = projctService.getProjectById(projectId).getServerSideLang();
+		String serverSideLang = projctService.findServerSideLang(projectId);
 		ClassDefinitionEntity classDef = classDefService.findClassDefinitionByTableId(domain.getTableInfoId());
 
 		switch (action) {

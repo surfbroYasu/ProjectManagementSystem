@@ -18,10 +18,14 @@ import com.example.projectmanagement.modules.databases.datastructure.entity.Tabl
 import com.example.projectmanagement.modules.databases.datastructure.form.TableInfoRegisterForm;
 import com.example.projectmanagement.modules.databases.services.application.DBViewContextService;
 import com.example.projectmanagement.modules.databases.services.repository.DbTableService;
-import com.example.projectmanagement.modules.projects.services.repository.ProjectService;
+import com.example.projectmanagement.modules.projects.services.repository.ProjectRepositoryService;
 
 import jakarta.servlet.http.HttpServletRequest;
-
+/*
+ * TODO
+ * リファクタリングする
+ * サービスクラスにロジックを切り出す
+ */
 @Controller
 @RequestMapping("/project/{projectId}/database")
 public class DbTableController {
@@ -35,7 +39,8 @@ public class DbTableController {
 	private DbTableService domainService;
 
 	@Autowired
-	private ProjectService projctService;
+	private ProjectRepositoryService projctService;
+
 
 	@Autowired
 	private EntityFieldService entityService;
@@ -61,18 +66,18 @@ public class DbTableController {
 			return redirectUrl;
 		}
 
-		TableInfo domain = new TableInfo();
-		BeanUtils.copyProperties(form, domain);
-
-		String serverSideLang = projctService.getProjectById(projectId).getServerSideLang();
+		TableInfo tableEntity = new TableInfo();
+		BeanUtils.copyProperties(form, tableEntity);
+		
+		String serverSideLang = projctService.findServerSideLang(projectId);
 
 		switch (action) {
 		case "add" -> {
-			domainService.insertTable(domain);
-			entityService.createClassDefFromTableId(serverSideLang, projectId, domain.getId(), "entity");
+			domainService.insertTable(tableEntity);
+			entityService.createClassDefFromTableId(serverSideLang, projectId, tableEntity.getId(), "entity");
 		}
 		case "edit" -> {
-			domainService.updateTable(domain);
+			domainService.updateTable(tableEntity);
 		}
 		default -> throw new IllegalArgumentException("Unsupported action: " + action);
 		}

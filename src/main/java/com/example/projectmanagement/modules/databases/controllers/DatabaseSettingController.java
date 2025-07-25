@@ -1,8 +1,7 @@
 package com.example.projectmanagement.modules.databases.controllers;
 
-import java.util.List;
+import java.util.Objects;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,13 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.projectmanagement.modules.coding.services.application.EntityFieldService;
-import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfo;
 import com.example.projectmanagement.modules.databases.datastructure.form.DBInfoRegisterForm;
 import com.example.projectmanagement.modules.databases.datastructure.form.TableInfoRegisterForm;
-import com.example.projectmanagement.modules.databases.services.application.DBViewContextService;
-import com.example.projectmanagement.modules.databases.services.repository.DatabaseService;
-import com.example.projectmanagement.modules.projects.services.repository.ProjectRepositoryService;
+import com.example.projectmanagement.modules.databases.services.application.context.database.DatabasePageContextService;
+import com.example.projectmanagement.modules.databases.services.repository.DatabaseRepositoryService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -31,16 +27,11 @@ public class DatabaseSettingController {
 	private static final String TEMPLATE_ROOT = "contents/databases/";
 
 	@Autowired
-	private DBViewContextService contextService;
+	private DatabasePageContextService contextService;
 
 	@Autowired
-	private DatabaseService domainService;
-	
-	@Autowired
-	private ProjectRepositoryService projctService;
-	
-	@Autowired
-	private EntityFieldService entityService;
+	private DatabaseRepositoryService repoService;
+
 
 
 	@ModelAttribute("dbInfoRegisterForm")
@@ -55,11 +46,9 @@ public class DatabaseSettingController {
 
 	@GetMapping("")
 	public String showDbInfo(@PathVariable Integer projectId, Model model) {
-		model.addAttribute("title", "title.db.top");
-		contextService.setProjectToModel(model, projectId);
 
-		List<DBInfo> dbInfo = domainService.getAll(projectId);
-		contextService.setAllDatabaseTablesContext(model, dbInfo);
+		String title = "title.db.top";
+		contextService.setupDbListPage(model, projectId, title);
 
 		return TEMPLATE_ROOT + "list";
 	}
@@ -72,11 +61,10 @@ public class DatabaseSettingController {
 			BindingResult bindingResult,
 			Model model) {
 		
-		String referer = request.getHeader("Referer");
-		String redirectUrl =  "redirect:" + referer;
+		String redirectUrl =  "redirect:" + request.getHeader("Referer");
 		
 		if ("delete".equals(action)) {
-			domainService.deleteDatabase(form.getId());
+			repoService.deleteByIdIfExists(form.getId());
 			return redirectUrl;
 		}
 
@@ -85,15 +73,10 @@ public class DatabaseSettingController {
 			return redirectUrl;
 		}
 
-		DBInfo domain = new DBInfo();
-		BeanUtils.copyProperties(form, domain);
-		domain.setProjectId(projectId);
-
-		switch (action) {
-		case "add" -> domainService.insertDatabase(domain);
-		case "edit" -> domainService.updateDatabase(domain);
-		default -> throw new IllegalArgumentException("Unsupported action: " + action);
+		if (!Objects.equals(form.getProjectId(), projectId)) {
+		    form.setProjectId(projectId);
 		}
+		repoService.saveByAction(action, form);
 
 		return redirectUrl;
 	}
@@ -101,11 +84,8 @@ public class DatabaseSettingController {
 	@GetMapping("/{databaseId}/detail")
 	public String renderDBDetail(@PathVariable Integer projectId, @PathVariable Integer databaseId, Model model) {
 
-		model.addAttribute("title", "title.db.details");
-
-		DBInfo db = contextService.setDatabaseContext(model, databaseId);
-		contextService.setDatabaseTablesContext(model, databaseId);
-		contextService.prepareColumnFormForModel(model, databaseId, db.getDbms());
+		String title = "title.db.details";
+		contextService.setupDbInfoDetailPage(model, databaseId, projectId, title);
 
 		return TEMPLATE_ROOT + "detailDB";
 	}
@@ -113,8 +93,7 @@ public class DatabaseSettingController {
 	@GetMapping("/{databaseId}/print")
 	public String printDBTables(@PathVariable Integer projectId, @PathVariable Integer databaseId, Model model) {
 
-		contextService.setDatabaseContext(model, databaseId);
-		contextService.setDatabaseTablesContext(model, databaseId);
+		contextService.setupTableDefPrintablePage(model, databaseId);
 
 		return TEMPLATE_ROOT + "printTable";
 	}

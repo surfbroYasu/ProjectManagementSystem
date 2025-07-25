@@ -11,9 +11,9 @@ import com.example.projectmanagement.modules.coding.langgenerator.ModelGenerator
 import com.example.projectmanagement.modules.coding.services.repository.ClassDefRepositoryService;
 import com.example.projectmanagement.modules.coding.services.repository.ClassFieldRepostitoryService;
 import com.example.projectmanagement.modules.coding.services.repository.EntityRepostitoryService;
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfo;
-import com.example.projectmanagement.modules.databases.services.repository.DbTableService;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumnEntity;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfoEntity;
+import com.example.projectmanagement.modules.databases.services.repository.DbTableRepositoryService;
 
 /**
  * エンティティー専用のクラスフィールド永続化サービスです
@@ -37,14 +37,14 @@ public class EntityFieldRepositoryService {
 	private EntityRepostitoryService entityRepoService;
 	
 	@Autowired
-	private DbTableService tableService;
+	private DbTableRepositoryService tableService;
 
 
 	@Autowired
 	private ClassDefRepositoryService classDefService;
 
 	public void createClassDefFromTableId(String lang, Integer projectId, Integer tableId, String dataUseType) {
-		TableInfo table = tableService.getTableByTableId(tableId);
+		TableInfoEntity table = tableService.getTableByTableId(tableId);
 		ModelGenerator modelGenerator = modelFactory.getGenerator(lang);
 		ClassDefinitionEntity domain = modelGenerator.createClassFromDBTable(projectId, table, dataUseType);
 		domain.setTableId(tableId);
@@ -52,7 +52,7 @@ public class EntityFieldRepositoryService {
 		classDefService.registerClassDef(domain);
 	}
 	
-	public void createEntityFieldFromTableCol(String lang, Integer projectId, String dbms, Integer classId, TableColumn column) {
+	public void createEntityFieldFromTableCol(String lang, Integer projectId, String dbms, Integer classId, TableColumnEntity column) {
 
 		ModelGenerator modelGenerator = modelFactory.getGenerator(lang);
 		ClassFieldEntity classField = modelGenerator.createFieldFromDBColumn(column, classId, dbms);
@@ -68,7 +68,7 @@ public class EntityFieldRepositoryService {
 	}
 
 	
-	public void regenerateFieldFromColumn(TableColumn col, String dbms) {
+	public void regenerateFieldFromColumn(TableColumnEntity col, String dbms) {
 		EntityEntity entity = entityRepoService.findEntityByTableColId(col.getId());
 		ClassFieldEntity originalField = fieldRepoService.findClassFieldById(entity.getFieldId());
 		ClassDefinitionEntity classDef = classDefRepoService.findClassDefinitionById(originalField.getClassId());

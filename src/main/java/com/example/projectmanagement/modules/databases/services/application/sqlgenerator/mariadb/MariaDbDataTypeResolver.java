@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumnEntity;
 import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.DataTypeResolver;
 
 @Component("mariadbType")
@@ -30,7 +30,7 @@ public class MariaDbDataTypeResolver implements DataTypeResolver {
 	}
 
 	@Override
-	public TableColumn adjustDataTypeParam(TableColumn domain) {
+	public TableColumnEntity adjustDataTypeParam(TableColumnEntity domain) {
 		String type = domain.getDataType();
 		String param = domain.getDataTypeParam();
 		

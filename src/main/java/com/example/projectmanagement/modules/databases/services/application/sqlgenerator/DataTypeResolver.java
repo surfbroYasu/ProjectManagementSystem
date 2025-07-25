@@ -2,7 +2,7 @@ package com.example.projectmanagement.modules.databases.services.application.sql
 
 import java.util.List;
 
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumnEntity;
 
 public interface DataTypeResolver {
 	List<String> getDataTypeOptions();
@@ -17,6 +17,6 @@ public interface DataTypeResolver {
 	 * @param domain データ型とその引数情報を持つ TableColumn オブジェクト
 	 * @return 引数情報を調整済みの TableColumn オブジェクト
 	 */
-	TableColumn adjustDataTypeParam(TableColumn domain);
+	TableColumnEntity adjustDataTypeParam(TableColumnEntity domain);
 
 }

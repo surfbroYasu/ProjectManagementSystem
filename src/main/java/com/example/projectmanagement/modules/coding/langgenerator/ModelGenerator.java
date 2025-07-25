@@ -5,9 +5,9 @@ import java.util.List;
 import com.example.projectmanagement.modules.coding.datastructure.entity.ClassDefinitionEntity;
 import com.example.projectmanagement.modules.coding.datastructure.entity.ClassFieldEntity;
 import com.example.projectmanagement.modules.coding.datastructure.models.ClassDefFieldsModel;
-import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfo;
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfo;
+import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfoEntity;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumnEntity;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfoEntity;
 
 public interface ModelGenerator {
 
@@ -28,7 +28,7 @@ public interface ModelGenerator {
 	 * @param dataUseType
 	 * @return　 ClassDefinitionModel
 	 */
-	public ClassDefFieldsModel createClassAndFieldsFromDBTable(DBInfo dbInfo, TableInfo tableInfo, List<TableColumn> columnList, String dataUseType);
+	public ClassDefFieldsModel createClassAndFieldsFromDBTable(DBInfoEntity dbInfo, TableInfoEntity tableInfo, List<TableColumnEntity> columnList, String dataUseType);
 	
 	/**
 	 * テーブルInfoをクラスに変換する。ClassDefinition（エンティティー）を使用する。
@@ -37,10 +37,10 @@ public interface ModelGenerator {
 	 * @param dataUseType
 	 * @return
 	 */
-	public ClassDefinitionEntity createClassFromDBTable(Integer projectId, TableInfo tableInfo, String dataUseType);
+	public ClassDefinitionEntity createClassFromDBTable(Integer projectId, TableInfoEntity tableInfo, String dataUseType);
 	
 	
-	public ClassFieldEntity createFieldFromDBColumn(TableColumn column, Integer classId, String dbms);
+	public ClassFieldEntity createFieldFromDBColumn(TableColumnEntity column, Integer classId, String dbms);
 	
 	/**
 	 * ClassDefinitionModelからコードブロックを生成する。

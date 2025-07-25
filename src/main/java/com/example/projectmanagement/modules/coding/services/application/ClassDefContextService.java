@@ -16,12 +16,12 @@ import com.example.projectmanagement.modules.coding.langgenerator.ModelGenerator
 import com.example.projectmanagement.modules.coding.langgenerator.ModelGeneratorFactory;
 import com.example.projectmanagement.modules.coding.services.repository.ClassDefRepositoryService;
 import com.example.projectmanagement.modules.coding.services.repository.ClassFieldRepostitoryService;
-import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfo;
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfo;
-import com.example.projectmanagement.modules.databases.services.repository.DatabaseService;
-import com.example.projectmanagement.modules.databases.services.repository.DbTableColumnService;
-import com.example.projectmanagement.modules.databases.services.repository.DbTableService;
+import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfoEntity;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumnEntity;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfoEntity;
+import com.example.projectmanagement.modules.databases.services.repository.DatabaseRepositoryService;
+import com.example.projectmanagement.modules.databases.services.repository.DbColumnRepositoryService;
+import com.example.projectmanagement.modules.databases.services.repository.DbTableRepositoryService;
 import com.example.projectmanagement.modules.projects.services.application.ProjectViewContextService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,13 +32,13 @@ public class ClassDefContextService extends ProjectViewContextService {
 	private ModelGeneratorFactory modelFactory;
 
 	@Autowired
-	private DatabaseService dbService;
+	private DatabaseRepositoryService dbService;
 	
 	@Autowired
-	private DbTableService tableService;
+	private DbTableRepositoryService tableService;
 	
 	@Autowired
-	private DbTableColumnService columnService;
+	private DbColumnRepositoryService columnService;
 	
 	@Autowired
 	private ClassDefRepositoryService classRepoService;
@@ -55,9 +55,9 @@ public class ClassDefContextService extends ProjectViewContextService {
 	 */
 	public void setEntityViewFromDb(Model model, String lang, Integer tableId, String dataUseType, String pageTitle) {
 
-		TableInfo table = tableService.getTableByTableId(tableId);
-		DBInfo db = dbService.getDBInfoByDBId(table.getDbInfoId());
-		List<TableColumn> columnList = columnService.getTableColumns(List.of(tableId));
+		TableInfoEntity table = tableService.getTableByTableId(tableId);
+		DBInfoEntity db = dbService.getDBInfoByDBId(table.getDbInfoId());
+		List<TableColumnEntity> columnList = columnService.getTableColumns(List.of(tableId));
 		
 		ModelGenerator modelGenerator = modelFactory.getGenerator(lang);
 		ClassDefFieldsModel classDef =  modelGenerator.createClassAndFieldsFromDBTable(db, table, columnList, dataUseType);

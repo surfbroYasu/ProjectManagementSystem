@@ -1,12 +1,21 @@
 package com.example.projectmanagement.modules.databases.datastructure.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
 
 @Data
-public class TableColumn {
+@Entity
+@Table(name = "table_columns")
+public class TableColumnEntity {
 
-	private Integer id;
-	private Integer tableInfoId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private Long tableInfoId;
 	private String columnName;
 	private String alias;
 	private String dataType;

@@ -12,9 +12,9 @@ import com.example.projectmanagement.modules.coding.datastructure.entity.ClassFi
 import com.example.projectmanagement.modules.coding.datastructure.models.ClassDefFieldsModel;
 import com.example.projectmanagement.modules.coding.datastructure.models.ClassFieldModel;
 import com.example.projectmanagement.modules.coding.langgenerator.ModelGenerator;
-import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfo;
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfo;
+import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfoEntity;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumnEntity;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfoEntity;
 
 @Component("javaModel")
 public class JavaModelGenerator implements ModelGenerator {
@@ -38,8 +38,8 @@ public class JavaModelGenerator implements ModelGenerator {
 	}
 
 	@Override
-	public ClassDefFieldsModel createClassAndFieldsFromDBTable(DBInfo dbInfo, TableInfo tableInfo,
-			List<TableColumn> columnList,
+	public ClassDefFieldsModel createClassAndFieldsFromDBTable(DBInfoEntity dbInfo, TableInfoEntity tableInfo,
+			List<TableColumnEntity> columnList,
 			String dataUseType) {
 
 		ClassDefinitionEntity classDefEntity = createClassFromDBTable(dbInfo.getProjectId(), tableInfo, dataUseType);
@@ -47,7 +47,7 @@ public class JavaModelGenerator implements ModelGenerator {
 		BeanUtils.copyProperties(classDefEntity, dto);
 		
 		List<ClassFieldModel> fields = new ArrayList<>();
-		for (TableColumn col : columnList) {
+		for (TableColumnEntity col : columnList) {
 			ClassFieldModel f = new ClassFieldModel();
 			f.setFieldName(CaseConverter.toCamelCase(col.getColumnName()));
 			f.setDataType(dataTypeConverter(col.getDataType(), dbInfo.getDbms()));
@@ -58,7 +58,7 @@ public class JavaModelGenerator implements ModelGenerator {
 	}
 
 	@Override
-	public ClassDefinitionEntity createClassFromDBTable(Integer projectId, TableInfo tableInfo, String dataUseType) {
+	public ClassDefinitionEntity createClassFromDBTable(Integer projectId, TableInfoEntity tableInfo, String dataUseType) {
 		return new ClassDefinitionEntity(
 				CaseConverter.toPascalCase(tableInfo.getTableName()),
 				tableInfo.getTableAlias(),
@@ -70,7 +70,7 @@ public class JavaModelGenerator implements ModelGenerator {
 	}
 	
 	@Override
-	public ClassFieldEntity createFieldFromDBColumn(TableColumn column, Integer classId, String dbms) {
+	public ClassFieldEntity createFieldFromDBColumn(TableColumnEntity column, Integer classId, String dbms) {
 		return new ClassFieldEntity(
 				CaseConverter.toCamelCase(column.getColumnName()),
 				dataTypeConverter(column.getDataType(), dbms),

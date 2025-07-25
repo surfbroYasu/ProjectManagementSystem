@@ -2,8 +2,8 @@ package com.example.projectmanagement.modules.databases.datastructure.dto;
 
 public record ColumnDtoRecord(
 
-		Integer id,
-		Integer tableInfoId,
+		Long id,
+		Long tableInfoId,
 		String columnName,
 		String alias,
 		String dataType,

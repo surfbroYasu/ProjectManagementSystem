@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfo;
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfo;
+import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfoEntity;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumnEntity;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfoEntity;
 
 @Mapper
 public interface DBInfoMapper {
@@ -14,32 +14,32 @@ public interface DBInfoMapper {
 	/*
 	 * database
 	 */
-	public void insertNewDatabase(DBInfo domain);
-	public void updateDatabase(DBInfo domain);
+	public void insertNewDatabase(DBInfoEntity domain);
+	public void updateDatabase(DBInfoEntity domain);
 	public void deleteDatabase(int dbId);
 	
-	public DBInfo getDBInfoByDBId(int dbId);
-	public List<DBInfo> getDBInfoByProject(int projectId);
+	public DBInfoEntity getDBInfoByDBId(int dbId);
+	public List<DBInfoEntity> getDBInfoByProject(int projectId);
 		
 	
 	
 	/*
 	 * tables
 	 */
-	public void insertNewTable(TableInfo domain);
-	public void updateTable(TableInfo domain);
+	public void insertNewTable(TableInfoEntity domain);
+	public void updateTable(TableInfoEntity domain);
 	public void deleteTable(int tableId);
 	
-	public TableInfo getTableByTableId(int tableId);
-	public List<TableInfo> getTableInfoByDbIds(List<Integer> dbInfoIds);
+	public TableInfoEntity getTableByTableId(int tableId);
+	public List<TableInfoEntity> getTableInfoByDbIds(List<Integer> dbInfoIds);
 
 	/*
 	 * columns
 	 */
-	public void insertNewColumn(TableColumn domain);
-	public void updateColumn(TableColumn domain);
+	public void insertNewColumn(TableColumnEntity domain);
+	public void updateColumn(TableColumnEntity domain);
 	public void deleteColumn(int columnId);
-	public List<TableColumn> getFKList(int dbId);
-	public List<TableColumn> getColumnsByTableIds(List<Integer> tableIds);
+	public List<TableColumnEntity> getFKList(int dbId);
+	public List<TableColumnEntity> getColumnsByTableIds(List<Integer> tableIds);
 	
 }

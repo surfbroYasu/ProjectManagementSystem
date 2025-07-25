@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class TableInfoRegisterForm {
 	
-	private Integer id;
+	private Long id;
 	
 	@NotNull
 	private Integer dbInfoId;

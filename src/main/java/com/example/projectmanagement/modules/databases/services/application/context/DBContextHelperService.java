@@ -1,4 +1,4 @@
-package com.example.projectmanagement.modules.databases.services.application;
+package com.example.projectmanagement.modules.databases.services.application.context;
 
 import java.util.List;
 import java.util.Map;
@@ -9,27 +9,33 @@ import org.springframework.stereotype.Service;
 import com.example.projectmanagement.modules.databases.datastructure.dto.ColumnDtoRecord;
 import com.example.projectmanagement.modules.databases.datastructure.dto.DBInfoDtoRecord;
 import com.example.projectmanagement.modules.databases.datastructure.dto.TableInfoDtoRecord;
-import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfo;
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfo;
+import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfoEntity;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumnEntity;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfoEntity;
 
 @Service
 public class DBContextHelperService {
 
 	
-	Map<Integer, List<TableInfoDtoRecord>> convertToTableDtoMap(List<TableInfo> tableInfos) {
+	public Map<Integer, List<TableInfoDtoRecord>> convertToTableDtoMap(List<TableInfoEntity> tableInfos) {
 		return tableInfos.stream()
-				.map(this::tableInfoToDto)
+				.map(this::convertTableInfoToDto)
 				.collect(Collectors.groupingBy(TableInfoDtoRecord::dbInfoId));
 	}
 	
-	Map<Integer, List<ColumnDtoRecord>> convertToColumnDtoMap(List<TableColumn> columns) {
+	public Map<Long, List<ColumnDtoRecord>> convertEntityToColumnDtoMap(List<TableColumnEntity> columns) {
 		return columns.stream()
 				.map(this::columnInfoToDto)
 				.collect(Collectors.groupingBy(ColumnDtoRecord::tableInfoId));
 	}
+	
+	public Map<Long, List<ColumnDtoRecord>> groupColumnDtoByTableId(List<ColumnDtoRecord> columns) {
+		return columns.stream()
+			.collect(Collectors.groupingBy(ColumnDtoRecord::tableInfoId));
+	}
 
-	DBInfoDtoRecord dbInfoToDto(DBInfo entity) {
+
+	public DBInfoDtoRecord convertDbInfoToDto(DBInfoEntity entity) {
 		return new DBInfoDtoRecord(
 				entity.getId(),
 				entity.getProjectId(),
@@ -37,7 +43,7 @@ public class DBContextHelperService {
 				entity.getDbms());
 	}
 
-	TableInfoDtoRecord tableInfoToDto(TableInfo entity) {
+	public TableInfoDtoRecord convertTableInfoToDto(TableInfoEntity entity) {
 		return new TableInfoDtoRecord(
 				entity.getId(),
 				entity.getDbInfoId(),
@@ -45,7 +51,7 @@ public class DBContextHelperService {
 				entity.getTableAlias());
 	}
 
-	ColumnDtoRecord columnInfoToDto(TableColumn entity) {
+	public ColumnDtoRecord columnInfoToDto(TableColumnEntity entity) {
 		return new ColumnDtoRecord(
 				entity.getId(),
 				entity.getTableInfoId(),

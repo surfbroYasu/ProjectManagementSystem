@@ -8,7 +8,7 @@ import com.example.projectmanagement.modules.databases.datastructure.entity.Tabl
 
 public interface DbColumnJpaRepository extends JpaRepository<TableColumnEntity, Long> {
 
-	public List<TableColumnEntity> findAllByTableIdIn(List<Long> tableIds);
-	public List<TableColumnEntity> findAllByTableId(Long tableId);
+	public List<TableColumnEntity> findAllBytableInfoIdIn(List<Long> tableIds);
+	public List<TableColumnEntity> findAllBytableInfoId(Long tableId);
 	
 }

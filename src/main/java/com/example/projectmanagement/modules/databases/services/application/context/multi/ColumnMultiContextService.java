@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import com.example.projectmanagement.modules.databases.datastructure.dto.ColumnDtoRecord;
+import com.example.projectmanagement.modules.databases.constance.ModelAttributes;
+import com.example.projectmanagement.modules.databases.datastructure.dto.TableColumnJoinedDto;
 import com.example.projectmanagement.modules.databases.datastructure.dto.TableInfoDtoRecord;
 import com.example.projectmanagement.modules.databases.services.application.context.DBContextHelperService;
-import com.example.projectmanagement.modules.databases.services.application.context.ModelAttributes;
 import com.example.projectmanagement.modules.databases.services.application.context.column.DbColumnContextService;
 import com.example.projectmanagement.modules.databases.services.application.context.table.DbTableContextService;
 
@@ -36,22 +36,24 @@ public class ColumnMultiContextService {
 	 * @param databaseId 対象のデータベースID
 	 */
 	public void setupDbDetailWithTablesAndColums(Model model, List<TableInfoDtoRecord> dtoTables,
-			List<ColumnDtoRecord> columns) {
+			List<TableColumnJoinedDto> columns) {
 
 		model.addAttribute(ModelAttributes.TABLE_LIST, dtoTables);
 
-		Map<Long, List<ColumnDtoRecord>> columnsWithRelatedTableId = helper.groupColumnDtoByTableId(columns);
+		Map<Long, List<TableColumnJoinedDto>> columnsWithRelatedTableId = helper.groupTableColumnJoinedDtoByTableId(columns);
 		model.addAttribute(ModelAttributes.COLUMN_MAP, columnsWithRelatedTableId);
 
 	}
 
 	/**
 	 * テーブル詳細とカラム情報をModelに登録する（ページ表示用）。
+	 * 
+	 * tableContext.setupTableDetail + columnContext.setupColumnList
 	 *
 	 * @param model Thymeleaf用Model
 	 * @param tableId テーブルID
 	 */
-	public void setTableDetailWithColumns(Model model, TableInfoDtoRecord table, List<ColumnDtoRecord> columns) {
+	public void setTableDetailWithColumns(Model model, TableInfoDtoRecord table, List<TableColumnJoinedDto> columns) {
 		tableContextService.setupTableDetail(model, table);
 		columContextService.setupColumnList(model, columns);
 	}

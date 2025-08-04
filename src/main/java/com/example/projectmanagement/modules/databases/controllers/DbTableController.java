@@ -1,6 +1,7 @@
 package com.example.projectmanagement.modules.databases.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +25,7 @@ public class DbTableController {
 	private static final String TEMPLATE_ROOT = "contents/databases/";
 
 	@Autowired
+	@Qualifier("table")
 	private TablePageContextService contextService;
 
 	@Autowired

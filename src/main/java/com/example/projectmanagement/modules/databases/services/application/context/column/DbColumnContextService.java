@@ -7,12 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import com.example.projectmanagement.modules.databases.datastructure.dto.ColumnDtoRecord;
+import com.example.projectmanagement.modules.databases.constance.ModelAttributes;
+import com.example.projectmanagement.modules.databases.datastructure.dto.TableColumnJoinedDto;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumnEntity;
 import com.example.projectmanagement.modules.databases.datastructure.form.TableColumnRegisterForm;
 import com.example.projectmanagement.modules.databases.repository.DbColumnJpaRepository;
 import com.example.projectmanagement.modules.databases.services.application.context.DBContextHelperService;
-import com.example.projectmanagement.modules.databases.services.application.context.ModelAttributes;
 import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.DataTypeResolver;
 import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.DataTypeResolverFactory;
 import com.example.projectmanagement.persistence.modules.databases.DBInfoMapper;
@@ -34,29 +34,22 @@ public class DbColumnContextService{
 
 
 	
-	public List<ColumnDtoRecord> getColumnDtoListByTableId(Long tableId) {
-	    return jpaRepo.findAllByTableId(tableId)
-	                  .stream()
-	                  .map(helper::columnInfoToDto)
-	                  .collect(Collectors.toList());
+	public List<TableColumnJoinedDto> getColumnDtoListByTableId(Long tableId) {
+	    return mapper.getColumnsByTableIds(List.of(tableId));
 	}
 
-	public List<ColumnDtoRecord> getColumnDtoListByTableIdList(List<Long> tableIds) {
-		if (tableIds == null || tableIds.isEmpty()) return List.of();
-		return jpaRepo.findAllByTableIdIn(tableIds)
-				.stream()
-				.map(helper::columnInfoToDto)
-				.collect(Collectors.toList());
+	public List<TableColumnJoinedDto> getTableColumnJoinedDtoListByTableIdList(List<Long> tableIds) {
+		return mapper.getColumnsByTableIds(tableIds);
 	}
 
 	
-	public List<String> extractColumnNames(List<TableColumnEntity> columnList){
+	public List<String> extractColumnNames(List<TableColumnJoinedDto> columnList){
 		return columnList.stream()
-				.map(TableColumnEntity::getColumnName)
+				.map(TableColumnJoinedDto::getColumnName)
 				.collect(Collectors.toList());
 	}
 
-	public void setupColumnList(Model model, List<ColumnDtoRecord> dtos) {
+	public void setupColumnList(Model model, List<TableColumnJoinedDto> dtos) {
 		model.addAttribute(ModelAttributes.COLUMN_LIST, dtos);
 	}
 	

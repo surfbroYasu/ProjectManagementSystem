@@ -18,10 +18,6 @@ public record ColumnDtoRecord(
 		String checkConstraint,
 		String comment,
 		String onDelete,
-		String onUpdate,
-
-		String tableName,
-		String refTableName,
-		String refColumnName) {
+		String onUpdate) {
 
 }

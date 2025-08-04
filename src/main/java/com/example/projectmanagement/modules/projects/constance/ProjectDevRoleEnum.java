@@ -1,4 +1,4 @@
-package com.example.projectmanagement.modules.projects.datastructure.model;
+package com.example.projectmanagement.modules.projects.constance;
 
 import java.util.Locale;
 
@@ -6,7 +6,6 @@ import org.springframework.context.MessageSource;
 
 public enum ProjectDevRoleEnum {
     DEV("label.project.devrole.dev"),
-    MANAGER("label.project.devrole.manager"),
     TESTER("label.project.devrole.tester"),
     DESIGNER("label.project.devrole.designer");
 
@@ -16,11 +15,11 @@ public enum ProjectDevRoleEnum {
         this.messageCode = messageCode;
     }
 
-    public String getMessageCode() {
+    public String getMessageKey() {
         return messageCode;
     }
 
-    public String getLabel(MessageSource messageSource, Locale locale) {
+    public String displayLabel(MessageSource messageSource, Locale locale) {
         return messageSource.getMessage(messageCode, null, locale);
     }
 }

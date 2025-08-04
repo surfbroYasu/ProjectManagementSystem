@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class ClassFieldEntity {
-    private Integer id;
+    private Long id;
     private String fieldName;
     private String dataType;
     private Integer classId;

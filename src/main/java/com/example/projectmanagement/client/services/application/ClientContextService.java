@@ -8,9 +8,9 @@ import com.example.projectmanagement.client.datastructures.dtos.ClientDtoRecord;
 import com.example.projectmanagement.client.datastructures.entities.ClientEntity;
 import com.example.projectmanagement.client.repository.ClientJpaRepository;
 import com.example.projectmanagement.modules.projects.datastructure.entity.ProjectEntity;
-import com.example.projectmanagement.modules.projects.services.application.ProjectViewContextService;
+import com.example.projectmanagement.modules.projects.services.application.context.ProjectViewContextService;
 
-@Service
+@Service("client")
 public class ClientContextService extends ProjectViewContextService {
 
 	@Autowired

@@ -1,4 +1,4 @@
-package com.example.projectmanagement.config;
+package com.example.projectmanagement.application.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

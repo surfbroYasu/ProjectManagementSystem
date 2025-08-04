@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 public class EntityEntity {
 
 	private Integer id;
-	private Integer tableColumnId;
-	private Integer fieldId;
+	private Long tableColumnId;
+	private Long fieldId;
 	private Integer projectId;
 	
 	
-	public EntityEntity(Integer tableColumnId, Integer fieldId, Integer projectId) {
+	public EntityEntity(Long tableColumnId, Long fieldId, Integer projectId) {
 		super();
 		this.tableColumnId = tableColumnId;
 		this.fieldId = fieldId;

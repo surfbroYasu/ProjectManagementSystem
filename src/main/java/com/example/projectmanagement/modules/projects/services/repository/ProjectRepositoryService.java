@@ -1,19 +1,17 @@
 package com.example.projectmanagement.modules.projects.services.repository;
 
-import java.util.List;
 import java.util.Locale;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.projectmanagement.modules.projects.constance.ProjectDevRoleEnum;
 import com.example.projectmanagement.modules.projects.datastructure.entity.ProjectDeveloperEntity;
 import com.example.projectmanagement.modules.projects.datastructure.entity.ProjectEntity;
 import com.example.projectmanagement.modules.projects.datastructure.form.ProjectRegisterForm;
-import com.example.projectmanagement.modules.projects.datastructure.model.ProjectDevRoleEnum;
 import com.example.projectmanagement.modules.projects.repository.ProjectDeveloperJpaRepository;
 import com.example.projectmanagement.modules.projects.repository.ProjectJpaRepository;
-import com.example.projectmanagement.persistence.modules.projects.ProjectMapper;
 import com.example.projectmanagement.users.services.application.security.CustomUserDetails;
 
 import jakarta.transaction.Transactional;
@@ -21,13 +19,6 @@ import jakarta.transaction.Transactional;
 @Service
 public class ProjectRepositoryService {
 
-	@Autowired
-	private ProjectMapper mapper;
-
-	//	MyBatisで取得する
-	public List<ProjectEntity> getProjects(int userId) {
-		return mapper.getAllProjectsByUser(userId);
-	}
 
 	@Autowired
 	private ProjectJpaRepository projectJpaRepo;

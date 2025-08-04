@@ -6,13 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumnEntity;
+import com.example.projectmanagement.modules.databases.constance.ModelAttributes;
+import com.example.projectmanagement.modules.databases.datastructure.dto.TableColumnJoinedDto;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfoEntity;
 import com.example.projectmanagement.modules.databases.repository.DbColumnJpaRepository;
 import com.example.projectmanagement.modules.databases.repository.DbTableJpaRepository;
 import com.example.projectmanagement.modules.databases.services.application.context.column.DbColumnContextService;
 import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.SqlGeneratorFactory;
 import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.SqlSyntaxGenerator;
+import com.example.projectmanagement.persistence.modules.databases.DBInfoMapper;
 
 /**
  * SQL文を生成し、Thymeleafテンプレートで使用するModelに追加するコンテキストサービスクラス。
@@ -48,6 +50,9 @@ public class SqlContextService{
 	private DbColumnJpaRepository colJpaRepo;
 	@Autowired
 	private DbTableJpaRepository tableJpaRepo;
+	
+	@Autowired
+	private DBInfoMapper mapper;
 
 
 	/**
@@ -69,7 +74,7 @@ public class SqlContextService{
 
 	public void setAllSQLtoModel(Model model, String dbms, Long targetTableId) {
 
-		List<TableColumnEntity> columnList = colJpaRepo.findAllByTableId(targetTableId);
+		List<TableColumnJoinedDto> columnList = mapper.getColumnsByTableIds(List.of(targetTableId));
 		TableInfoEntity table = getTableOrSetError(model, targetTableId);
 		if (table == null)
 			return;
@@ -107,7 +112,7 @@ public class SqlContextService{
 	 */
 	public void setDDLtoModel(Model model, String dbms, Long targetTableId) {
 
-		List<TableColumnEntity> columnList = colJpaRepo.findAllByTableId(targetTableId);
+		List<TableColumnJoinedDto> columnList = mapper.getColumnsByTableIds(List.of(targetTableId));
 		TableInfoEntity table = getTableOrSetError(model, targetTableId);
 		if (table == null)
 			return;
@@ -137,7 +142,7 @@ public class SqlContextService{
 	 */
 	public void setDMLtoModel(Model model, String dbms, Long targetTableId) {
 
-		List<TableColumnEntity> columnList = colJpaRepo.findAllByTableId(targetTableId);
+		List<TableColumnJoinedDto> columnList = mapper.getColumnsByTableIds(List.of(targetTableId));
 		TableInfoEntity table = getTableOrSetError(model, targetTableId);
 		if (table == null) return;
 
@@ -158,7 +163,7 @@ public class SqlContextService{
 
 	private String generateCreate(SqlSyntaxGenerator sqlGen,
 			TableInfoEntity targetTable,
-			List<TableColumnEntity> columnList) {
+			List<TableColumnJoinedDto> columnList) {
 		return sqlGen.createTable(targetTable, columnList);
 	}
 

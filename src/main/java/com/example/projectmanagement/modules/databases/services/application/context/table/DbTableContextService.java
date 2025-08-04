@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import com.example.projectmanagement.modules.databases.constance.ModelAttributes;
 import com.example.projectmanagement.modules.databases.datastructure.dto.TableInfoDtoRecord;
 import com.example.projectmanagement.modules.databases.repository.DbTableJpaRepository;
 import com.example.projectmanagement.modules.databases.services.application.context.DBContextHelperService;
-import com.example.projectmanagement.modules.databases.services.application.context.ModelAttributes;
 
 @Service
 public class DbTableContextService {
@@ -56,6 +56,12 @@ public class DbTableContextService {
 	 */
 	public void setupTableDetail(Model model, TableInfoDtoRecord dto) {
 		model.addAttribute(ModelAttributes.TABLE, dto);
+	}
+	
+	
+	
+	public void setupTableListlByDbId(Model model, Integer databaseId) {
+		model.addAttribute(ModelAttributes.TABLE_LIST,  getTableDtoListByDbId(databaseId));
 	}
 	
 	public List<Long> extractTableIds(List<TableInfoDtoRecord> tableDtoList){

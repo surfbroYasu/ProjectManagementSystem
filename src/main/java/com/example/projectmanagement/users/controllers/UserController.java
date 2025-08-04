@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.example.projectmanagement.users.datastructure.entity.User;
+import com.example.projectmanagement.users.datastructure.entity.UserEntity;
 import com.example.projectmanagement.users.datastructure.enums.UserRoleEnum;
 import com.example.projectmanagement.users.datastructure.forms.SimpleUserRegistForm;
 import com.example.projectmanagement.users.datastructure.forms.UserInfoForm;
@@ -62,7 +62,7 @@ public class UserController {
 			return PERSONAL_SIGNUP;
 		}
 
-		User user = new User();
+		UserEntity user = new UserEntity();
 		BeanUtils.copyProperties(form, user);
 
 		user.setIsActive(true);
@@ -86,7 +86,7 @@ public class UserController {
 			return USER_INFO_SETUP;
 		}
 		
-		User user = new User();
+		UserEntity user = new UserEntity();
 		BeanUtils.copyProperties(form, user);
 		
 		userService.updateUserInfo(user);

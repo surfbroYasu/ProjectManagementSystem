@@ -1,6 +1,7 @@
 package com.example.projectmanagement.client.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,6 +41,7 @@ public class ClientUserController {
 	private ClientUserRepositoryService repoService;
 
 	@Autowired
+	@Qualifier("clientUser")
 	private ClientUserContextService contextService;
 
 	@ModelAttribute("clientUserInfoForm")

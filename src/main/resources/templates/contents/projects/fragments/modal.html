@@ -29,7 +29,7 @@
 					</p>
 					<small th:text="#{message.conf.action}"></small>
 
-					<form th:action="@{/projects/delete}" th:object="${projectRegisterForm}"
+					<form th:action="@{/delete}" th:object="${projectRegisterForm}"
 						th:id="deleteprojectRegisterForm + ${project.id}" method="post">
 						<input type="text" name="id" th:value="${project.id}" />
 					</form>
@@ -77,7 +77,7 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<form th:action="@{/projects/edit}" th:object="${projectRegisterForm}"
+					<form th:action="@{/project/edit}" th:object="${projectRegisterForm}"
 						th:id="editprojecRegisterForm + ${project.id}" method="post">
 						<input type="hidden" name="id" th:value="${project.id}" required />
 						<div class="mb-3">

@@ -1,4 +1,4 @@
-package com.example.projectmanagement.modules.databases.services.application.context;
+package com.example.projectmanagement.modules.databases.constance;
 
 public final class ModelAttributes {
 

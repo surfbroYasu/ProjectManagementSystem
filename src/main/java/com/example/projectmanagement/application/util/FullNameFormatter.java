@@ -1,13 +1,13 @@
-package com.example.projectmanagement.generalutil;
+package com.example.projectmanagement.application.util;
 
 import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.example.projectmanagement.users.datastructure.entity.User;
+import com.example.projectmanagement.users.datastructure.entity.UserEntity;
 
 public class FullNameFormatter {
-    public static String formatByUser(User user, String lang) {
+    public static String formatByUser(UserEntity user, String lang) {
         if (user == null) return "";
 
         String firstName = nullToEmpty(user.getFirstName());

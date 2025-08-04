@@ -13,6 +13,9 @@ import com.example.projectmanagement.modules.coding.services.repository.ClassFie
 import com.example.projectmanagement.modules.coding.services.repository.EntityRepostitoryService;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumnEntity;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfoEntity;
+import com.example.projectmanagement.modules.databases.repository.DbColumnJpaRepository;
+import com.example.projectmanagement.modules.databases.repository.DbInfoJpaRepository;
+import com.example.projectmanagement.modules.databases.repository.DbTableJpaRepository;
 import com.example.projectmanagement.modules.databases.services.repository.DbTableRepositoryService;
 
 /**
@@ -23,7 +26,15 @@ import com.example.projectmanagement.modules.databases.services.repository.DbTab
  */
 @Service
 public class EntityFieldRepositoryService {
-	
+	@Autowired
+	private DbInfoJpaRepository dbJpa;
+
+	@Autowired
+	private DbTableJpaRepository tableJpa;
+
+	@Autowired
+	private DbColumnJpaRepository columnJpa;
+
 	@Autowired
 	private ModelGeneratorFactory modelFactory;
 	
@@ -43,8 +54,8 @@ public class EntityFieldRepositoryService {
 	@Autowired
 	private ClassDefRepositoryService classDefService;
 
-	public void createClassDefFromTableId(String lang, Integer projectId, Integer tableId, String dataUseType) {
-		TableInfoEntity table = tableService.getTableByTableId(tableId);
+	public void createClassDefFromTableId(String lang, Integer projectId, Long tableId, String dataUseType) {
+		TableInfoEntity table = tableJpa.findById(tableId).orElseThrow();
 		ModelGenerator modelGenerator = modelFactory.getGenerator(lang);
 		ClassDefinitionEntity domain = modelGenerator.createClassFromDBTable(projectId, table, dataUseType);
 		domain.setTableId(tableId);
@@ -68,15 +79,15 @@ public class EntityFieldRepositoryService {
 	}
 
 	
-	public void regenerateFieldFromColumn(TableColumnEntity col, String dbms) {
-		EntityEntity entity = entityRepoService.findEntityByTableColId(col.getId());
-		ClassFieldEntity originalField = fieldRepoService.findClassFieldById(entity.getFieldId());
-		ClassDefinitionEntity classDef = classDefRepoService.findClassDefinitionById(originalField.getClassId());
-		
-		ModelGenerator modelGenerator = modelFactory.getGenerator(classDef.getLanguage());
-		ClassFieldEntity newRepo = modelGenerator.createFieldFromDBColumn(col, classDef.getId(), dbms);
-		newRepo.setId(originalField.getId());
-		
-		fieldRepoService.updateClassField(newRepo);
-	}
+//	public void regenerateFieldFromColumn(TableColumnEntity col, String dbms) {
+//		EntityEntity entity = entityRepoService.findEntityByTableColId(col.getId());
+//		ClassFieldEntity originalField = fieldRepoService.findClassFieldById(entity.getFieldId());
+//		ClassDefinitionEntity classDef = classDefRepoService.findClassDefinitionById(originalField.getClassId());
+//		
+//		ModelGenerator modelGenerator = modelFactory.getGenerator(classDef.getLanguage());
+//		ClassFieldEntity newRepo = modelGenerator.createFieldFromDBColumn(col, classDef.getId(), dbms);
+//		newRepo.setId(originalField.getId());
+//		
+//		fieldRepoService.updateClassField(newRepo);
+//	}
 }

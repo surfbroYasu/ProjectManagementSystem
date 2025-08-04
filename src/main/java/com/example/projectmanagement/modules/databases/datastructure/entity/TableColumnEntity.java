@@ -31,9 +31,4 @@ public class TableColumnEntity {
 	private String comment;
 	private String onDelete;
 	private String onUpdate;
-
-	//	結合取得
-	private String tableName;
-	private String refTableName;
-	private String refColumnName;
 }

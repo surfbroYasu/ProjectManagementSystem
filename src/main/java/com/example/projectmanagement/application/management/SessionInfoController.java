@@ -1,4 +1,4 @@
-package com.example.projectmanagement.sessionManagement;
+package com.example.projectmanagement.application.management;
 
 import java.util.Enumeration;
 

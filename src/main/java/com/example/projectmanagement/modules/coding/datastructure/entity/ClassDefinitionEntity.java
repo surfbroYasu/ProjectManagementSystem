@@ -16,7 +16,7 @@ public class ClassDefinitionEntity {
     private Integer historyId;
     private String language;
     private Integer projectId;
-    private Integer tableId;
+    private Long tableId;
     private String structualType;
     
 	public ClassDefinitionEntity(String className, String classAlias, String description, String dataUseType, String language,

@@ -1,4 +1,4 @@
-package com.example.projectmanagement.generalutil.enums;
+package com.example.projectmanagement.application.constance.enums;
 
 import java.util.Arrays;
 import java.util.List;

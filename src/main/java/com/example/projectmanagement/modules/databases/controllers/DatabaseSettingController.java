@@ -3,6 +3,7 @@ package com.example.projectmanagement.modules.databases.controllers;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,7 @@ public class DatabaseSettingController {
 	private static final String TEMPLATE_ROOT = "contents/databases/";
 
 	@Autowired
+	@Qualifier("db")
 	private DatabasePageContextService contextService;
 
 	@Autowired
@@ -68,7 +70,6 @@ public class DatabaseSettingController {
 			return redirectUrl;
 		}
 
-
 		if (bindingResult.hasErrors()) {
 			return redirectUrl;
 		}
@@ -93,7 +94,7 @@ public class DatabaseSettingController {
 	@GetMapping("/{databaseId}/print")
 	public String printDBTables(@PathVariable Integer projectId, @PathVariable Integer databaseId, Model model) {
 
-		contextService.setupTableDefPrintablePage(model, databaseId);
+		contextService.setupTableDefPrintablePage(model, projectId, databaseId);
 
 		return TEMPLATE_ROOT + "printTable";
 	}

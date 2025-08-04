@@ -1,4 +1,4 @@
-package com.example.projectmanagement.config;
+package com.example.projectmanagement.application.config;
 
 import java.io.IOException;
 
@@ -10,7 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.example.projectmanagement.users.datastructure.entity.User;
+import com.example.projectmanagement.users.datastructure.entity.UserEntity;
 import com.example.projectmanagement.users.services.application.security.CustomUserDetails;
 
 import jakarta.servlet.FilterChain;
@@ -32,7 +32,7 @@ public class DevAutoLoginFilter extends OncePerRequestFilter {
 		if (auth == null || !auth.isAuthenticated()) {
 
 			CustomUserDetails dummyUser = new CustomUserDetails(
-				    new User(1, "dummy", "ROLE_SYSTEM_DEVELOPER", "Dev", null, "User", "dev@example.com", true)
+				    new UserEntity(1, "dummy", "ROLE_SYSTEM_DEVELOPER", "Dev", null, "User", "dev@example.com", true)
 				);
 
 				UsernamePasswordAuthenticationToken authentication =

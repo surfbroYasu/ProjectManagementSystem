@@ -1,4 +1,4 @@
-package com.example.projectmanagement.config;
+package com.example.projectmanagement.application.config;
 
 import java.io.IOException;
 import java.util.Map;

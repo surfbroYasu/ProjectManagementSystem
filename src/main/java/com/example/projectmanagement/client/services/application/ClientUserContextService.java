@@ -13,9 +13,9 @@ import com.example.projectmanagement.client.datastructures.dtos.ClientUserDtoRec
 import com.example.projectmanagement.client.datastructures.entities.ClientUserInfoEntity;
 import com.example.projectmanagement.client.repository.ClientUserJpaRepository;
 import com.example.projectmanagement.modules.projects.datastructure.dto.ProjectDtoRecord;
-import com.example.projectmanagement.modules.projects.services.application.ProjectViewContextService;
+import com.example.projectmanagement.modules.projects.services.application.context.ProjectViewContextService;
 
-@Service
+@Service("clientUser")
 public class ClientUserContextService extends ProjectViewContextService {
 
 	@Autowired

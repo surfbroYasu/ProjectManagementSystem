@@ -14,21 +14,30 @@ import com.example.projectmanagement.modules.coding.services.repository.ClassFie
 import com.example.projectmanagement.modules.coding.services.repository.EntityRepostitoryService;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumnEntity;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfoEntity;
-import com.example.projectmanagement.modules.databases.services.repository.DatabaseRepositoryService;
-import com.example.projectmanagement.modules.databases.services.repository.DbColumnRepositoryService;
-import com.example.projectmanagement.modules.databases.services.repository.DbTableRepositoryService;
+import com.example.projectmanagement.modules.databases.repository.DbColumnJpaRepository;
+import com.example.projectmanagement.modules.databases.repository.DbInfoJpaRepository;
+import com.example.projectmanagement.modules.databases.repository.DbTableJpaRepository;
 
 @Service
 public class EntityFieldService {
+//
+//	@Autowired
+//	private DatabaseRepositoryService dbService;
+//
+//	@Autowired
+//	private DbTableRepositoryService tableService;
+//
+//	@Autowired
+//	private DbColumnRepositoryService columnService;
 
 	@Autowired
-	private DatabaseRepositoryService dbService;
+	private DbInfoJpaRepository dbJpa;
 
 	@Autowired
-	private DbTableRepositoryService tableService;
+	private DbTableJpaRepository tableJpa;
 
 	@Autowired
-	private DbColumnRepositoryService columnService;
+	private DbColumnJpaRepository columnJpa;
 
 	@Autowired
 	private ModelGeneratorFactory modelFactory;
@@ -71,13 +80,13 @@ public class EntityFieldService {
 //		}
 //	}
 	
-	public void createClassDefFromTableId(String lang, Integer projectId, Integer tableId, String dataUseType) {
-		TableInfoEntity table = tableService.getTableByTableId(tableId);
+	public void createClassDefFromTableId(String lang, Integer projectId, Long tableId, String dataUseType) {
+		TableInfoEntity table = tableJpa.findById(tableId).orElseThrow();
 		ModelGenerator modelGenerator = modelFactory.getGenerator(lang);
-		ClassDefinitionEntity domain = modelGenerator.createClassFromDBTable(projectId, table, dataUseType);
-		domain.setTableId(tableId);
+		ClassDefinitionEntity classDef = modelGenerator.createClassFromDBTable(projectId, table, dataUseType);
+		classDef.setTableId(tableId);
 		
-		classDefService.registerClassDef(domain);
+		classDefService.registerClassDef(classDef);
 	}
 	
 	public void createEntityFieldFromTableCol(String lang, Integer projectId, String dbms, Integer classId, TableColumnEntity column) {

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ClassFieldModel {
 
-    private Integer id;
+    private Long id;
     private String fieldName;
     private String dataType;
     private Integer classId;

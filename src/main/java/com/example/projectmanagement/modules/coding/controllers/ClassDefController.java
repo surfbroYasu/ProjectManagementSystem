@@ -1,9 +1,9 @@
 package com.example.projectmanagement.modules.coding.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ClassDefController {
 
 	@Autowired
+	@Qualifier("classDefService")
 	private ClassDefContextService contextService;
 
 	private static final String TEMPLATE_ROOT = "contents/coding/classdef";
@@ -31,15 +32,15 @@ public class ClassDefController {
 	 * @param model
 	 * @return
 	 */
-	@GetMapping("/database-entity/{tableId}")
-	public String renderModelGeneratorSetupForm(@PathVariable Integer projectId,
-			@PathVariable("tableId") Integer tableId,
-			@RequestParam("lang") String lang, Model model) {
-
-		contextService.setEntityViewFromDb(model, lang, tableId, "entity", "title.class_def");
-
-		return TEMPLATE_ROOT + "/codeBlock";
-	}
+//	@GetMapping("/database-entity/{tableId}")
+//	public String renderModelGeneratorSetupForm(@PathVariable Integer projectId,
+//			@PathVariable("tableId") Integer tableId,
+//			@RequestParam("lang") String lang, Model model) {
+//
+//		contextService.setEntityViewFromDb(model, lang, tableId, "entity", "title.class_def");
+//
+//		return TEMPLATE_ROOT + "/codeBlock";
+//	}
 
 	@PostMapping("/create/{dataUseType}")
 	public String renderModelClassEditor(@PathVariable Integer projectId, @PathVariable String dataUseType,
@@ -48,7 +49,6 @@ public class ClassDefController {
 		ClassDefFieldsModel classDef;
 		try {
 			classDef = mapper.readValue(classDefJson, ClassDefFieldsModel.class);
-			System.out.println(classDef);
 			model.addAttribute("classDef", classDef);
 			model.addAttribute("title", "title.class_def");
 			contextService.setProjectToModel(model, projectId);

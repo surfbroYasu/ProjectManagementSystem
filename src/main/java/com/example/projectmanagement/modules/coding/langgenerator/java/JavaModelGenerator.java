@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
-import com.example.projectmanagement.generalutil.CaseConverter;
+import com.example.projectmanagement.application.util.CaseConverter;
 import com.example.projectmanagement.modules.coding.datastructure.entity.ClassDefinitionEntity;
 import com.example.projectmanagement.modules.coding.datastructure.entity.ClassFieldEntity;
 import com.example.projectmanagement.modules.coding.datastructure.models.ClassDefFieldsModel;

@@ -14,13 +14,16 @@ public class ProjectDeveloperEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long id;
 	private Integer userId;
 	private Integer teamId;
 	private Integer projectId;
 
 	private String memberName;
 	private String devRole;
+	
+	private Boolean isActiveMember;
+	private String permissionLevel;
 
 
 }

@@ -2,6 +2,7 @@ package com.example.projectmanagement.modules.designs.app.modules.controllers;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +23,7 @@ import com.example.projectmanagement.modules.designs.app.modules.services.reposi
 public class ModuleController {
 
 	@Autowired
+	@Qualifier("module")
 	private ModuleContextService contextService;
 
 	@Autowired

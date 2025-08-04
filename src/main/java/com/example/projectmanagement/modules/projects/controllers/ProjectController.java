@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.projectmanagement.modules.projects.constance.PageTitleEnum;
 import com.example.projectmanagement.modules.projects.datastructure.form.ProjectRegisterForm;
-import com.example.projectmanagement.modules.projects.services.application.PreProjectContextService;
+import com.example.projectmanagement.modules.projects.services.application.context.ProjectPageContext;
 import com.example.projectmanagement.modules.projects.services.repository.ProjectRepositoryService;
 import com.example.projectmanagement.users.services.application.security.CustomUserDetails;
 
 @Controller
-@RequestMapping("/projects")
+@RequestMapping("/project")
 public class ProjectController {
 
 	private static final String TEMPLATE_ROOT = "contents/projects/";
@@ -29,16 +30,17 @@ public class ProjectController {
 	private ProjectRepositoryService repoService;
 
 	@Autowired
-	private PreProjectContextService preProjectContextService;
+	private ProjectPageContext pageContext;
 
 	@ModelAttribute("projectRegisterForm")
 	public ProjectRegisterForm setRegistForm() {
 		return new ProjectRegisterForm();
 	}
 
-	@GetMapping("")
+	@GetMapping("/list")
 	public String renderProjectIndex(@AuthenticationPrincipal CustomUserDetails loginUser, Model model) {
-		preProjectContextService.setPerProjectContext(model, loginUser, "title.project.top");
+		//TODO プロジェクトの削除権限を持った人しか削除できないように、ボタンを表示するか否かのModelAttributeがひつよう
+		pageContext.setupProjectListPageByUserId(model, loginUser, PageTitleEnum.PROJECT_TOP.getTitleKey());
 		return TEMPLATE_ROOT + "list";
 	}
 
@@ -49,23 +51,33 @@ public class ProjectController {
 			BindingResult bindingResult,
 			Model model) {
 
-		String redirectUrl = "redirect:/projects";
-		
+		String redirectUrl = "redirect:/project";
+
 		if ("delete".equals(action)) {
+			//TODO 以下サービスに削除権限を持った人からのアクセスか確かめるロジックを追加する
+			//-> deleteByIdIfExistsAndAuthorized を作成
 			repoService.deleteByIdIfExists(form.getId());
 			return redirectUrl;
 		}
 
 		if (bindingResult.hasErrors()) {
-			preProjectContextService.setPerProjectContext(model, loginUser, "title.project.top");
+			pageContext.setupProjectListPageByUserId(model, loginUser, PageTitleEnum.PROJECT_TOP.getTitleKey());
 			return "contents/projects/list";
 		}
-
 		repoService.saveByAction(action, form, loginUser, locale);
+		//TODO 以下サービスに編集権限を持った人からのアクセスか確かめるロジックを追加する
+		//-> saveByIdIfExistsAndAuthorized を作成
+		//編集と新規作成を分けて実装する方がロジックビルドしやすいかも
 
 		return redirectUrl;
 	}
 
-
+	@GetMapping("/{projectId}/detail")
+	public String renderProjectDetail(@PathVariable("projectId") Integer projectId,
+			@AuthenticationPrincipal CustomUserDetails loginUser,
+			Model model) {
+		pageContext.setupProjectDetailPage(model, projectId, loginUser, PageTitleEnum.PROJECT_DETAIL.getTitleKey());
+		return TEMPLATE_ROOT + "detail";
+	}
 
 }

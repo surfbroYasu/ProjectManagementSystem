@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.projectmanagement.modules.databases.datastructure.dto.ColumnDtoRecord;
 import com.example.projectmanagement.modules.databases.datastructure.dto.DBInfoDtoRecord;
+import com.example.projectmanagement.modules.databases.datastructure.dto.TableColumnJoinedDto;
 import com.example.projectmanagement.modules.databases.datastructure.dto.TableInfoDtoRecord;
 import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfoEntity;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumnEntity;
@@ -29,9 +30,9 @@ public class DBContextHelperService {
 				.collect(Collectors.groupingBy(ColumnDtoRecord::tableInfoId));
 	}
 	
-	public Map<Long, List<ColumnDtoRecord>> groupColumnDtoByTableId(List<ColumnDtoRecord> columns) {
+	public Map<Long, List<TableColumnJoinedDto>> groupTableColumnJoinedDtoByTableId(List<TableColumnJoinedDto> columns) {
 		return columns.stream()
-			.collect(Collectors.groupingBy(ColumnDtoRecord::tableInfoId));
+			.collect(Collectors.groupingBy(TableColumnJoinedDto::getTableInfoId));
 	}
 
 
@@ -69,9 +70,6 @@ public class DBContextHelperService {
 				entity.getCheckConstraint(),
 				entity.getComment(),
 				entity.getOnDelete(),
-				entity.getOnUpdate(),
-				entity.getTableName(),
-				entity.getRefTableName(),
-				entity.getRefColumnName());
+				entity.getOnUpdate());
 	}
 }

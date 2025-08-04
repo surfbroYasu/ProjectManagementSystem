@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import com.example.projectmanagement.modules.databases.constance.ModelAttributes;
 import com.example.projectmanagement.modules.databases.datastructure.dto.DBInfoDtoRecord;
 import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfoEntity;
 import com.example.projectmanagement.modules.databases.repository.DbInfoJpaRepository;
 import com.example.projectmanagement.modules.databases.services.application.context.DBContextHelperService;
-import com.example.projectmanagement.modules.databases.services.application.context.ModelAttributes;
 
 @Service
 public class DbInfoContextService{

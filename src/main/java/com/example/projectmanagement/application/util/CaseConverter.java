@@ -1,4 +1,4 @@
-package com.example.projectmanagement.generalutil;
+package com.example.projectmanagement.application.util;
 
 public class CaseConverter {
 

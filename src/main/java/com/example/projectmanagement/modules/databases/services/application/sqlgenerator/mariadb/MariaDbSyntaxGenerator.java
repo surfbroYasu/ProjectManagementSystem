@@ -6,7 +6,8 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import com.example.projectmanagement.generalutil.CaseConverter;
+import com.example.projectmanagement.application.util.CaseConverter;
+import com.example.projectmanagement.modules.databases.datastructure.dto.TableColumnJoinedDto;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumnEntity;
 import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfoEntity;
 import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.AbstractSqlSyntaxGenerator;
@@ -22,14 +23,14 @@ public class MariaDbSyntaxGenerator extends AbstractSqlSyntaxGenerator {
 	 * @return SQL CREATE TABLE 文
 	 */
 	@Override
-	public String createTable(TableInfoEntity table, List<TableColumnEntity> columns) {
+	public String createTable(TableInfoEntity table, List<TableColumnJoinedDto> columns) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("CREATE TABLE ").append(table.getTableName()).append(" (\n");
 
 		List<String> fkConstraints = new ArrayList<>();
 
 		for (int i = 0; i < columns.size(); i++) {
-			TableColumnEntity col = columns.get(i);
+			TableColumnJoinedDto col = columns.get(i);
 			sb.append("  ").append(col.getColumnName())
 					.append(" ").append(col.getDataType());
 

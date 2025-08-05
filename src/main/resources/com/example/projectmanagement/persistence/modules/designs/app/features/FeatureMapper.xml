@@ -7,7 +7,7 @@
 	namespace="com.example.projectmanagement.persistence.modules.designs.app.features.FeatureMapper">
 
 	<resultMap id="featureMap"
-		type="com.example.projectmanagement.modules.designs.app.features.datastructures.entity.ApplicationFeatureEntity">
+		type="com.example.projectmanagement.modules.designs.app.datastructures.entity.ApplicationFeatureEntity">
 		<id column="id" property="id" />
 		<result column="feature_name" property="featureName" />
 		<result column="program_feature_name"
@@ -17,7 +17,7 @@
 	</resultMap>
 
 	<resultMap id="moduleFeatureMap"
-		type="com.example.projectmanagement.modules.designs.app.features.datastructures.entity.ModuleFeatureRelationEntity">
+		type="com.example.projectmanagement.modules.designs.app.datastructures.entity.ModuleFeatureRelationEntity">
 		<id column="id" property="id" />
 		<result column="module_id" property="moduleId" />
 		<result column="feature_id" property="featureId" />

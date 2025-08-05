@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.example.projectmanagement.modules.designs.app.modules.datastructures.entity.ModuleDefinitionEntity;
+import com.example.projectmanagement.modules.designs.app.datastructures.entity.ModuleDefinitionEntity;
 
 @Mapper
 public interface ModuleDefMapper {

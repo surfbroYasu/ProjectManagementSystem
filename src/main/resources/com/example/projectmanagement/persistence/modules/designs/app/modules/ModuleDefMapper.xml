@@ -5,7 +5,7 @@
 
 <mapper namespace="com.example.projectmanagement.persistence.modules.designs.app.modules.ModuleDefMapper">
 
-	<resultMap id="moduleMap" type="com.example.projectmanagement.modules.designs.app.modules.datastructures.entity.ModuleDefinitionEntity">
+	<resultMap id="moduleMap" type="com.example.projectmanagement.modules.designs.app.datastructures.entity.ModuleDefinitionEntity">
 	  <id column="id" property="id"/>
 	  <result column="module_name" property="moduleName"/>
 	  <result column="program_module_name" property="programModuleName"/>

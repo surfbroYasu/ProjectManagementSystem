@@ -9,7 +9,7 @@ public class IndexController {
 	
 //	private static final String TEMPLATE_ROOT="contents/projects/";
 
-	@GetMapping("")
+	@GetMapping("/")
 	public String renderProjectIndex(Model model) {
 		model.addAttribute("title", "title.todo");
 		return "todo";

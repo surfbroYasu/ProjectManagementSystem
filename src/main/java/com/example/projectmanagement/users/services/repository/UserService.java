@@ -4,30 +4,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.projectmanagement.persistence.users.UserMapper;
-import com.example.projectmanagement.users.datastructure.entity.User;
+import com.example.projectmanagement.users.datastructure.entity.UserEntity;
+import com.example.projectmanagement.users.repository.UserJpaRepository;
 
 @Service
 public class UserService {
 
-    @Autowired
-    private UserMapper userMapper;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private UserJpaRepository jpaRepo;
 
-    public void registerUser(User user) {
+    public void registerUser(UserEntity user) {
         String encoded = passwordEncoder.encode(user.getPasswordHash());
         user.setPasswordHash(encoded);
-        userMapper.insertUser(user);
+        jpaRepo.save(user);
     }
 
     public boolean existsByEmail(String email) {
-        return userMapper.findByEmail(email) != null;
+    	return jpaRepo.existsByEmail(email);
     }
     
-    public void updateUserInfo(User user) {
-    	userMapper.updateUserInfo(user);
+    public void updateUserInfo(UserEntity user) {
+        jpaRepo.save(user);
     }
     
 

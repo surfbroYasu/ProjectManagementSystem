@@ -3,13 +3,14 @@ package com.example.projectmanagement.modules.databases.services.application.sql
 import java.util.List;
 import java.util.Map;
 
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfo;
+import com.example.projectmanagement.modules.databases.datastructure.dto.TableColumnJoinedDto;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumnEntity;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfoEntity;
 
 public interface SqlSyntaxGenerator {
 
-	String createTable(TableInfo table, List<TableColumn> columns);
-	String addColumn(String tableName, TableColumn column);
+	String createTable(TableInfoEntity table, List<TableColumnJoinedDto> columns);
+	String addColumn(String tableName, TableColumnEntity column);
 	String dropTable(String tableName);
 	
 	String insertTemplate(String tableName, List<String> columnNames);

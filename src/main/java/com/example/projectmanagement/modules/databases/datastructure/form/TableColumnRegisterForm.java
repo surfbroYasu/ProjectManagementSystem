@@ -2,7 +2,7 @@ package com.example.projectmanagement.modules.databases.datastructure.form;
 
 import java.util.List;
 
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumnEntity;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -10,8 +10,8 @@ import lombok.Data;
 @Data
 public class TableColumnRegisterForm {
 	
-	private Integer id;
-	private Integer tableInfoId;
+	private Long id;
+	private Long tableInfoId;
 	
 	@NotBlank
 	private String columnName;
@@ -31,7 +31,7 @@ public class TableColumnRegisterForm {
 	private String onDelete;
 	private String onUpdate;
 	
-	public List<TableColumn> forignOptions;
+	public List<TableColumnEntity> forignOptions;
 
 	
 }

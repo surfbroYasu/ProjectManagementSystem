@@ -1,14 +1,19 @@
 package com.example.projectmanagement.modules.databases.services.application.validation.columnstructure;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import com.example.projectmanagement.modules.databases.datastructure.form.TableColumnRegisterForm;
+import com.example.projectmanagement.modules.databases.services.application.context.database.DbInfoContextService;
 
 @Service
 public class ColumnValidationService {
 
 	private final ColumnStructureValidatorFactory validatorFactory;
+	
+	@Autowired
+	private DbInfoContextService dbContext;
 
 	public ColumnValidationService(ColumnStructureValidatorFactory validatorFactory) {
 		this.validatorFactory = validatorFactory;
@@ -24,9 +29,10 @@ public class ColumnValidationService {
 
 	
 	
-	public void validateForm(BindingResult result, String dbms, TableColumnRegisterForm column) {
+	public void validateForm(BindingResult result, Integer dbId, TableColumnRegisterForm column) {
 
-	    ColumnStructureValidator validator = validatorFactory.getValidator(dbms);
+		
+	    ColumnStructureValidator validator = validatorFactory.getValidator(dbContext.findDbms(dbId));
 
 	    if (!column.getDataType().isBlank() && !column.getDefaultValue().isBlank()) {
 	        ColumnStructureValidationResult defResult = validator.validateDefaultValue(

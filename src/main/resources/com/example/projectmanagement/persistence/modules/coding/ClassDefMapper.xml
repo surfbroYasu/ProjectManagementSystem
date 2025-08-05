@@ -6,7 +6,7 @@
 <mapper
 	namespace="com.example.projectmanagement.persistence.modules.coding.ClassDefMapper">
 	
-	<resultMap id="classDefMap" type="com.example.projectmanagement.modules.coding.datastructure.entity.ClassDefinition">
+	<resultMap id="classDefMap" type="com.example.projectmanagement.modules.coding.datastructure.entity.ClassDefinitionEntity">
 		<id property="id" column="id" />
 		<result property="className" column="class_name"/>
 		<result property="classAlias" column="class_alias"/>
@@ -22,11 +22,11 @@
 
 	<insert id="insertClassDef" useGeneratedKeys="true">
 		INSERT INTO class_definitions (
-		class_name, class_alias, decsription,
+		class_name, class_alias, description,
 		data_use_type, language, history_id, 
 		project_id, table_id, structual_type
 		) VALUES (
-		#{classNmae}, #{classAlias}, #{description},
+		#{className}, #{classAlias}, #{description},
 		#{dataUseType}, #{language},
 		#{historyId}, #{projectId}, #{tableId}, #{structualType}
 		)

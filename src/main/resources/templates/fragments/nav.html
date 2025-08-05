@@ -1,13 +1,8 @@
 <div th:fragment="nav" class="border-end position-sticky" style="top: 1rem; min-height: 100vh;">
 	<ul class="nav flex-column">
 		<li class="nav-item mb-2">
-			<a class="nav-link active" aria-current="page" href="/" th:href="@{/}">
+			<a class="nav-link active" aria-current="page" href="/" th:href="@{/project/list}">
 				<i class="bi bi-house-door"></i> ダッシュボード
-			</a>
-		</li>
-		<li class="nav-item mb-2">
-			<a class="nav-link" href="#" th:href="@{/projects}">
-				<i th:utext="#{icon.project}"></i> プロジェクト
 			</a>
 		</li>
 
@@ -15,12 +10,17 @@
 		<th:block th:unless="#{${title}} == #{title.project.top}">
 
 			<li class="nav-item mb-2">
-				<a class="nav-link" href="#" th:href="@{/project/{projectId}/client(projectId=${project.id})}">
+				<a class="nav-link" href="#" th:href="@{/project/{projectId}/detail(projectId=${projectId})}">
+					<i th:utext="#{icon.project}"></i> プロジェクト
+				</a>
+			</li>
+			<li class="nav-item mb-2">
+				<a class="nav-link" href="#" th:href="@{/project/{projectId}/client(projectId=${projectId})}">
 					<i th:utext="#{icon.client}"></i> 顧客管理
 				</a>
 			</li>
 			<li class="nav-item mb-2">
-				<a class="nav-link" href="#"  th:href="@{/project/{projectId}/database(projectId=${project.id})}">
+				<a class="nav-link" href="#" th:href="@{/project/{projectId}/database(projectId=${projectId})}">
 					<i th:utext="#{icon.data}"></i> DB定義
 				</a>
 			</li>

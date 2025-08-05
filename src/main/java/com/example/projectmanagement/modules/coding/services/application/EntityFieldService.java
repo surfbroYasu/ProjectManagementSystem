@@ -1,40 +1,43 @@
 package com.example.projectmanagement.modules.coding.services.application;
 
-import java.util.List;
-
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.projectmanagement.modules.coding.datastructure.entity.ClassDefinition;
-import com.example.projectmanagement.modules.coding.datastructure.entity.ClassField;
-import com.example.projectmanagement.modules.coding.datastructure.entity.Entity;
-import com.example.projectmanagement.modules.coding.datastructure.models.ClassDefinitionModel;
-import com.example.projectmanagement.modules.coding.datastructure.models.FieldModel;
+import com.example.projectmanagement.modules.coding.datastructure.entity.ClassDefinitionEntity;
+import com.example.projectmanagement.modules.coding.datastructure.entity.ClassFieldEntity;
+import com.example.projectmanagement.modules.coding.datastructure.entity.EntityEntity;
 import com.example.projectmanagement.modules.coding.langgenerator.ModelGenerator;
 import com.example.projectmanagement.modules.coding.langgenerator.ModelGeneratorFactory;
 import com.example.projectmanagement.modules.coding.services.repository.ClassDefRepositoryService;
 import com.example.projectmanagement.modules.coding.services.repository.ClassFieldRepostitoryService;
 import com.example.projectmanagement.modules.coding.services.repository.EntityRepostitoryService;
-import com.example.projectmanagement.modules.databases.datastructure.entity.DBInfo;
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfo;
-import com.example.projectmanagement.modules.databases.services.repository.DatabaseService;
-import com.example.projectmanagement.modules.databases.services.repository.DbTableColumnService;
-import com.example.projectmanagement.modules.databases.services.repository.DbTableService;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumnEntity;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfoEntity;
+import com.example.projectmanagement.modules.databases.repository.DbColumnJpaRepository;
+import com.example.projectmanagement.modules.databases.repository.DbInfoJpaRepository;
+import com.example.projectmanagement.modules.databases.repository.DbTableJpaRepository;
 
 @Service
 public class EntityFieldService {
+//
+//	@Autowired
+//	private DatabaseRepositoryService dbService;
+//
+//	@Autowired
+//	private DbTableRepositoryService tableService;
+//
+//	@Autowired
+//	private DbColumnRepositoryService columnService;
 
 	@Autowired
-	private DatabaseService dbService;
+	private DbInfoJpaRepository dbJpa;
 
 	@Autowired
-	private DbTableService tableService;
+	private DbTableJpaRepository tableJpa;
 
 	@Autowired
-	private DbTableColumnService columnService;
+	private DbColumnJpaRepository columnJpa;
 
 	@Autowired
 	private ModelGeneratorFactory modelFactory;
@@ -50,49 +53,49 @@ public class EntityFieldService {
 
 	
 	@Transactional
-	public void registerEntitiesFromTableId(String lang, Integer projectId, Integer tableId, String dataUseType) {
-
-		TableInfo table = tableService.getTableByTableId(tableId);
-		DBInfo db = dbService.getDBInfoByDBId(table.getDbInfoId());
-		List<TableColumn> dbColumnList = columnService.getTableColumns(List.of(tableId));
-
+//	public void registerEntitiesFromTableId(String lang, Integer projectId, Integer tableId, String dataUseType) {
+//
+//		TableInfo table = tableService.getTableByTableId(tableId);
+//		DBInfo db = dbService.getDBInfoByDBId(table.getDbInfoId());
+//		List<TableColumn> dbColumnList = columnService.getTableColumns(List.of(tableId));
+//
+//		ModelGenerator modelGenerator = modelFactory.getGenerator(lang);
+//		ClassDefFieldsModel classDef = modelGenerator.createClassAndFieldsFromDBTable(db, table, dbColumnList,
+//				dataUseType);
+//
+//		ClassDefinitionEntity classDefEntity = new ClassDefinitionEntity();
+//		BeanUtils.copyProperties(classDef, classDefEntity);
+//		
+//		classDefService.registerClassDef(classDefEntity);
+//
+//		int classId = classDefEntity.getId();
+//
+//		for (ClassFieldModel each : classDef.getFields()) {
+//
+//			ClassFieldEntity classFieldEntity = new ClassFieldEntity(each.getFieldName(), each.getDataType(), classId);
+//			fieldService.registerClassField(classFieldEntity);
+//
+//			EntityEntity entityEntity = new EntityEntity(each.getTableColId(), each.getId(), projectId);
+//			entityService.registerEntity(entityEntity);
+//		}
+//	}
+	
+	public void createClassDefFromTableId(String lang, Integer projectId, Long tableId, String dataUseType) {
+		TableInfoEntity table = tableJpa.findById(tableId).orElseThrow();
 		ModelGenerator modelGenerator = modelFactory.getGenerator(lang);
-		ClassDefinitionModel classDef = modelGenerator.createClassAndFieldsFromDBTable(db, table, dbColumnList,
-				dataUseType);
-
-		ClassDefinition classDefEntity = new ClassDefinition();
-		BeanUtils.copyProperties(classDef, classDefEntity);
+		ClassDefinitionEntity classDef = modelGenerator.createClassFromDBTable(projectId, table, dataUseType);
+		classDef.setTableId(tableId);
 		
-		classDefService.registerClassDef(classDefEntity);
-
-		int classId = classDefEntity.getId();
-
-		for (FieldModel each : classDef.getFields()) {
-
-			ClassField classFieldEntity = new ClassField(each.getFieldName(), each.getDataType(), classId);
-			fieldService.registerClassField(classFieldEntity);
-
-			Entity entityEntity = new Entity(each.getTableColId(), each.getId(), projectId);
-			entityService.registerEntity(entityEntity);
-		}
+		classDefService.registerClassDef(classDef);
 	}
 	
-	public void createClassDefFromTableId(String lang, Integer projectId, Integer tableId, String dataUseType) {
-		TableInfo table = tableService.getTableByTableId(tableId);
-		ModelGenerator modelGenerator = modelFactory.getGenerator(lang);
-		ClassDefinition domain = modelGenerator.createClassFromDBTable(projectId, table, dataUseType);
-		domain.setTableId(tableId);
-		
-		classDefService.registerClassDef(domain);
-	}
-	
-	public void createEntityFieldFromTableCol(String lang, Integer projectId, String dbms, Integer classId, TableColumn column) {
+	public void createEntityFieldFromTableCol(String lang, Integer projectId, String dbms, Integer classId, TableColumnEntity column) {
 
 		ModelGenerator modelGenerator = modelFactory.getGenerator(lang);
-		ClassField classField = modelGenerator.createFieldFromDBColumn(column, classId, dbms);
+		ClassFieldEntity classField = modelGenerator.createFieldFromDBColumn(column, classId, dbms);
 		fieldService.registerClassField(classField);
 		
-		Entity entity = new Entity(
+		EntityEntity entity = new EntityEntity(
 				column.getId(),
 				classField.getId(),
 				projectId
@@ -100,17 +103,6 @@ public class EntityFieldService {
 		
 		entityService.registerEntity(entity);
 	}
-	
-	public void updateEntityField(TableColumn col, String dbms) {
-		Entity entity = entityService.findEntityByTableColId(col.getId());
-		ClassField originalField = fieldService.findClassFieldById(entity.getFieldId());
-		ClassDefinition classDef = classDefService.findClassDefinitionById(originalField.getClassId());
-		
-		ModelGenerator modelGenerator = modelFactory.getGenerator(classDef.getLanguage());
-		ClassField newDomain = modelGenerator.createFieldFromDBColumn(col, classDef.getId(), dbms);
-		newDomain.setId(originalField.getId());
-		
-		fieldService.updateClassField(newDomain);
-	}
+
 	
 }

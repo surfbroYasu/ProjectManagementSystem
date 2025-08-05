@@ -3,7 +3,8 @@ package com.example.projectmanagement.modules.coding.services.repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.projectmanagement.modules.coding.datastructure.entity.Entity;
+import com.example.projectmanagement.modules.coding.datastructure.entity.EntityEntity;
+import com.example.projectmanagement.modules.coding.langgenerator.ModelGeneratorFactory;
 import com.example.projectmanagement.persistence.modules.coding.EntityMapper;
 
 @Service
@@ -12,7 +13,18 @@ public class EntityRepostitoryService {
 	@Autowired
 	private EntityMapper mapper;
 
-	public void registerEntity(Entity entityEntity) {
+	@Autowired
+	private ModelGeneratorFactory modelFactory;
+	
+	@Autowired
+	private ClassDefRepositoryService classDefService;
+	
+	@Autowired
+	private ClassFieldRepostitoryService fieldService;
+	
+	
+
+	public void registerEntity(EntityEntity entityEntity) {
 		mapper.insertEnity(entityEntity);
 	}
 	
@@ -20,7 +32,9 @@ public class EntityRepostitoryService {
 		mapper.deleteEntityByTableColId(tableColId);
 	}
 	
-	public Entity findEntityByTableColId(int tableColId) {
+	public EntityEntity findEntityByTableColId(int tableColId) {
 		return mapper.findEntityByTableColId(tableColId);
 	}
+	
+
 }

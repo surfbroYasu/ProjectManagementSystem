@@ -10,13 +10,15 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.projectmanagement.users.datastructure.entity.User;
-import com.example.projectmanagement.users.utils.FullNameFormatter;
+import com.example.projectmanagement.application.util.FullNameFormatter;
+import com.example.projectmanagement.users.datastructure.entity.UserEntity;
 
 public class CustomUserDetails implements UserDetails {
-    private final User user;
+	
+    private final UserEntity user;
+    
 
-    public CustomUserDetails(User user) {
+    public CustomUserDetails(UserEntity user) {
         this.user = user;
     }
 
@@ -53,6 +55,7 @@ public class CustomUserDetails implements UserDetails {
     public int getUserId() {
     	return user.getId();
     }
+ 
     
     public Map<String, String> getFullNameInMap() {
     	
@@ -65,7 +68,7 @@ public class CustomUserDetails implements UserDetails {
     }
     
     public String getFormattedFullName(Locale locale) {
-        return FullNameFormatter.format(this.user, locale);
+        return FullNameFormatter.formatByUser(this.user, locale.getLanguage());
     }
 
 }

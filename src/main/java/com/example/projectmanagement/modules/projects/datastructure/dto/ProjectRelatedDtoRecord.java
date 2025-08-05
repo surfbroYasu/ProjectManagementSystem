@@ -3,7 +3,7 @@ package com.example.projectmanagement.modules.projects.datastructure.dto;
 import java.time.LocalDate;
 
 /*
- * TIP 使ってないかも
+ * TIP 使ってない
  */
 public record ProjectRelatedDtoRecord(
 		Integer projectid,
@@ -13,7 +13,7 @@ public record ProjectRelatedDtoRecord(
 		Integer clientId,
 		LocalDate startDate,
 		
-		Integer projectDevId,
+		Long projectDevId,
 		Integer userId,
 		Integer teamId,
 		Integer projectId,

@@ -1,15 +1,15 @@
 package com.example.projectmanagement.modules.coding.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.projectmanagement.modules.coding.datastructure.models.ClassDefinitionModel;
+import com.example.projectmanagement.modules.coding.datastructure.models.ClassDefFieldsModel;
 import com.example.projectmanagement.modules.coding.services.application.ClassDefContextService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -18,29 +18,37 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ClassDefController {
 
 	@Autowired
+	@Qualifier("classDefService")
 	private ClassDefContextService contextService;
 
 	private static final String TEMPLATE_ROOT = "contents/coding/classdef";
 
-	@GetMapping("/database-entity/{tableId}")
-	public String renderModelGeneratorSetupForm(@PathVariable Integer projectId,
-			@PathVariable("tableId") Integer tableId,
-			@RequestParam("lang") String lang, Model model) {
-
-		model.addAttribute("title", "title.class_def");
-		contextService.setEntityView(model, lang, tableId, "entity");
-
-		return TEMPLATE_ROOT + "/codeBlock";
-	}
+	/**
+	 * 
+	 * dbテーブルからエンティティーを作成する為の初期ページ
+	 * @param projectId
+	 * @param tableId
+	 * @param lang
+	 * @param model
+	 * @return
+	 */
+//	@GetMapping("/database-entity/{tableId}")
+//	public String renderModelGeneratorSetupForm(@PathVariable Integer projectId,
+//			@PathVariable("tableId") Integer tableId,
+//			@RequestParam("lang") String lang, Model model) {
+//
+//		contextService.setEntityViewFromDb(model, lang, tableId, "entity", "title.class_def");
+//
+//		return TEMPLATE_ROOT + "/codeBlock";
+//	}
 
 	@PostMapping("/create/{dataUseType}")
 	public String renderModelClassEditor(@PathVariable Integer projectId, @PathVariable String dataUseType,
 			@RequestParam String classDefJson, Model model) {
 		ObjectMapper mapper = new ObjectMapper();
-		ClassDefinitionModel classDef;
+		ClassDefFieldsModel classDef;
 		try {
-			classDef = mapper.readValue(classDefJson, ClassDefinitionModel.class);
-			System.out.println(classDef);
+			classDef = mapper.readValue(classDefJson, ClassDefFieldsModel.class);
 			model.addAttribute("classDef", classDef);
 			model.addAttribute("title", "title.class_def");
 			contextService.setProjectToModel(model, projectId);
@@ -63,8 +71,6 @@ public class ClassDefController {
 	 * 
 	 * DBカラムが追加されたら自動で追加するか？
 	 * 
-	 * 
-	 * 
 	 */
 	
 	
@@ -74,4 +80,6 @@ public class ClassDefController {
 	 * エンティティーとの連携を解除し、クラスは温存する
 	 * 後々エンティティが生成されたときに紐づけ連携できるようにする
 	 */
+	
+	
 }

@@ -2,14 +2,14 @@ package com.example.projectmanagement.persistence.users;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.example.projectmanagement.users.datastructure.entity.User;
+import com.example.projectmanagement.users.datastructure.entity.UserEntity;
 
 @Mapper
 public interface UserMapper {
 	
-    User findByEmail(String email);
+    UserEntity findByEmail(String email);
     
-    void insertUser(User user);
+    void insertUser(UserEntity user);
     
-    void updateUserInfo(User user);
+    void updateUserInfo(UserEntity user);
 }

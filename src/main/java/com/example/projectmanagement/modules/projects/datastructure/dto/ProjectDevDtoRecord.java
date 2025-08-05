@@ -1,9 +1,12 @@
 package com.example.projectmanagement.modules.projects.datastructure.dto;
 
 public record ProjectDevDtoRecord(
-		Integer id,
+		Long id,
 		Integer userId,
 		Integer teamId,
 		Integer projectId,
 		String memberName,
-		String devRole) {}
+		String devRole,
+		Boolean isActiveMember,
+		String permissionLevel 
+		) {}

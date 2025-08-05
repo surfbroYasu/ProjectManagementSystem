@@ -6,9 +6,10 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import com.example.projectmanagement.generalutil.CaseConverter;
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumn;
-import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfo;
+import com.example.projectmanagement.application.util.CaseConverter;
+import com.example.projectmanagement.modules.databases.datastructure.dto.TableColumnJoinedDto;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableColumnEntity;
+import com.example.projectmanagement.modules.databases.datastructure.entity.TableInfoEntity;
 import com.example.projectmanagement.modules.databases.services.application.sqlgenerator.AbstractSqlSyntaxGenerator;
 
 @Component("mariadbSyntax")
@@ -22,14 +23,14 @@ public class MariaDbSyntaxGenerator extends AbstractSqlSyntaxGenerator {
 	 * @return SQL CREATE TABLE 文
 	 */
 	@Override
-	public String createTable(TableInfo table, List<TableColumn> columns) {
+	public String createTable(TableInfoEntity table, List<TableColumnJoinedDto> columns) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("CREATE TABLE ").append(table.getTableName()).append(" (\n");
 
 		List<String> fkConstraints = new ArrayList<>();
 
 		for (int i = 0; i < columns.size(); i++) {
-			TableColumn col = columns.get(i);
+			TableColumnJoinedDto col = columns.get(i);
 			sb.append("  ").append(col.getColumnName())
 					.append(" ").append(col.getDataType());
 
@@ -101,7 +102,7 @@ public class MariaDbSyntaxGenerator extends AbstractSqlSyntaxGenerator {
 	 * @return SQL ALTER TABLE ADD COLUMN 文
 	 */
 	@Override
-	public String addColumn(String tableName, TableColumn column) {
+	public String addColumn(String tableName, TableColumnEntity column) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("ALTER TABLE ").append(tableName)
 				.append(" ADD COLUMN ").append(column.getColumnName()).append(" ").append(column.getDataType());

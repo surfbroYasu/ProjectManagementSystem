@@ -14,7 +14,7 @@ public class ClassDefFieldsModel {
     private String className;
     private String classAlias;
     private String description;
-    private String dataUseType;
+    private String classType;
     private Integer historyId;
     private String langage;
     private Integer projectId;

@@ -12,20 +12,20 @@ public class ClassDefinitionEntity {
     private String className;
     private String classAlias;
     private String description;
-    private String dataUseType;
+    private String classType;
     private Integer historyId;
     private String language;
     private Integer projectId;
     private Long tableId;
     private String structualType;
     
-	public ClassDefinitionEntity(String className, String classAlias, String description, String dataUseType, String language,
+	public ClassDefinitionEntity(String className, String classAlias, String description, String classType, String language,
 			Integer projectId) {
 		super();
 		this.className = className;
 		this.classAlias = classAlias;
 		this.description = description;
-		this.dataUseType = dataUseType;
+		this.classType = classType;
 		this.language = language;
 		this.projectId = projectId;
 	}

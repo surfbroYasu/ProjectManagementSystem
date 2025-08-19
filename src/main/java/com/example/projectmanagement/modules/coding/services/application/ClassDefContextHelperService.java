@@ -31,7 +31,7 @@ public class ClassDefContextHelperService {
 				classDef.getClassName(),
 				classDef.getClassAlias(),
 				classDef.getDescription(),
-				classDef.getDataUseType(),
+				classDef.getClassType(),
 				classDef.getHistoryId(),
 				classDef.getLanguage(),
 				classDef.getProjectId(),

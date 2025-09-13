@@ -19,7 +19,7 @@
 					th:attrappend="aria-labelledby='heading' + ${stat.index}" data-bs-parent="#projectAccordion">
 					<div class="accordion-body">
 						<p><strong th:text="#{label.start_date}">開始日：</strong> ：<span th:text="${project.startDate}">2025-04-01</span></p>
-						<p><strong th:text="#{label.client}">クライアント：</strong> ：<span th:text="${project.clientId}">1</span></p>
+<!--						<p><strong th:text="#{label.client}">クライアント：</strong> ：<span th:text="${project.clientId}">1</span></p>-->
 						<p><strong th:text="#{field.server_side_lang}">サーバーサイド言語：</strong>： <span
 								th:text="${project.serverSideLang}">java</span></p>
 						<a th:href="@{/project/{projectId}/detail(projectId=${project.id})}"

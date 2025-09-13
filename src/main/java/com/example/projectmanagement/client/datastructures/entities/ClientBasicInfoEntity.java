@@ -1,6 +1,4 @@
-package com.example.projectmanagement.modules.projects.datastructure.entity;
-
-import java.time.LocalDate;
+package com.example.projectmanagement.client.datastructures.entities;
 
 import com.example.projectmanagement.organizations.datastructure.entity.OrganizationEntity;
 
@@ -14,21 +12,21 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
-@Data
 @Entity
-@Table(name = "projects")
-public class ProjectEntity {
+@Data
+@Table(name = "client_basic_info")
+public class ClientBasicInfoEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private String projectName;
-	private String applicationName;
-	private String serverSideLang;
-
-	private LocalDate startDate;
-
-	@ManyToOne(fetch = FetchType.LAZY, optional = true)
-	@JoinColumn(name = "organization_id")
+	private String name;
+	private String phone;
+	
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organization_id")
 	private OrganizationEntity organization;
+
+	//	TODO
+	//	国際電話対応にするか検討する！
 }

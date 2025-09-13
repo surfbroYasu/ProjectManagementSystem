@@ -1,21 +1,28 @@
 package com.example.projectmanagement.client.datastructures.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "client_user_info")
-public class ClientUserInfoEntity {
+@Table(name = "project_client_personnels")
+public class ProjectClientPersonnelEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private Integer clientId;
+	
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@JoinColumn(name = "project_client_id", nullable = true)
+	private ProjectClientEntity projectClient;
+	
 	private String position;
 	private String note;
 	private String email;

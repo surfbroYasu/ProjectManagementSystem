@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.example.projectmanagement.client.datastructures.dtos.ClientUserDtoRecord;
-import com.example.projectmanagement.client.datastructures.entities.ClientUserInfoEntity;
-import com.example.projectmanagement.client.repository.ClientUserJpaRepository;
+import com.example.projectmanagement.client.datastructures.entities.ProjectClientPersonnelEntity;
+import com.example.projectmanagement.client.repository.ProjectClientPersonnelJpaRepository;
 import com.example.projectmanagement.modules.projects.datastructure.dto.ProjectDtoRecord;
 import com.example.projectmanagement.modules.projects.services.application.context.ProjectViewContextService;
 
@@ -19,7 +19,7 @@ import com.example.projectmanagement.modules.projects.services.application.conte
 public class ClientUserContextService extends ProjectViewContextService {
 
 	@Autowired
-	private ClientUserJpaRepository jpaRepo;
+	private ProjectClientPersonnelJpaRepository jpaRepo;
 
 	/**
 	 * クライアント担当者の一覧情報をモデルに設定します（画面描画用）。
@@ -43,7 +43,7 @@ public class ClientUserContextService extends ProjectViewContextService {
 		setPageTitle(model, titleProp);
 		setProjectToModel(model, projectId);
 
-		List<ClientUserInfoEntity> entities = Optional.ofNullable(jpaRepo.findByClientId(clientId))
+		List<ProjectClientPersonnelEntity> entities = Optional.ofNullable(jpaRepo.findByProjectClient_Client_Id(clientId))
 				.orElse(Collections.emptyList());
 
 		List<ClientUserDtoRecord> dtoList = entities.stream()
@@ -81,15 +81,14 @@ public class ClientUserContextService extends ProjectViewContextService {
 				.ifPresentOrElse(
 						record -> model.addAttribute("personnel", record),
 						() -> {
-							// ユーザーが見つからない場合のビューへの伝達
 							model.addAttribute("personnelNotFound", true);
 						});
 	}
 
-	private ClientUserDtoRecord convertClientUserEntityToRecord(ClientUserInfoEntity entity) {
+	private ClientUserDtoRecord convertClientUserEntityToRecord(ProjectClientPersonnelEntity entity) {
 		return new ClientUserDtoRecord(
 				entity.getId(),
-				entity.getClientId(),
+				entity.getProjectClient().getId(),
 				entity.getPosition(),
 				entity.getNote(),
 				entity.getEmail(),

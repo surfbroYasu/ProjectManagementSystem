@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/parentLayout.html}">
+
+
+<th:block layout:fragment="mainContent">
+
+	<div th:if="${clientNotFound}" class="my-5 card">
+		<th:block th:insert="~{contents/client/client/fragments/forms :: ClientPhoneNumberForm}"></th:block>
+<!--		<th:block th:insert="~{contents/client/client/fragments/register :: ClientRegisterForm}"></th:block>-->
+	</div>
+
+	<div th:unless="${clientNotFound}">
+		
+		<div class="card p-3">
+			<table class="table">
+				<tbody>
+					<tr>
+						<th scope="row" th:text="#{field.client.name}">Company name</th>
+						<td th:text="${client.name}"></td>
+					</tr>
+					<tr>
+						<th scope="row" th:text="#{field.client.rep_name}">Rep name</th>
+						<td th:text="${client.repName}"></td>
+					</tr>
+					<tr>
+						<th scope="row" th:text="#{field.client.phone}">Phone</th>
+						<td>
+							<a th:href="'tel:' + ${client.phone}" th:text="${client.phone}"></a>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row" th:text="#{field.client.note}">Note</th>
+						<td th:text="${client.note}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<div class="card mt-3 p-3">担当者リストに飛ぶ</div>
+	</div>
+
+</th:block>
+
+
+</html>

@@ -4,9 +4,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.projectmanagement.client.datastructures.entities.ClientUserInfoEntity;
+import com.example.projectmanagement.client.datastructures.entities.ProjectClientPersonnelEntity;
 import com.example.projectmanagement.client.datastructures.forms.ClientUserInfoForm;
-import com.example.projectmanagement.client.repository.ClientUserJpaRepository;
+import com.example.projectmanagement.client.repository.ProjectClientPersonnelJpaRepository;
 
 /**
  * このクラスはデータの永続化にかかわるビジネスロジックを扱うクラスとして使用
@@ -19,7 +19,7 @@ import com.example.projectmanagement.client.repository.ClientUserJpaRepository;
 public class ClientUserRepositoryService {
 
 	@Autowired
-	private ClientUserJpaRepository jpaRepo;
+	private ProjectClientPersonnelJpaRepository jpaRepo;
 
 	
 	/**
@@ -27,14 +27,14 @@ public class ClientUserRepositoryService {
 	 * @param form
 	 */
 	public void saveByAction(String action, ClientUserInfoForm form) {
-		ClientUserInfoEntity entity = switch (action) {
+		ProjectClientPersonnelEntity entity = switch (action) {
 		case "add" -> {
-			ClientUserInfoEntity newEntity = new ClientUserInfoEntity();
+			ProjectClientPersonnelEntity newEntity = new ProjectClientPersonnelEntity();
 			BeanUtils.copyProperties(form, newEntity);
 			yield newEntity;
 		}
 		case "edit" -> {
-			ClientUserInfoEntity existing = jpaRepo.findById(form.getId())
+			ProjectClientPersonnelEntity existing = jpaRepo.findById(form.getId())
 					.orElseThrow(() -> new IllegalArgumentException("User not found"));
 			BeanUtils.copyProperties(form, existing);
 			yield existing;

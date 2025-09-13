@@ -11,7 +11,7 @@ package com.example.projectmanagement.client.datastructures.dtos;
 public record ClientUserDtoRecord(
 		
 		 Integer id,
-		 Integer clientId,
+		 Integer projectClientId,
 		 String position,
 		 String note,
 		 String email,

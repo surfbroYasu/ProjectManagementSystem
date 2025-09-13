@@ -2,6 +2,8 @@ package com.example.projectmanagement.modules.projects.datastructure.dto;
 
 import java.time.LocalDate;
 
+import com.example.projectmanagement.organizations.datastructure.entity.OrganizationEntity;
+
 /**
  * プロジェクトの画面描画に使用されるDTOレコード。
  * <p>
@@ -23,6 +25,6 @@ public record ProjectDtoRecord(
 		String projectName,
 		String applicationName,
 		String serverSideLang,
-		Integer clientId,
-		LocalDate startDate) {
+		LocalDate startDate,
+		OrganizationEntity organization) {
 }

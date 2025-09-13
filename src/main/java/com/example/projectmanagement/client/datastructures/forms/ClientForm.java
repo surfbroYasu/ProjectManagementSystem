@@ -17,4 +17,8 @@ public class ClientForm {
 	private String phone;
 	private String note;
 	
+	private Integer organizationId;
+	
+	private Integer projectId;
+	
 }

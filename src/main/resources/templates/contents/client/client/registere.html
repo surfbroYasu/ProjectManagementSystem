@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/parentLayout.html}">
+
+
+<th:block layout:fragment="mainContent">
+
+<!--TODO 比較文字列を動的にする-->
+
+	<div th:if="${formType} == 'phone'" class="my-5 card">
+		<th:block th:insert="~{contents/client/client/fragments/forms :: ClientPhoneNumberForm}"></th:block>
+<!--		<th:block th:insert="~{contents/client/client/fragments/register :: ClientRegisterForm}"></th:block>-->
+	</div>
+	
+	
+	<div th:if="${formType} == 'clientOptions'" class="my-5 card">
+		<th:block th:insert="~{contents/client/client/fragments/forms :: ClientOptionForm}"></th:block>
+<!--		<th:block th:insert="~{contents/client/client/fragments/register :: ClientRegisterForm}"></th:block>-->
+	</div>
+
+
+	<div th:if="${formType} == 'manualInput'" class="my-5 card">
+		<th:block th:insert="~{contents/client/client/fragments/forms :: ClientRegisterForm}"></th:block>
+<!--		<th:block th:insert="~{contents/client/client/fragments/register :: ClientRegisterForm}"></th:block>-->
+	</div>
+
+</html>

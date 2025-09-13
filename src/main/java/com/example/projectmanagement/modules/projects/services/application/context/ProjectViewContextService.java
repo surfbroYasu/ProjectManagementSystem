@@ -88,8 +88,8 @@ public class ProjectViewContextService extends ApplicationContextService {
 				entity.getProjectName(),
 				entity.getApplicationName(),
 				entity.getServerSideLang(),
-				entity.getClientId(),
-				entity.getStartDate());
+				entity.getStartDate(),
+				entity.getOrganization());
 	}
 
 }

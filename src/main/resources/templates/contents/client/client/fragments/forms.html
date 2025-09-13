@@ -1,0 +1,88 @@
+<th:block th:fragment="ClientRegisterForm">
+	<form th:action="@{/project/{projectId}/client/add(projectId=${project.id})}" th:object="${clientForm}"
+		method="post" class="row g-2 align-items-center">
+
+		<div class="row">
+			<h5 class="form-label" th:text="#{label.new.register}">新規登録</h5>
+		</div>
+
+		<div class="mb-3">
+			<label for="name" th:text="#{field.client.name}"></label>
+			<input type="text" required th:field="*{name}" class="form-control">
+		</div>
+
+		<div class="mb-3">
+			<label for="repName" th:text="#{field.client.rep_name}"></label>
+			<input type="text" required th:field="*{repName}" class="form-control">
+		</div>
+
+
+		<div class="mb-3">
+			<!-- TODO [phone validation] ??make it international with country code etc??-->
+			<label for="phone" th:text="#{field.client.phone}"></label>
+			<input type="tel" required th:field="*{phone}" class="form-control">
+		</div>
+
+		<div class="mb-3">
+			<label for="note" th:text="#{field.client.note}"></label>
+			<textarea class="form-control" th:field="*{note}" rows="4" cols="50"></textarea>
+		</div>
+
+		<div class="mb-3">
+			<button type="submit" class="btn btn-primary w-100">登録</button>
+		</div>
+
+		<input type="hidden" name="projectId" th:value="${project.id}" />
+		<input type="hidden" name="projectId" th:value="${project.organizationId}" />
+
+	</form>
+</th:block>
+
+<th:block th:fragment="ClientPhoneNumberForm">
+	<form th:action="@{/project/{projectId}/client/search(projectId=${project.id})}" method="post"
+		class="row g-2 align-items-center">
+
+
+		<div class="mb-3">
+			<label for="phone" th:text="#{field.client.phone}"></label>
+			<input type="tel" required id="phone" name="phone" class="form-control">
+		</div>
+
+
+		<div class="mb-3">
+			<button type="submit" class="btn btn-primary w-100">登録</button>
+		</div>
+
+
+	</form>
+</th:block>
+
+<th:block th:fragment="ClientOptionForm">
+	<form th:action="@{/project/{projectId}/client/options(projectId=${project.id})}" method="post"
+		class="row g-2 align-items-center">
+
+		<th:block th:each="opt : ${clientOptions}">
+			
+			<div class="form-check">
+				<input class="form-check-input" type="radio" th:value="${opt.id}" th:id="${opt.id}">
+				<label class="form-check-label" th:for="${opt.id}">
+					<p th:text="${opt.name}"></p>
+					<p th:text="${opt.phone}"></p>
+				</label>
+			</div>
+			
+		</th:block>
+
+		<div class="mb-3">
+			<label for="phone" th:text="#{field.client.phone}"></label>
+			<input type="tel" required id="phone" name="phone" class="form-control">
+		</div>
+
+
+		<div class="mb-3">
+			<button type="submit" class="btn btn-primary w-100">登録</button>
+		</div>
+
+
+	</form>
+</th:block>
